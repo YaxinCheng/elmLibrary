@@ -6,6 +6,10 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.example.library.backend.Book;
 
 /* Create custom UI Components.
@@ -83,12 +87,18 @@ public class BookForm extends FormLayout {
         try {
             // Commit the fields from UI to DAO
             formFieldBindings.commit();
-
+            String ISBN = isbnField.getValue();
+            String Title = titleField.getValue();
+            String[] author = {authorField.getValue()};
+            List<String> Author = Arrays.asList(author);
+            String Publisher = publisherField.getValue();
+            String Year = yearField.getValue();
+            String Edition = editionField.getValue();
+            book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
             // Save DAO to backend with direct synchronous service API
             getUI().service.save(book);
 
-            String msg = String.format("Saved '%s %s'.",
-                    book.getIsbn(),
+            String msg = String.format("Saved '%s'.",
                     book.getTitle());
             Notification.show(msg,Type.TRAY_NOTIFICATION);
             getUI().refreshBooks();
@@ -105,6 +115,7 @@ public class BookForm extends FormLayout {
         }
         setVisible(book != null);
     }
+    
 
     @Override
     public LibraryUI getUI() {
