@@ -11,7 +11,7 @@ import java.util.List;
 * @version 1.0
 * @since   2015-02-01
 */
-public class Book implements Comparable<Book> {
+public class Book implements Comparable<Book>, Cloneable {
 	
 	private Long id;
 	private String isbn;
@@ -36,6 +36,19 @@ public class Book implements Comparable<Book> {
 
 	public Book(String isbn, String title, List<String> authors, String pub, String year) {
 		this(isbn, title, authors, pub, year, "1");
+	}
+	
+	public boolean containInformation(String info) {
+		if ((isbn.contains(info)) || (title.contains(info))
+				|| (publisher.contains(info)) || (year.contains(info))) {
+			return true;
+		}
+		for (String author : authors) {
+			if (author.contains(info)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Long getId() {
@@ -90,6 +103,8 @@ public class Book implements Comparable<Book> {
 		this.edition = edition;
 	}
 	
+
+	
 	@Override
 	public String toString() {
 		return "Book [id=" + id + ", isbn=" + isbn + ", title=" + title + ", authors=" + authors + ", publisher="
@@ -110,7 +125,7 @@ public class Book implements Comparable<Book> {
 	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	protected Book clone() throws CloneNotSupportedException {
 		return new Book(isbn, title, authors, publisher, year, edition);
 	}
 }

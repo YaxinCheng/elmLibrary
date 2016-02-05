@@ -21,7 +21,7 @@ public class BookService {
 			
 			// read from the config file and populate the BookService
 			String filepath = "/Users/Roc/Documents/2015-2016Winter/CSCI3130/Project/library/src/com/example/library/book-service-config.txt";
-			populateBookService(bookService, filepath);
+//			populateBookService(bookService, filepath);
 			
 			instance = bookService;
 		}
@@ -53,10 +53,12 @@ public class BookService {
 	
 	// FIX ME: put in the filter
 	public synchronized List<Book> findAll(String filter) {
-        List arrayList = new ArrayList<Book>();
+        List<Book> arrayList = new ArrayList<Book>();
         for (Book book: books.values()) {
             try {
-            	arrayList.add(book.clone());
+            	if (book.containInformation(filter)) {
+            		arrayList.add(book.clone());
+            	}
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(BookService.class.getName()).log(
                         Level.SEVERE, null, ex);
