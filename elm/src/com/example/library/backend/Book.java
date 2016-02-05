@@ -21,7 +21,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String year;
 	private String edition;
 
-	private static Long idCount = (long) 0;
+	private static long idCount = 0;
 
 	public Book(String isbn, String title, List<String> authors, String publisher, String year, String edition) {
 		this.id = Book.idCount;
@@ -71,8 +71,16 @@ public class Book implements Comparable<Book>, Cloneable {
 		this.title = title;
 	}
 
-	public List<String> getAuthors() {
-		return authors;
+	public String getAuthors() {
+		if (authors.size() == 0) {
+			return "n.a.";
+		}
+		String result = authors.get(0);
+		for (String author : authors) {			
+			result += ",";
+			result += author;
+		}
+		return result;
 	}
 
 	public void setAuthors(List<String> authors) {

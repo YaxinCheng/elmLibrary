@@ -81,9 +81,11 @@ public class BookService {
 
 	public synchronized void delete(Book value) {
 		books.remove(value.getId());
+		System.out.println(value.getId());
 	}
 
 	public synchronized void save(Book entry) {
+		System.out.println(entry.getId());
 		if (!books.containsKey( entry.getId() )) {
         	books.put(entry.getId() , entry);
         }

@@ -96,6 +96,10 @@ public class BookForm extends FormLayout {
             String Publisher = publisherField.getValue();
             String Year = yearField.getValue();
             String Edition = editionField.getValue();
+            if (ISBN.isEmpty() || Title.isEmpty() || author.length == 0 || Publisher.isEmpty() || Year.isEmpty() || Edition.isEmpty()) {
+            	Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
+            	return;
+            }
             book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
             // Save DAO to backend with direct synchronous service API
             getUI().service.save(book);
@@ -111,16 +115,22 @@ public class BookForm extends FormLayout {
     
     void edit(Book book) {
         this.book = book;
+        if (book.compareTo(new Book("", "", new ArrayList<String>(), "", "", "")) == 0) {
+        	isbnField.setValue("");
+        	titleField.setValue("");
+        	authorField.setValue("");
+        	publisherField.setValue("");
+        	yearField.setValue("");
+        	editionField.setValue("");
+        	removeButton.setVisible(false);
+        } else {
+        	removeButton.setVisible(true);
+        }
         if(book != null) {
             // Bind the properties of the Book POJO to fiels in this form
             formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
         }
         setVisible(book != null);
-    }
-    
-    void segueForAddingBook() {
-    	edit(new Book("", "", new ArrayList<String>(), "", "", ""));
-    	removeButton.setVisible(false);
     }
     
 
