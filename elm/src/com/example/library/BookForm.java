@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,6 +80,7 @@ public class BookForm extends FormLayout {
 
     public void cancel(Button.ClickEvent event) {
         // Place to call business logic.
+    	this.setVisible(false);
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
         getUI().bookList.select(null);
     }
@@ -114,6 +116,11 @@ public class BookForm extends FormLayout {
             formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
         }
         setVisible(book != null);
+    }
+    
+    void segueForAddingBook() {
+    	edit(new Book("", "", new ArrayList<String>(), "", "", ""));
+    	removeButton.setVisible(false);
     }
     
 

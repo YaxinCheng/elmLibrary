@@ -60,7 +60,7 @@ public class LibraryUI extends UI {
 		 * the needed changes to the web page without loading a new page.
 		 */
 		
-		addBookButton.addClickListener(e -> bookForm.edit(new Book("", "", new ArrayList<String>(), "", "", "")));
+		addBookButton.addClickListener(e -> bookForm.segueForAddingBook());
 
         filterField.setInputPrompt("Filter books...");
         filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
