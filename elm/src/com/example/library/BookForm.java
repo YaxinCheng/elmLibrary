@@ -63,6 +63,7 @@ public class BookForm extends FormLayout {
         
 		addComponents(actions, isbnField, titleField, publisherField, 
 											yearField, editionField);
+		this.addComponent(new HorizontalLayout(authorField.get(0),addAuthors));
     }
     
     public void moreAuthor(Button.ClickEvent event) {
@@ -97,9 +98,6 @@ public class BookForm extends FormLayout {
     public void cancel(Button.ClickEvent event) {
         // Place to call business logic.
     	this.setVisible(false);
-    	for (TextField surplus : authorField) {
-    		this.removeComponent(surplus);
-    	}
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
         getUI().bookList.select(null);
         authorNumber = 1;
@@ -141,7 +139,11 @@ public class BookForm extends FormLayout {
     }
     
     void edit(Book book) {
+    	if (book == null) {
+    		return;
+    	}
         this.book = book;
+        this.removeAllComponents();
         if (book.compareTo(new Book("", "", new ArrayList<String>(), "", "", "")) == 0) {
         	isbnField.setValue("");
         	titleField.setValue("");
@@ -150,22 +152,32 @@ public class BookForm extends FormLayout {
         	yearField.setValue("");
         	editionField.setValue("");
         	removeButton.setVisible(false);
-        	this.addComponent(new HorizontalLayout(authorField.get(0),addAuthors));
+        	buildLayout();
         } else {
         	removeButton.setVisible(true);
-        	int authorsCount = book.getAuthors().length();
-        	this.addComponent(new HorizontalLayout(authorField.get(0),addAuthors));
+        	int authorsCount = book.getAuthors().size();
+        	buildLayout();
         	for(int i = 1; i < authorsCount; i ++) {
         		this.addComponent(authorField.get(i));
         	}
         }
-        if(book != null) {
-            // Bind the properties of the Book POJO to fiels in this form
-            formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
-        }
+
+        setFields(book);
+        	// Bind the properties of the Book POJO to fiels in this form
+        formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
+        
         setVisible(book != null);
     }
     
+    private void setFields(Book book) {
+    	titleField.setValue(book.getTitle());
+    	isbnField.setValue(book.getIsbn());
+    	publisherField.setValue(book.getPublisher());
+    	yearField.setValue(book.getYear());
+    	for (int i = 0; i < book.getAuthors().size(); i ++) {
+    		authorField.get(i).setValue(book.getAuthors().get(i));
+    	}
+    }
 
     @Override
     public LibraryUI getUI() {

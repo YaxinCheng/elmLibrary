@@ -62,16 +62,17 @@ public class Book implements Comparable<Book>, Cloneable {
 		this.title = title;
 	}
 
-	public String getAuthors() {
-		if (authors.size() == 0) {
-			return "n.a.";
-		}
-		String result = authors.remove(0);
-		for (String author : authors) {			
-			result += ",";
-			result += author;
-		}
-		return result;
+	public List<String> getAuthors() {
+		return authors;
+//		if (authors.size() == 0) {
+//			return "n.a.";
+//		}
+//		String result = authors.get(0);
+//		for (int i = 1; i < authors.size(); i++) {			
+//			result += ",";
+//			result += authors.get(i);
+//		}
+//		return result;
 	}
 
 	public void setAuthors(List<String> authors) {
