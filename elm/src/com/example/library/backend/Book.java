@@ -13,7 +13,6 @@ import java.util.List;
 */
 public class Book implements Comparable<Book>, Cloneable {
 	
-	private Long id;
 	private String isbn;
 	private String title;
 	private List<String> authors;
@@ -21,11 +20,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String year;
 	private String edition;
 
-	private static long idCount = 0;
-
 	public Book(String isbn, String title, List<String> authors, String publisher, String year, String edition) {
-		this.id = Book.idCount;
-		Book.idCount += 1;
 		this.isbn = isbn;
 		this.title = title;
 		this.authors = authors;
@@ -51,10 +46,6 @@ public class Book implements Comparable<Book>, Cloneable {
 		return false;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	public String getIsbn() {
 		return isbn;
 	}
@@ -75,7 +66,7 @@ public class Book implements Comparable<Book>, Cloneable {
 		if (authors.size() == 0) {
 			return "n.a.";
 		}
-		String result = authors.get(0);
+		String result = authors.remove(0);
 		for (String author : authors) {			
 			result += ",";
 			result += author;
@@ -115,7 +106,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", isbn=" + isbn + ", title=" + title + ", authors=" + authors + ", publisher="
+		return "Book [isbn=" + isbn + ", title=" + title + ", authors=" + authors + ", publisher="
 				+ publisher + ", year=" + year + ", edition=" + edition + "]";
 	}
 	
