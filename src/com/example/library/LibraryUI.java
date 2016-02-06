@@ -17,6 +17,8 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -66,7 +68,6 @@ public class LibraryUI extends UI {
         filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
 
 		bookList.setContainerDataSource(new BeanItemContainer<>(Book.class));
-		// FIX ME: remove some columns, correct the order
 		bookList.setColumnOrder("title", "publisher", "year");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 		bookList.addSelectionListener(e -> bookForm.edit((Book) bookList.getSelectedRow()));

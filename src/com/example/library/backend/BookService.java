@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class BookService {
 
 	private static BookService instance;
-	private HashMap<Long, Book> books = new HashMap<>();
+	private HashMap<String, Book> books = new HashMap<>();
 		
 	public static BookService createDemoService() {
 		if (instance == null) {
@@ -50,8 +50,7 @@ public class BookService {
 			System.out.print("IOException - Book configuration file could not be read - " + e);
 		}
 	}
-	
-	// FIX ME: put in the filter
+
 	public synchronized List<Book> findAll(String filter) {
         List<Book> arrayList = new ArrayList<Book>();
         for (Book book: books.values()) {
@@ -80,14 +79,14 @@ public class BookService {
 	}
 
 	public synchronized void delete(Book value) {
-		books.remove(value.getId());
-		System.out.println(value.getId());
+		books.remove(value.getIsbn());
+		System.out.println(value.getIsbn());
 	}
 
 	public synchronized void save(Book entry) {
-		System.out.println(entry.getId());
-		if (!books.containsKey( entry.getId() )) {
-        	books.put(entry.getId() , entry);
+		System.out.println(entry.getIsbn());
+		if (!books.containsKey( entry.getIsbn() )) {
+        	books.put(entry.getIsbn() , entry);
         }
 	}
 

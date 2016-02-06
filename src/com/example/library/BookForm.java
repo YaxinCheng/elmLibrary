@@ -26,14 +26,16 @@ public class BookForm extends FormLayout {
     Button removeButton = new Button("Remove", this::remove);
     Button saveButton = new Button("Save", this::save);
     Button cancelButton = new Button("Cancel", this::cancel);
+    Button addAuthors = new Button("+", this::moreAuthor);
     TextField isbnField = new TextField("ISBN");
     TextField titleField = new TextField("Title");
-    // FIX ME: should be able to add more authors
-    TextField authorField = new TextField("Author");
+    ArrayList<TextField> authorField = new ArrayList<TextField>(
+    		Arrays.asList(new TextField("Author"), new TextField("")
+    				,new TextField(""),new TextField(""),new TextField("")));
     TextField publisherField = new TextField("Publisher");
     TextField yearField = new TextField("Year");
     TextField editionField = new TextField("Edition");
-
+    private static int authorNumber = 1;
     Book book;
     
     // Easily bind forms to beans and manage validation and buffering
@@ -46,8 +48,9 @@ public class BookForm extends FormLayout {
 
     private void configureComponents() {
     	saveButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+    	saveButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
     	removeButton.setStyleName(ValoTheme.BUTTON_DANGER);
-    	cancelButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+    	addAuthors.setStyleName(ValoTheme.BUTTON_BORDERLESS);
         setVisible(false);
     }
 
@@ -57,9 +60,20 @@ public class BookForm extends FormLayout {
 
         HorizontalLayout actions = new HorizontalLayout(removeButton, saveButton, cancelButton);
         actions.setSpacing(true);
-
-		addComponents(actions, isbnField, titleField, authorField, publisherField, 
+        
+		addComponents(actions, isbnField, titleField, publisherField, 
 											yearField, editionField);
+    }
+    
+    public void moreAuthor(Button.ClickEvent event) {
+    	if (authorNumber == 6) {
+    		Notification.show("Can't add more", Type.ERROR_MESSAGE);
+    		return;
+    	}
+    	TextField authorOne = authorField.get(0);
+    	authorOne.setCaption("Authors");
+    	authorNumber ++;
+    	this.addComponent(authorField.get(authorNumber - 1));
     }
 
     public void remove(Button.ClickEvent event) {
@@ -75,14 +89,20 @@ public class BookForm extends FormLayout {
             getUI().refreshBooks();
         } catch (FieldGroup.CommitException e) {
             // Validation exceptions could be shown here
+        } finally {
+        	cancel(event);
         }
     }
 
     public void cancel(Button.ClickEvent event) {
         // Place to call business logic.
     	this.setVisible(false);
+    	for (TextField surplus : authorField) {
+    		this.removeComponent(surplus);
+    	}
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
         getUI().bookList.select(null);
+        authorNumber = 1;
     }
     
     public void save(Button.ClickEvent event) {
@@ -91,12 +111,18 @@ public class BookForm extends FormLayout {
             formFieldBindings.commit();
             String ISBN = isbnField.getValue();
             String Title = titleField.getValue();
-            String[] author = {authorField.getValue()};
-            List<String> Author = Arrays.asList(author);
+            ArrayList<String> author = new ArrayList();
+            for (TextField authorText : authorField) {
+            	String writer = authorText.getValue();
+            	if (!writer.isEmpty()) {
+            		author.add(writer);
+            	}
+            }
+            List<String> Author = author;
             String Publisher = publisherField.getValue();
             String Year = yearField.getValue();
             String Edition = editionField.getValue();
-            if (ISBN.isEmpty() || Title.isEmpty() || author.length == 0 || Publisher.isEmpty() || Year.isEmpty() || Edition.isEmpty()) {
+            if (ISBN.isEmpty() || Title.isEmpty() || author.size() == 0 || Publisher.isEmpty() || Year.isEmpty() || Edition.isEmpty()) {
             	Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
             	return;
             }
@@ -108,6 +134,7 @@ public class BookForm extends FormLayout {
                     book.getTitle());
             Notification.show(msg,Type.TRAY_NOTIFICATION);
             getUI().refreshBooks();
+            authorNumber = 1;
         } catch (FieldGroup.CommitException e) {
             // Validation exceptions could be shown here
         }
@@ -118,13 +145,19 @@ public class BookForm extends FormLayout {
         if (book.compareTo(new Book("", "", new ArrayList<String>(), "", "", "")) == 0) {
         	isbnField.setValue("");
         	titleField.setValue("");
-        	authorField.setValue("");
+        	authorField.get(0).setValue("");
         	publisherField.setValue("");
         	yearField.setValue("");
         	editionField.setValue("");
         	removeButton.setVisible(false);
+        	this.addComponent(new HorizontalLayout(authorField.get(0),addAuthors));
         } else {
         	removeButton.setVisible(true);
+        	int authorsCount = book.getAuthors().length();
+        	this.addComponent(new HorizontalLayout(authorField.get(0),addAuthors));
+        	for(int i = 1; i < authorsCount; i ++) {
+        		this.addComponent(authorField.get(i));
+        	}
         }
         if(book != null) {
             // Bind the properties of the Book POJO to fiels in this form
