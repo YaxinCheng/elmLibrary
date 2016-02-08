@@ -138,6 +138,6 @@ public class LibraryUI extends UI {
     */
    @WebServlet(urlPatterns = "/*")
    @VaadinServletConfiguration(ui = LibraryUI.class, productionMode = false)
-   public static class MyUIServlet extends VaadinServlet {
-   }
+	public static class MyUIServlet extends VaadinServlet {
+	}
 }
