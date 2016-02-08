@@ -3,16 +3,15 @@ package com.example.library.backend;
 import java.util.List;
 
 /**
-* <h1>Book</h1>
-* This is a class that represents a Book.
-* It has all the attributes for a single book.
-*
-* @author  Team-Elm
-* @version 1.0
-* @since   2015-02-01
-*/
+ * <h1>Book</h1> This is a class that represents a Book. It has all the
+ * attributes for a single book.
+ *
+ * @author Team-Elm
+ * @version 1.0
+ * @since 2015-02-01
+ */
 public class Book implements Comparable<Book>, Cloneable {
-	
+
 	private String isbn;
 	private String title;
 	private List<String> authors;
@@ -32,10 +31,9 @@ public class Book implements Comparable<Book>, Cloneable {
 	public Book(String isbn, String title, List<String> authors, String pub, String year) {
 		this(isbn, title, authors, pub, year, "1");
 	}
-	
+
 	public boolean containInformation(String info) {
-		if ((isbn.contains(info)) || (title.contains(info))
-				|| (publisher.contains(info)) || (year.contains(info))) {
+		if ((isbn.contains(info)) || (title.contains(info)) || (publisher.contains(info)) || (year.contains(info))) {
 			return true;
 		}
 		for (String author : authors) {
@@ -64,15 +62,15 @@ public class Book implements Comparable<Book>, Cloneable {
 
 	public List<String> getAuthors() {
 		return authors;
-//		if (authors.size() == 0) {
-//			return "n.a.";
-//		}
-//		String result = authors.get(0);
-//		for (int i = 1; i < authors.size(); i++) {			
-//			result += ",";
-//			result += authors.get(i);
-//		}
-//		return result;
+		// if (authors.size() == 0) {
+		// return "n.a.";
+		// }
+		// String result = authors.get(0);
+		// for (int i = 1; i < authors.size(); i++) {
+		// result += ",";
+		// result += authors.get(i);
+		// }
+		// return result;
 	}
 
 	public void setAuthors(List<String> authors) {
@@ -102,28 +100,26 @@ public class Book implements Comparable<Book>, Cloneable {
 	public void setEdition(String edition) {
 		this.edition = edition;
 	}
-	
 
-	
 	@Override
 	public String toString() {
-		return "Book [isbn=" + isbn + ", title=" + title + ", authors=" + authors + ", publisher="
-				+ publisher + ", year=" + year + ", edition=" + edition + "]";
+		return "Book [isbn=" + isbn + ", title=" + title + ", authors=" + authors + ", publisher=" + publisher
+				+ ", year=" + year + ", edition=" + edition + "]";
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
-	    if(object instanceof Book && ((Book) object).getIsbn().equals( this.isbn )) {
-	        return true;
-	    }
-	    return false;
+		if (object instanceof Book && ((Book) object).getIsbn().equals(this.isbn)) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public int compareTo(Book o) {
 		return this.title.compareTo(o.getTitle());
 	}
-	
+
 	@Override
 	protected Book clone() throws CloneNotSupportedException {
 		return new Book(isbn, title, authors, publisher, year, edition);

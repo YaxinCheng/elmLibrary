@@ -1,11 +1,12 @@
 package com.example.library.backend;
+
 import java.util.*;
 
 /**
- * <h1>User</h1>
- * This class contains the data for library patrons (users), including their personal
- * information, a list of books they've borrowed, and a list of books they are on a
- * hold list for.
+ * <h1>User</h1> This class contains the data for library patrons (users),
+ * including their personal information, a list of books they've borrowed, and a
+ * list of books they are on a hold list for.
+ * 
  * @author Team-Elm
  * @version 1.0
  * @since 2016-02-01
@@ -17,15 +18,15 @@ public class User {
 	private String phone;
 	private ArrayList borrowed;
 	private ArrayList holds;
-	
-	public User(String name, String email, String phone, ArrayList borrowed, ArrayList holds){
-		
+
+	public User(String name, String email, String phone, ArrayList borrowed, ArrayList holds) {
+
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.borrowed = borrowed;
 		this.holds = holds;
-		
+
 	}
 
 	public String getName() {
@@ -70,25 +71,25 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", email=" + email + ", phone=" + phone
-				+ ", borrowed=" + borrowed + ", holds=" + holds + "]";
+		return "User [name=" + name + ", email=" + email + ", phone=" + phone + ", borrowed=" + borrowed + ", holds="
+				+ holds + "]";
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
-		if(object instanceof User && ((User)object).getEmail() == this.email) {
+		if (object instanceof User && ((User) object).getEmail() == this.email) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public int compareTo(User o) {
 		return this.email.compareTo(o.getEmail());
 	}
-	
+
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return new User(name, email, phone, borrowed, holds);
 	}
-	
+
 }
