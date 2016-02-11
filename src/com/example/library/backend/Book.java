@@ -18,6 +18,15 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String publisher;
 	private String year;
 	private String edition;
+	private boolean checkOut;
+
+	public boolean isCheckOut() {
+		return checkOut;
+	}
+
+	public void setCheckOut(boolean checkOut) {
+		this.checkOut = checkOut;
+	}
 
 	public Book(String isbn, String title, List<String> authors, String publisher, String year, String edition) {
 		this.isbn = isbn;
