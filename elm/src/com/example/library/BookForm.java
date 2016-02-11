@@ -51,6 +51,7 @@ public class BookForm extends FormLayout {
 	private void configureComponents() {
 		saveButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		saveButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+		cancelButton.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
 		removeButton.setStyleName(ValoTheme.BUTTON_DANGER);
 		checkIO.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		addAuthors.setStyleName(ValoTheme.BUTTON_BORDERLESS);
@@ -61,7 +62,7 @@ public class BookForm extends FormLayout {
 		setSizeUndefined();
 		setMargin(true);
 
-		HorizontalLayout actions = new HorizontalLayout(removeButton, saveButton, checkIO, cancelButton);
+		HorizontalLayout actions = new HorizontalLayout(saveButton, removeButton, checkIO, cancelButton);
 		actions.setSpacing(true);
 
 		addComponents(actions, isbnField, titleField, publisherField, yearField, editionField);
