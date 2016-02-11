@@ -31,7 +31,7 @@ public class BookForm extends FormLayout {
 	Button addAuthors = new Button("+", this::moreAuthor);
 	TextField isbnField = new TextField("ISBN");
 	TextField titleField = new TextField("Title");
-	ArrayList<TextField> authorField = new ArrayList<TextField>(Arrays.asList(new TextField("Author"),
+	List<TextField> authorField = new ArrayList<TextField>(Arrays.asList(new TextField("Author"),
 			new TextField(""), new TextField(""), new TextField(""), new TextField("")));
 	TextField publisherField = new TextField("Publisher");
 	TextField yearField = new TextField("Year");
@@ -107,7 +107,7 @@ public class BookForm extends FormLayout {
 			formFieldBindings.commit();
 			String ISBN = isbnField.getValue();
 			String Title = titleField.getValue();
-			ArrayList<String> author = new ArrayList();
+			List<String> author = new ArrayList<String>();
 			for (TextField authorText : authorField) {
 				String writer = authorText.getValue();
 				if (!writer.isEmpty()) {
@@ -161,7 +161,7 @@ public class BookForm extends FormLayout {
 		}
 
 		setFields(book);
-		// Bind the properties of the Book POJO to fiels in this form
+		// Bind the properties of the Book POJO to fields in this form
 		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
 
 		setVisible(book != null);
@@ -172,6 +172,7 @@ public class BookForm extends FormLayout {
 		isbnField.setValue(book.getIsbn());
 		publisherField.setValue(book.getPublisher());
 		yearField.setValue(book.getYear());
+		editionField.setValue(book.getEdition());
 		for (int i = 0; i < book.getAuthors().size(); i++) {
 			authorField.get(i).setValue(book.getAuthors().get(i));
 		}
