@@ -80,6 +80,7 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("isbn");
 		bookList.removeColumn("publisher");
 		bookList.removeColumn("edition");
+		bookList.removeColumn("checkOut");
 		
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 		bookList.addSelectionListener(e -> bookForm.edit((Book) bookList.getSelectedRow()));
