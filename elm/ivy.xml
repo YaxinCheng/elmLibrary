@@ -23,6 +23,15 @@
 		<!-- Vaadin themes -->
 		<dependency org="com.vaadin" name="vaadin-themes" rev="&vaadin.version;" />
 
+		<!-- JPA Container -->
+		<dependency org="com.vaadin.addon" name="jpacontainer" rev="3.2.0" />
+		
+		<!--EclipseLink -->
+		<dependency org="org.eclipse.persistence" name="org.eclipse.persistence.jpa" rev="2.6.2" />
+		
+		<!-- H2 Database -->
+		<dependency org="com.h2database" name="h2" rev="1.4.191" />
+		
 		<!-- Push support -->
 		<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />
 
