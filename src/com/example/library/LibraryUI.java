@@ -10,6 +10,7 @@ import com.example.library.BookForm;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
@@ -71,6 +72,7 @@ public class LibraryUI extends UI {
 				}
 			}
 		});
+		addBookButton.setClickShortcut(ShortcutAction.KeyCode.TAB);
 
         filterField.setInputPrompt("Filter books...");
         filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
