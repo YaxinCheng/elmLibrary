@@ -69,7 +69,7 @@ public class BookForm extends FormLayout {
 	}
 
 	public void moreAuthor(Button.ClickEvent event) {
-		if (authorNumber == 6) {
+		if (authorNumber == 5) {
 			Notification.show("Can't add more", Type.ERROR_MESSAGE);
 			return;
 		}
@@ -100,6 +100,7 @@ public class BookForm extends FormLayout {
 			book.setCheckOut(!book.isCheckOut());
 			String buttonTitle = book.isCheckOut()?"Return":"Check Out";
 			checkIO.setCaption(buttonTitle);
+			
 		}
 	}
 
@@ -136,7 +137,6 @@ public class BookForm extends FormLayout {
 			book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
 			// Save DAO to backend with direct synchronous service API
 			getUI().service.save(book);
-
 			String msg = String.format("Saved '%s'.", book.getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();
