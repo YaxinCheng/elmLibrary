@@ -20,8 +20,8 @@ public class BookService {
 			final BookService bookService = new BookService();
 			
 			// read from the config file and populate the BookService
-			String filepath = "/Users/Roc/Documents/2015-2016Winter/CSCI3130/Project/library/src/com/example/library/book-service-config.txt";
-//			populateBookService(bookService, filepath);
+			String filepath = "/Users/salman/workspace/library/src/com/example/library/book-service-config.txt";
+			populateBookService(bookService, filepath);
 			
 			instance = bookService;
 		}

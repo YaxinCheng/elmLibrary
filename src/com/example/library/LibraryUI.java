@@ -76,7 +76,11 @@ public class LibraryUI extends UI {
         filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
 
 		bookList.setContainerDataSource(new BeanItemContainer<>(Book.class));
-		bookList.setColumnOrder("title", "publisher", "year");
+		bookList.setColumnOrder("title", "authors", "year");		
+		bookList.removeColumn("isbn");
+		bookList.removeColumn("publisher");
+		bookList.removeColumn("edition");
+		
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 		bookList.addSelectionListener(e -> bookForm.edit((Book) bookList.getSelectedRow()));
 		refreshBooks();
