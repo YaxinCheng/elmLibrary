@@ -29,6 +29,7 @@ public class BookForm extends FormLayout {
 	Button saveButton = new Button("Save", this::save);
 	Button cancelButton = new Button("Cancel", this::cancel);
 	Button addAuthors = new Button("+", this::moreAuthor);
+	Button checkIO = new Button("Check Out", this::checkIO);
 	TextField isbnField = new TextField("ISBN");
 	TextField titleField = new TextField("Title");
 	List<TextField> authorField = new ArrayList<TextField>(Arrays.asList(new TextField("Author"),
@@ -51,6 +52,7 @@ public class BookForm extends FormLayout {
 		saveButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		saveButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		removeButton.setStyleName(ValoTheme.BUTTON_DANGER);
+		checkIO.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		addAuthors.setStyleName(ValoTheme.BUTTON_BORDERLESS);
 		setVisible(false);
 	}
@@ -59,7 +61,7 @@ public class BookForm extends FormLayout {
 		setSizeUndefined();
 		setMargin(true);
 
-		HorizontalLayout actions = new HorizontalLayout(removeButton, saveButton, cancelButton);
+		HorizontalLayout actions = new HorizontalLayout(removeButton, saveButton, checkIO, cancelButton);
 		actions.setSpacing(true);
 
 		addComponents(actions, isbnField, titleField, publisherField, yearField, editionField);
@@ -90,6 +92,14 @@ public class BookForm extends FormLayout {
 			// Validation exceptions could be shown here
 		} finally {
 			cancel(event);
+		}
+	}
+	
+	public void checkIO(Button.ClickEvent event) {
+		if (book != null) {
+			book.setCheckOut(!book.isCheckOut());
+			String buttonTitle = book.isCheckOut()?"Return":"Check Out";
+			checkIO.setCaption(buttonTitle);
 		}
 	}
 
@@ -150,9 +160,11 @@ public class BookForm extends FormLayout {
 			yearField.setValue("");
 			editionField.setValue("");
 			removeButton.setVisible(false);
+			checkIO.setVisible(false);
 			buildLayout();
 		} else {
 			removeButton.setVisible(true);
+			checkIO.setVisible(true);
 			int authorsCount = book.getAuthors().size();
 			buildLayout();
 			for (int i = 1; i < authorsCount; i++) {

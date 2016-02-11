@@ -35,6 +35,7 @@ public class Book implements Comparable<Book>, Cloneable {
 		this.publisher = publisher;
 		this.year = year;
 		this.edition = edition;
+		checkOut = false;
 	}
 
 	public Book(String isbn, String title, List<String> authors, String pub, String year) {
