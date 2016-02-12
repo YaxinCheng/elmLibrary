@@ -2,6 +2,13 @@ package com.example.library.backend;
 
 import java.util.List;
 
+import javax.persistence.*;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.addon.jpacontainer.fieldfactory.SingleSelectConverter;
+import com.vaadin.ui.*;
+
 /**
  * <h1>Book</h1> This is a class that represents a Book. It has all the
  * attributes for a single book.
@@ -10,8 +17,11 @@ import java.util.List;
  * @version 1.0
  * @since 2015-02-01
  */
+@Entity
 public class Book implements Comparable<Book>, Cloneable {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
 	private String isbn;
 	private String title;
 	private List<String> authors;
@@ -19,6 +29,9 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String year;
 	private String edition;
 	private boolean checkOut;
+
+	@ManyToOne
+	private User user;
 
 	public boolean isCheckOut() {
 		return checkOut;
@@ -40,6 +53,10 @@ public class Book implements Comparable<Book>, Cloneable {
 
 	public Book(String isbn, String title, List<String> authors, String pub, String year) {
 		this(isbn, title, authors, pub, year, "1");
+	}
+
+	public Book() {
+
 	}
 
 	public boolean containInformation(String info) {
@@ -134,4 +151,15 @@ public class Book implements Comparable<Book>, Cloneable {
 	protected Book clone() throws CloneNotSupportedException {
 		return new Book(isbn, title, authors, publisher, year, edition);
 	}
+	/*
+	public <T extends Field> T createField(Class<?> dataType, Class<T> fieldType) {
+		if (dataType == User.class) {
+			JPAContainer<User> countries = JPAContainerFactory.make(User.class, "mypunit");
+			ComboBox cb = new ComboBox(null, countries);
+			cb.setConverter(new SingleSelectConverter<User>(cb));
+			return (T) cb;
+		}
+		return super.createField(dataType, fieldType);
+	}
+	*/
 }
