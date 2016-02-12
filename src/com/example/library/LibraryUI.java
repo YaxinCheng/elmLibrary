@@ -9,6 +9,7 @@ import com.example.library.backend.BookService;
 import com.example.library.BookForm;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.client.widget.grid.selection.SelectionEvent;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinRequest;
@@ -20,6 +21,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -34,6 +36,7 @@ public class LibraryUI extends UI {
      */
     Grid bookList = new Grid();
     TextField filterField = new TextField();
+    Button searchButton = new Button("Search");
     Button addBookButton = new Button("Add Book");
     
     BookService service = BookService.createDemoService();
@@ -68,11 +71,22 @@ public class LibraryUI extends UI {
 			public void buttonClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				if (!bookForm.isVisible()) {
+					bookForm.authorField.get(0).setCaption("Author");
+					bookForm.clearFields();
 					bookForm.edit(new Book("", "", new ArrayList<String>(), "", "", ""));
 				}
 			}
 		});
-		addBookButton.setClickShortcut(ShortcutAction.KeyCode.TAB);
+		searchButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+		searchButton.setClickShortcut(ShortcutAction.KeyCode.SPACEBAR);
+		searchButton.addClickListener(e -> {
+			String info = filterField.getValue(); 
+			if (!info.isEmpty()) {
+				refreshBooks(info);
+			} else {
+				filterField.focus();
+			}
+		});
 
         filterField.setInputPrompt("Filter books...");
         filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
@@ -85,7 +99,10 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("checkOut");
 		
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
-		bookList.addSelectionListener(e -> bookForm.edit((Book) bookList.getSelectedRow()));
+		bookList.addSelectionListener(selectionEvent -> {
+			bookForm.clearFields();
+			bookForm.edit((Book) bookList.getSelectedRow());
+			});
 		refreshBooks();
 	}
 
@@ -101,7 +118,9 @@ public class LibraryUI extends UI {
     * with Vaadin Designer, CSS and HTML.
     */
    private void buildLayout() {
-	   HorizontalLayout actions = new HorizontalLayout(filterField, addBookButton);
+	   HorizontalLayout buttons = new HorizontalLayout(searchButton, addBookButton);
+	   buttons.setSpacing(true);
+	   HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
        actions.setWidth("100%");
        filterField.setWidth("100%");
        actions.setExpandRatio(filterField, 1);

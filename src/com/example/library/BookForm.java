@@ -32,7 +32,7 @@ public class BookForm extends FormLayout {
 	Button checkIO = new Button("Check Out", this::checkIO);
 	TextField isbnField = new TextField("ISBN");
 	TextField titleField = new TextField("Title");
-	List<TextField> authorField = new ArrayList<TextField>(Arrays.asList(new TextField("Author"),
+	final List<TextField> authorField = new ArrayList<TextField>(Arrays.asList(new TextField("Author"),
 			new TextField(""), new TextField(""), new TextField(""), new TextField("")));
 	TextField publisherField = new TextField("Publisher");
 	TextField yearField = new TextField("Year");
@@ -101,7 +101,6 @@ public class BookForm extends FormLayout {
 			book.setCheckOut(!book.isCheckOut());
 			String buttonTitle = book.isCheckOut()?"Return":"Check Out";
 			checkIO.setCaption(buttonTitle);
-			
 		}
 	}
 
@@ -117,34 +116,42 @@ public class BookForm extends FormLayout {
 		try {
 			// Commit the fields from UI to DAO
 			formFieldBindings.commit();
-			String ISBN = isbnField.getValue();
-			String Title = titleField.getValue();
-			List<String> author = new ArrayList<String>();
-			for (TextField authorText : authorField) {
-				String writer = authorText.getValue();
-				if (!writer.isEmpty()) {
-					author.add(writer);
-				}
-			}
-			List<String> Author = author;
-			String Publisher = publisherField.getValue();
-			String Year = yearField.getValue();
-			String Edition = editionField.getValue();
-			if (ISBN.isEmpty() || Title.isEmpty() || author.size() == 0 || Publisher.isEmpty() || Year.isEmpty()
-					|| Edition.isEmpty()) {
-				Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
-				return;
-			}
-			book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
-			// Save DAO to backend with direct synchronous service API
-			getUI().service.save(book);
-			String msg = String.format("Saved '%s'.", book.getTitle());
-			Notification.show(msg, Type.TRAY_NOTIFICATION);
-			getUI().refreshBooks();
-			authorNumber = 1;
 		} catch (FieldGroup.CommitException e) {
 			// Validation exceptions could be shown here
 		}
+		boolean modification = false;
+		if (!book.getIsbn().isEmpty()) {
+			modification = true;
+		}
+		String ISBN = isbnField.getValue();
+		String Title = titleField.getValue();
+		List<String> author = new ArrayList<String>();
+		for (TextField authorText : authorField) {
+			String writer = authorText.getValue();
+			if (!writer.isEmpty()) {
+				author.add(writer);
+			}
+		}
+		List<String> Author = author;
+		String Publisher = publisherField.getValue();
+		String Year = yearField.getValue();
+		String Edition = editionField.getValue();
+		if (ISBN.isEmpty() || Title.isEmpty() || author.size() == 0 || Publisher.isEmpty() || Year.isEmpty()
+				|| Edition.isEmpty()) {
+			Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
+			return;
+		}
+		book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
+		// Save DAO to backend with direct synchronous service API
+		boolean result = getUI().service.save(book,modification);
+		if (result) {
+			String msg = String.format("Saved '%s'.", book.getTitle());
+			Notification.show(msg, Type.TRAY_NOTIFICATION);
+			getUI().refreshBooks();
+		} else {
+			Notification.show("The book with the same ISBN has already existed", Type.ERROR_MESSAGE);
+		}
+		authorNumber = 1;
 	}
 
 	void edit(Book book) {
@@ -154,14 +161,6 @@ public class BookForm extends FormLayout {
 		this.book = book;
 		this.removeAllComponents();
 		if (book.compareTo(new Book("", "", new ArrayList<String>(), "", "", "")) == 0) {
-			isbnField.setValue("");
-			titleField.setValue("");
-			authorField.get(0).setValue("");
-			publisherField.setValue("");
-			yearField.setValue("");
-			editionField.setValue("");
-			removeButton.setVisible(false);
-			checkIO.setVisible(false);
 			buildLayout();
 		} else {
 			removeButton.setVisible(true);
@@ -188,6 +187,19 @@ public class BookForm extends FormLayout {
 		editionField.setValue(book.getEdition());
 		for (int i = 0; i < book.getAuthors().size(); i++) {
 			authorField.get(i).setValue(book.getAuthors().get(i));
+		}
+	}
+	
+	public void clearFields() {
+		isbnField.setValue("");
+		titleField.setValue("");
+		publisherField.setValue("");
+		yearField.setValue("");
+		editionField.setValue("");
+		removeButton.setVisible(false);
+		checkIO.setVisible(false);
+		for (TextField field : authorField) {
+			field.setValue("");
 		}
 	}
 

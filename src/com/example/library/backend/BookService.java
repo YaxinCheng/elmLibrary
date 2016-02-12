@@ -21,7 +21,7 @@ public class BookService {
 			
 			// read from the config file and populate the BookService
 			String filepath = "/Users/salman/workspace/library/src/com/example/library/book-service-config.txt";
-			populateBookService(bookService, filepath);
+//			populateBookService(bookService, filepath);
 			
 			instance = bookService;
 		}
@@ -44,7 +44,7 @@ public class BookService {
 	
 				Book book = new Book(isbn, title, authors, publisher, year, edition);
 				// System.out.println(book);
-				bookService.save(book);
+//				bookService.save(book);
 			}		
 		} catch (IOException e) {
 			System.out.print("IOException - Book configuration file could not be read - " + e);
@@ -83,11 +83,17 @@ public class BookService {
 		System.out.println(value.getIsbn());
 	}
 
-	public synchronized void save(Book entry) {
-		System.out.println(entry.getIsbn());
+	public synchronized boolean save(Book entry, boolean modification) {
+		if (modification) {
+			books.replace(entry.getIsbn(), entry);
+			return true;
+		}
+//		System.out.println(entry.getIsbn());
 		if (!books.containsKey( entry.getIsbn() )) {
         	books.put(entry.getIsbn() , entry);
+        	return true;
         }
+		return false;
 	}
 
 }
