@@ -2,6 +2,8 @@ package com.example.library.backend;
 
 import java.util.*;
 
+import javax.persistence.*;
+
 /**
  * <h1>User</h1> This class contains the data for library patrons (users),
  * including their personal information, a list of books they've borrowed, and a
@@ -11,14 +13,21 @@ import java.util.*;
  * @version 1.0
  * @since 2016-02-01
  */
+@Entity
 public class User {
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
 	private String name;
 	private String email;
 	private String phone;
 	private ArrayList borrowed;
 	private ArrayList holds;
+	
+	@OneToMany(mappedBy = "user")
+	private Set<Book> book;
 
+	//above this part, we made some change on the database part
 	public User(String name, String email, String phone, ArrayList borrowed, ArrayList holds) {
 
 		this.name = name;
@@ -28,7 +37,10 @@ public class User {
 		this.holds = holds;
 
 	}
+	public User(){
 
+	}
+	
 	public String getName() {
 		return name;
 	}
