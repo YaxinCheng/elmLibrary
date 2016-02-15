@@ -20,7 +20,7 @@ import com.example.library.backend.Book;
  * Use BeanFieldGroup to bind data fields from DTO to UI fields.
  * Similarly named field by naming convention or customized
  * with @PropertyId annotation.
- * ok
+ * 
  */
 @SuppressWarnings("serial")
 public class BookForm extends FormLayout {

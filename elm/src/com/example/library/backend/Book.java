@@ -152,14 +152,11 @@ public class Book implements Comparable<Book>, Cloneable {
 		return new Book(isbn, title, authors, publisher, year, edition);
 	}
 	/*
-	public <T extends Field> T createField(Class<?> dataType, Class<T> fieldType) {
-		if (dataType == User.class) {
-			JPAContainer<User> countries = JPAContainerFactory.make(User.class, "mypunit");
-			ComboBox cb = new ComboBox(null, countries);
-			cb.setConverter(new SingleSelectConverter<User>(cb));
-			return (T) cb;
-		}
-		return super.createField(dataType, fieldType);
-	}
-	*/
+	 * public <T extends Field> T createField(Class<?> dataType, Class<T>
+	 * fieldType) { if (dataType == User.class) { JPAContainer<User> countries =
+	 * JPAContainerFactory.make(User.class, "mypunit"); ComboBox cb = new
+	 * ComboBox(null, countries); cb.setConverter(new
+	 * SingleSelectConverter<User>(cb)); return (T) cb; } return
+	 * super.createField(dataType, fieldType); }
+	 */
 }
