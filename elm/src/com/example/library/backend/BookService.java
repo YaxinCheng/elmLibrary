@@ -3,6 +3,7 @@ package com.example.library.backend;
 import com.example.library.backend.Book;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.ui.Table;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,15 +21,16 @@ public class BookService {
 	private static BookService instance;
 	private HashMap<String, Book> books = new HashMap<>();
 	static EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
-	static JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
-		
+	public static JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
+
 	public static BookService createDemoService() {
 		if (instance == null) {
 			final BookService bookService = new BookService();
 
-			// read from the config file and populate the BookService
-			//String filepath = "/Users/Bray/Documents/library/library/src/com/example/library/book-service-config.txt";
-			populateBookService(bookService);
+			// read from the config file and populate the BookService, make
+			// RELATIVE
+			String filepath = "/Users/Bray/Documents/library/library/src/com/example/library/book-service-config.txt";
+			populateBookService(bookService, filepath);
 
 			instance = bookService;
 		}
@@ -36,56 +38,53 @@ public class BookService {
 		return instance;
 	}
 
-	private static void populateBookService(BookService bookService) {
-		
-		shelf.addEntity(new Book("2487438", "Moby Dick", null, "Sun Company", "1903", "2nd"));
-//		String line = null;
-//		String[] bookInfo = line.split("%%%%");
-//		String isbn = bookInfo[0];
-//		String title = bookInfo[1];
-//		String authorsDelimitedByAnd = bookInfo[2];
-//		List<String> authors = Arrays.asList(authorsDelimitedByAnd.split("&&&&"));
-//		String publisher = bookInfo[3];
-//		String year = bookInfo[4];
-//		String edition = bookInfo[5];
+	private static void populateBookService(BookService bookService, String filepath) {
 
-		//Book book = new Book(isbn, title, authors, publisher, year, edition);
-		System.out.println(shelf.getEntityProvider());
-//		shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
-//		System.out.println(book);
-//		bookService.save(book, false);
-//		try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
-//			while ((line = br.readLine()) != null) {
-//				String[] bookInfo = line.split("%%%%");
-//				String isbn = bookInfo[0];
-//				String title = bookInfo[1];
-//				String authorsDelimitedByAnd = bookInfo[2];
-//				List<String> authors = Arrays.asList(authorsDelimitedByAnd.split("&&&&"));
-//				String publisher = bookInfo[3];
-//				String year = bookInfo[4];
-//				String edition = bookInfo[5];
-//
-//				Book book = new Book(isbn, title, authors, publisher, year, edition);
-//				shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
-//				// System.out.println(book);
-//				bookService.save(book, false);
-//			}
-//		} catch (IOException e) {
-//			System.out.print("IOException - Book configuration file could not be read - " + e);
-//		}
+		String line;
+		try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+			while ((line = br.readLine()) != null) {
+				String[] bookInfo = line.split("%%%%");
+				String isbn = bookInfo[0];
+				String title = bookInfo[1];
+				String authorsDelimitedByAnd = bookInfo[2];
+				List<String> authors = Arrays.asList(authorsDelimitedByAnd.split("&&&&"));
+				String publisher = bookInfo[3];
+				String year = bookInfo[4];
+				String edition = bookInfo[5];
+
+				shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
+				// System.out.println(book);
+				// bookService.save(book, false);
+			}
+		} catch (IOException e) {
+			System.out.print("IOException - Book configuration file could not be read - " + e);
+		}
+		System.out.println(shelf.size());
 	}
 
-	public synchronized List<Book> findAll(String filter) {
+	public synchronized List<Book> findAll(String filter) throws CloneNotSupportedException {
 		List<Book> arrayList = new ArrayList<Book>();
-		for (Book book : books.values()) {
-			try {
-				if (book.containInformation(filter)) {
-					arrayList.add(book.clone());
-				}
-			} catch (CloneNotSupportedException ex) {
-				Logger.getLogger(BookService.class.getName()).log(Level.SEVERE, null, ex);
+		System.out.println(shelf.size() + "fuck");
+		Collection<Object> id = shelf.getItemIds();
+		System.out.println(id);
+		for (int i = 0; i < shelf.size() + 1; i++) {
+			if (id.contains(i)) {
+				System.out.println(i + "FUCJ YA");
 			}
+			// if (shelf.getItem(i).getEntity().containInformation(filter)) {
+			// arrayList.add(shelf.getItem(i).getEntity().clone());
+			// }
 		}
+		// for (Book book : books.values()) {
+		// try {
+		// if (book.containInformation(filter)) {
+		// arrayList.add(book.clone());
+		// }
+		// } catch (CloneNotSupportedException ex) {
+		// Logger.getLogger(BookService.class.getName()).log(Level.SEVERE, null,
+		// ex);
+		// }
+		// }
 		Collections.sort(arrayList, new Comparator<Book>() {
 			@Override
 			public int compare(Book o1, Book o2) {
@@ -93,7 +92,7 @@ public class BookService {
 			}
 		});
 
-		System.out.println("books list: " + arrayList);
+		System.out.println("filtered books list: " + arrayList);
 		return arrayList;
 	}
 
@@ -118,5 +117,5 @@ public class BookService {
 		}
 		return false;
 	}
-	
+
 }
