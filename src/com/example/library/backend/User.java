@@ -23,11 +23,11 @@ public class User {
 	private String phone;
 	private ArrayList borrowed;
 	private ArrayList holds;
-	
+
 	@OneToMany(mappedBy = "user")
 	private Set<Book> book;
 
-	//above this part, we made some change on the database part
+	// above this part, we made some change on the database part
 	public User(String name, String email, String phone, ArrayList borrowed, ArrayList holds) {
 
 		this.name = name;
@@ -37,10 +37,11 @@ public class User {
 		this.holds = holds;
 
 	}
-	public User(){
+
+	public User() {
 
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -103,5 +104,4 @@ public class User {
 	protected Object clone() throws CloneNotSupportedException {
 		return new User(name, email, phone, borrowed, holds);
 	}
-
 }
