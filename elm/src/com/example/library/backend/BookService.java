@@ -1,6 +1,7 @@
 package com.example.library.backend;
 
 import com.example.library.backend.Book;
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.Table;
@@ -19,7 +20,7 @@ import javax.persistence.EntityManager;
 public class BookService {
 
 	private static BookService instance;
-	private HashMap<String, Book> books = new HashMap<>();
+	//private HashMap<String, Book> books = new HashMap<>();
 	static EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
 	public static JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
 
@@ -97,24 +98,29 @@ public class BookService {
 	}
 
 	public synchronized long count() {
-		return books.size();
+		return shelf.size();
 	}
 
-	public synchronized void delete(Book value) {
-		books.remove(value.getIsbn());
-		System.out.println(value.getIsbn());
+	public synchronized void delete(EntityItem<Book> book) {
+		shelf.removeItem(book.getEntity().getIsbn());
+		System.out.println(book.getEntity().getIsbn());
 	}
 
-	public synchronized boolean save(Book entry, boolean modification) {
+	public synchronized boolean save(EntityItem<Book> book, boolean modification) {
 		if (modification) {
-			books.replace(entry.getIsbn(), entry);
+			//books.replace(entry.getIsbn(), entry);
+			shelf.removeItem(book.getEntity().getIsbn());
+			shelf.addEntity(book.getEntity());
+			
 			return true;
 		}
 		// System.out.println(entry.getIsbn());
-		if (!books.containsKey(entry.getIsbn())) {
-			books.put(entry.getIsbn(), entry);
-			return true;
-		}
+		
+		//need to fix
+//		if (!books.containsKey(entry.getIsbn())) {
+//			books.put(entry.getIsbn(), entry);
+//			return true;
+//		}
 		return false;
 	}
 

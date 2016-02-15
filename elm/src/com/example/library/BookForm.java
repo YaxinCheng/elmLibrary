@@ -1,5 +1,6 @@
 package com.example.library;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.example.library.backend.Book;
+import com.example.library.backend.BookService;
 
 /* Create custom UI Components.
  *
@@ -38,10 +40,10 @@ public class BookForm extends FormLayout {
 	TextField yearField = new TextField("Year");
 	TextField editionField = new TextField("Edition");
 	private static int authorNumber = 1;
-	Book book;
+	EntityItem<Book> book;
 
 	// Easily bind forms to beans and manage validation and buffering
-	BeanFieldGroup<Book> formFieldBindings;
+	BeanFieldGroup<EntityItem<Book>> formFieldBindings;
 
 	public BookForm() {
 		configureComponents();
@@ -85,8 +87,9 @@ public class BookForm extends FormLayout {
 			formFieldBindings.commit();
 
 			getUI().service.delete(book);
+			BookService.shelf.removeItem(book.getEntity());
 
-			String msg = String.format("Removed '%s - %s'.", book.getIsbn(), book.getTitle());
+			String msg = String.format("Removed '%s - %s'.", book.getEntity().getIsbn(), book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();
 		} catch (FieldGroup.CommitException e) {
@@ -95,11 +98,11 @@ public class BookForm extends FormLayout {
 			cancel(event);
 		}
 	}
-	
+
 	public void checkIO(Button.ClickEvent event) {
 		if (book != null) {
-			book.setCheckOut(!book.isCheckOut());
-			String buttonTitle = book.isCheckOut()?"Return":"Check Out";
+			book.getEntity().setCheckOut(!book.getEntity().isCheckOut());
+			String buttonTitle = book.getEntity().isCheckOut() ? "Return" : "Check Out";
 			checkIO.setCaption(buttonTitle);
 		}
 	}
@@ -120,7 +123,7 @@ public class BookForm extends FormLayout {
 			// Validation exceptions could be shown here
 		}
 		boolean modification = false;
-		if (!book.getIsbn().isEmpty()) {
+		if (!book.getEntity().getIsbn().isEmpty()) {
 			modification = true;
 		}
 		String ISBN = isbnField.getValue();
@@ -141,11 +144,13 @@ public class BookForm extends FormLayout {
 			Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
 			return;
 		}
-		book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
+		// book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
+		BookService.shelf.addEntity(new Book(ISBN, Title, Author, Publisher, Year, Edition));
+
 		// Save DAO to backend with direct synchronous service API
-		boolean result = getUI().service.save(book,modification);
+		boolean result = getUI().service.save(book, modification);
 		if (result) {
-			String msg = String.format("Saved '%s'.", book.getTitle());
+			String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();
 		} else {
@@ -154,42 +159,42 @@ public class BookForm extends FormLayout {
 		authorNumber = 1;
 	}
 
-	void edit(Book book) {
-		if (book == null) {
+	void edit(EntityItem<Book> book2) {
+		if (book2 == null) {
 			return;
 		}
-		this.book = book;
+		this.book = book2;
 		this.removeAllComponents();
-		if (book.compareTo(new Book("", "", new ArrayList<String>(), "", "", "")) == 0) {
+		if (book2.getEntity().compareTo(new Book("", "", new ArrayList<String>(), "", "", "")) == 0) {
 			buildLayout();
 		} else {
 			removeButton.setVisible(true);
 			checkIO.setVisible(true);
-			int authorsCount = book.getAuthors().size();
+			int authorsCount = book2.getEntity().getAuthors().size();
 			buildLayout();
 			for (int i = 1; i < authorsCount; i++) {
 				this.addComponent(authorField.get(i));
 			}
 		}
 
-		setFields(book);
+		setFields(book2);
 		// Bind the properties of the Book POJO to fields in this form
-		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
+		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book2, this);
 
-		setVisible(book != null);
+		setVisible(book2 != null);
 	}
 
-	private void setFields(Book book) {
-		titleField.setValue(book.getTitle());
-		isbnField.setValue(book.getIsbn());
-		publisherField.setValue(book.getPublisher());
-		yearField.setValue(book.getYear());
-		editionField.setValue(book.getEdition());
-		for (int i = 0; i < book.getAuthors().size(); i++) {
-			authorField.get(i).setValue(book.getAuthors().get(i));
+	private void setFields(EntityItem<Book> book2) {
+		titleField.setValue(book2.getEntity().getTitle());
+		isbnField.setValue(book2.getEntity().getIsbn());
+		publisherField.setValue(book2.getEntity().getPublisher());
+		yearField.setValue(book2.getEntity().getYear());
+		editionField.setValue(book2.getEntity().getEdition());
+		for (int i = 0; i < book2.getEntity().getAuthors().size(); i++) {
+			authorField.get(i).setValue(book2.getEntity().getAuthors().get(i));
 		}
 	}
-	
+
 	public void clearFields() {
 		isbnField.setValue("");
 		titleField.setValue("");
