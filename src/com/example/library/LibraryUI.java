@@ -2,6 +2,7 @@ package com.example.library;
 
 import java.util.ArrayList;
 
+import javax.persistence.EntityManager;
 import javax.servlet.annotation.WebServlet;
 
 import com.example.library.backend.Book;
@@ -77,7 +78,8 @@ public class LibraryUI extends UI {
         filterField.setInputPrompt("Filter books...");
         filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
 
-		bookList.setContainerDataSource(new BeanItemContainer<>(Book.class));
+		//bookList.setContainerDataSource(new BeanItemContainer<>(Book.class));
+        bookList.setContainerDataSource(BookService.shelf);
 		bookList.setColumnOrder("title", "authors", "year");		
 		bookList.removeColumn("isbn");
 		bookList.removeColumn("publisher");
@@ -87,7 +89,9 @@ public class LibraryUI extends UI {
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 		bookList.addSelectionListener(selectionEvent -> {
 			bookForm.clearFields();
-			bookForm.edit((Book) bookList.getSelectedRow());
+			
+			//problem with editing the book, just need to connect it to the shelf
+			//bookForm.edit((Book) bookList.getSelectedRow());
 			});
 		refreshBooks();
 	}
@@ -118,8 +122,13 @@ public class LibraryUI extends UI {
    }
 
    private void refreshBooks(String stringFilter) {
-	   bookList.setContainerDataSource(new BeanItemContainer<>(
-               Book.class, service.findAll(stringFilter)));
+	   try {
+		//bookList.setContainerDataSource(new BeanItemContainer<>(Book.class, service.findAll(stringFilter)));
+		   bookList.setContainerDataSource(BookService.shelf);
+	} catch (IllegalArgumentException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
        bookForm.setVisible(false);
    }
    
