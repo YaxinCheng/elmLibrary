@@ -65,13 +65,9 @@ public class BookService {
 				String edition = bookInfo[5];
 
 				/* adding the book to the shelf */
-				shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
-
-				/*
-				 * this is currently commented out on purpose, still has some
-				 * bugs
-				 */
-				// bookService.save(book, false);
+				Object id = shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
+				EntityItem<Book> book = shelf.getItem(id);
+				//bookService.save(book, false);
 			}
 		} catch (IOException e) {
 			System.out.print("IOException - Book configuration file could not be read - " + e);
@@ -131,20 +127,30 @@ public class BookService {
 	/*
 	 * this function will either replace and then add an edited book, else it
 	 * will save the book to the shelf
+	 * 
+	 * I am having trouble with this function, the goal is to not add a duplicate ISBN
+	 * however with the JPAContainer i haven't learned how to yet
 	 */
 	public synchronized boolean save(EntityItem<Book> book, boolean modification) {
+		boolean dup = false;
 		if (modification) {
-			// books.replace(entry.getIsbn(), entry);
-			shelf.removeItem(book.getEntity().getIsbn());
-			shelf.addEntity(book.getEntity());
+			delete(book);
 			return true;
+		} else {
+			for (long i = 1; i <= shelf.size(); i++) {
+//				if (book.getEntity().getIsbn().equals(shelf.getItem(i).getEntity().getIsbn())) {
+//					System.out.println(book.getEntity().getIsbn());
+//					System.out.println(shelf.getItem(i).getEntity().getIsbn());
+//					dup = true;
+//				}
+			}
+			if (dup) {
+				System.out.println("DUPLICATE!!!!!");
+			} else {
+				System.out.println("we goood");
+				return true;
+			}
 		}
-		// System.out.println(entry.getIsbn());
-		// need to fix
-		// if (!books.containsKey(entry.getIsbn())) {
-		// books.put(entry.getIsbn(), entry);
-		// return true;
-		// }
 		return false;
 	}
 }
