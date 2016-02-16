@@ -38,28 +38,35 @@ public class LibraryUI extends UI {
 	TextField filterField = new TextField();
 	Button searchButton = new Button("Search");
 	Button addBookButton = new Button("Add Book");
-
 	BookService service = BookService.createDemoService();
-
-	// BookForm is an example of a custom component class
+	/* custom component class */
 	BookForm bookForm = new BookForm();
 
+	/* this is where the program initializes from */
 	@Override
 	protected void init(VaadinRequest request) {
 		configureComponents();
 		buildLayout();
 	}
 
+	/*
+	 * this function is called once the dash-board UI is created, it will
+	 * display the add book function
+	 */
 	private void configureComponents() {
-
 		addBookButton.addClickListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// TODO Auto-generated method stub
 				if (!bookForm.isVisible()) {
 					bookForm.authorField.get(0).setCaption("Author");
 					bookForm.clearFields();
-					//bookForm.edit((EntityItem<Book>) new Book("", "", new ArrayList<String>(), "", "", ""));
+
+					/*
+					 * currently have this commented because i don't know what
+					 * to do
+					 */
+					// bookForm.edit((EntityItem<Book>) new Book("", "", new
+					// ArrayList<String>(), "", "", ""));
 				}
 			}
 		});
@@ -68,15 +75,19 @@ public class LibraryUI extends UI {
 		searchButton.addClickListener(e -> {
 			String info = filterField.getValue();
 			if (!info.isEmpty()) {
-				refreshBooks(info);
+				// refreshBooks(info);
 			} else {
-				filterField.focus();
+				// filterField.focus();
 			}
 		});
 
+		/*
+		 * i need to fix the filtering of books when searching and refreshing,
+		 * just not quite sure how to do that with the new implementation of the
+		 * 'shelf' at the moment
+		 */
 		filterField.setInputPrompt("Filter books...");
-		filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
-
+		// filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
 		// bookList.setContainerDataSource(new BeanItemContainer<>(Book.class));
 		bookList.setContainerDataSource(BookService.shelf);
 		bookList.setColumnOrder("title", "authors", "year");
@@ -84,15 +95,15 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("publisher");
 		bookList.removeColumn("edition");
 		bookList.removeColumn("checkOut");
-		//bookList.removeColumn("id");
-
+		bookList.removeColumn("id");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
+
+		/*
+		 * this will allow a book to be edited or deleted when a row is clicked
+		 * on
+		 */
 		bookList.addSelectionListener(selectionEvent -> {
 			bookForm.clearFields();
-
-			// problem with editing the book, just need to connect it to the
-			// shelf
-			//System.out.println(bookList.getSelectedRow());
 			bookForm.edit(BookService.shelf.getItem(bookList.getSelectedRow()));
 		});
 		refreshBooks();
@@ -114,22 +125,27 @@ public class LibraryUI extends UI {
 		HorizontalLayout mainLayout = new HorizontalLayout(left, bookForm);
 		mainLayout.setSizeFull();
 		mainLayout.setExpandRatio(left, 1);
-
-		// Split and allow resizing
-		setContent(mainLayout);
+		setContent(mainLayout); // Split and allow resizing
 	}
 
+	/*
+	 * here is where i have been having some trouble, i have left some of the
+	 * original code as reference, just not quite sure how to use the findAll
+	 * method on the 'shelf'
+	 */
 	void refreshBooks() {
-		refreshBooks(filterField.getValue());
+		// refreshBooks(filterField.getValue());
 	}
 
-	private void refreshBooks(String stringFilter) {
+	private void refreshBooks(String stringFilter) throws CloneNotSupportedException {
 		try {
+			// old code
 			// bookList.setContainerDataSource(new
 			// BeanItemContainer<>(Book.class, service.findAll(stringFilter)));
-			bookList.setContainerDataSource(BookService.shelf);
+
+			// new code
+			// bookList.setContainerDataSource(BookService.shelf);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		bookForm.setVisible(false);

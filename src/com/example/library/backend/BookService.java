@@ -20,27 +20,38 @@ import javax.persistence.EntityManager;
 public class BookService {
 
 	private static BookService instance;
-	//private HashMap<String, Book> books = new HashMap<>();
+	// private HashMap<String, Book> books = new HashMap<>();//old
+	// implementation
+
+	/*
+	 * creating an entity manager for some reason, this lets us create a
+	 * JPAContainer of type Book
+	 */
 	static EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
 	public static JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
 
 	public static BookService createDemoService() {
 		if (instance == null) {
 			final BookService bookService = new BookService();
-
-			// read from the config file and populate the BookService, make
-			// RELATIVE
+			/* if someone can make this path RELATIVE i will be overjoyed */
 			String filepath = "/Users/Bray/Documents/library/library/src/com/example/library/book-service-config.txt";
+			/*
+			 * this function call happens when application UI is being
+			 * generated, it will read from the text file, file the 'shelf'
+			 * container, and then be spit out to the UI
+			 */
 			populateBookService(bookService, filepath);
-
 			instance = bookService;
 		}
-
 		return instance;
 	}
 
+	/*
+	 * this function works by reading a text file using the BufferedReader and
+	 * then placing those values as the properties of a new book, each row in
+	 * the text file will represent an instance of a book
+	 */
 	private static void populateBookService(BookService bookService, String filepath) {
-
 		String line;
 		try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
 			while ((line = br.readLine()) != null) {
@@ -53,16 +64,28 @@ public class BookService {
 				String year = bookInfo[4];
 				String edition = bookInfo[5];
 
+				/* adding the book to the shelf */
 				shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
-				// System.out.println(book);
+
+				/*
+				 * this is currently commented out on purpose, still has some
+				 * bugs
+				 */
 				// bookService.save(book, false);
 			}
 		} catch (IOException e) {
 			System.out.print("IOException - Book configuration file could not be read - " + e);
 		}
-		System.out.println(shelf.size());
 	}
 
+	/*
+	 * this function has been giving me lots of trouble after implementing the
+	 * JPAContainer we just need to figure out a way to sort and filter through
+	 * the 'shelf'
+	 * 
+	 * with that said, this function works in conjunction with the search bar to
+	 * display the books that match the filter string
+	 */
 	public synchronized List<Book> findAll(String filter) throws CloneNotSupportedException {
 		List<Book> arrayList = new ArrayList<Book>();
 		System.out.println(shelf.size() + "fuck");
@@ -92,7 +115,6 @@ public class BookService {
 				return (o1.compareTo(o2));
 			}
 		});
-
 		System.out.println("filtered books list: " + arrayList);
 		return arrayList;
 	}
@@ -101,27 +123,28 @@ public class BookService {
 		return shelf.size();
 	}
 
+	/* this function will simply delete a book from the 'shelf' container */
 	public synchronized void delete(EntityItem<Book> book) {
-		shelf.removeItem(book.getEntity().getIsbn());
-		System.out.println(book.getEntity().getIsbn());
+		shelf.removeItem(book.getItemId());
 	}
 
+	/*
+	 * this function will either replace and then add an edited book, else it
+	 * will save the book to the shelf
+	 */
 	public synchronized boolean save(EntityItem<Book> book, boolean modification) {
 		if (modification) {
-			//books.replace(entry.getIsbn(), entry);
+			// books.replace(entry.getIsbn(), entry);
 			shelf.removeItem(book.getEntity().getIsbn());
 			shelf.addEntity(book.getEntity());
-			
 			return true;
 		}
 		// System.out.println(entry.getIsbn());
-		
-		//need to fix
-//		if (!books.containsKey(entry.getIsbn())) {
-//			books.put(entry.getIsbn(), entry);
-//			return true;
-//		}
+		// need to fix
+		// if (!books.containsKey(entry.getIsbn())) {
+		// books.put(entry.getIsbn(), entry);
+		// return true;
+		// }
 		return false;
 	}
-
 }

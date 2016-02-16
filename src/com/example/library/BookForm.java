@@ -7,26 +7,16 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
 
-/* Create custom UI Components.
- *
- * Create your own Vaadin components by inheritance and composition.
- * This is a form component inherited from VerticalLayout. Use
- * Use BeanFieldGroup to bind data fields from DTO to UI fields.
- * Similarly named field by naming convention or customized
- * with @PropertyId annotation.
- * 
- */
 @SuppressWarnings("serial")
 public class BookForm extends FormLayout {
 
+	/* adding all of the UI buttons */
 	Button removeButton = new Button("Remove", this::remove);
 	Button saveButton = new Button("Save", this::save);
 	Button cancelButton = new Button("Cancel", this::cancel);
@@ -40,11 +30,19 @@ public class BookForm extends FormLayout {
 	TextField yearField = new TextField("Year");
 	TextField editionField = new TextField("Edition");
 	private static int authorNumber = 1;
+
+	/*
+	 * creating an entity named book, this will be managed by the JPAContainer
+	 */
 	EntityItem<Book> book;
 
-	// Easily bind forms to beans and manage validation and buffering
+	/* this creates container to hold all of the books */
 	BeanFieldGroup<EntityItem<Book>> formFieldBindings;
 
+	/*
+	 * when the book is clicked, to view, the according method to build all of
+	 * the components will be called, they will then be stored in a layout
+	 */
 	public BookForm() {
 		configureComponents();
 		buildLayout();
@@ -71,6 +69,10 @@ public class BookForm extends FormLayout {
 		this.addComponent(new HorizontalLayout(authorField.get(0), addAuthors));
 	}
 
+	/*
+	 * this function will allow the book to have more than one author the
+	 * authors max out at 5
+	 */
 	public void moreAuthor(Button.ClickEvent event) {
 		if (authorNumber == 5) {
 			Notification.show("Can't add more", Type.ERROR_MESSAGE);
@@ -82,13 +84,16 @@ public class BookForm extends FormLayout {
 		this.addComponent(authorField.get(authorNumber - 1));
 	}
 
+	/*
+	 * this function will be called when the 'remove' button is pressed when
+	 * viewing a book, the book will be removed from the 'shelf' and then the
+	 * books will be refreshed
+	 */
 	public void remove(Button.ClickEvent event) {
 		try {
 			formFieldBindings.commit();
-
 			getUI().service.delete(book);
 			BookService.shelf.removeItem(book.getEntity());
-
 			String msg = String.format("Removed '%s - %s'.", book.getEntity().getIsbn(), book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();
@@ -99,6 +104,7 @@ public class BookForm extends FormLayout {
 		}
 	}
 
+	/* this function will allow a user to check out a book or return a book */
 	public void checkIO(Button.ClickEvent event) {
 		if (book != null) {
 			book.getEntity().setCheckOut(!book.getEntity().isCheckOut());
@@ -115,6 +121,12 @@ public class BookForm extends FormLayout {
 		authorNumber = 1;
 	}
 
+	/*
+	 * this function will first check if an existing book has been modified, if
+	 * it is a new book, it will then proceed to make sure all of the fields
+	 * have been filled out, the book will then be added to the JPAContainer
+	 * 'shelf'
+	 */
 	public void save(Button.ClickEvent event) {
 		try {
 			// Commit the fields from UI to DAO
@@ -144,10 +156,7 @@ public class BookForm extends FormLayout {
 			Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
 			return;
 		}
-		// book = new Book(ISBN, Title, Author, Publisher, Year, Edition);
 		BookService.shelf.addEntity(new Book(ISBN, Title, Author, Publisher, Year, Edition));
-
-		// Save DAO to backend with direct synchronous service API
 		boolean result = getUI().service.save(book, modification);
 		if (result) {
 			String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
@@ -159,6 +168,10 @@ public class BookForm extends FormLayout {
 		authorNumber = 1;
 	}
 
+	/*
+	 * this function will be called when a book is clicked from the table, it
+	 * will then display that book's attributes
+	 */
 	void edit(EntityItem<Book> book2) {
 		if (book2 == null) {
 			return;
@@ -176,11 +189,9 @@ public class BookForm extends FormLayout {
 				this.addComponent(authorField.get(i));
 			}
 		}
-
 		setFields(book2);
 		// Bind the properties of the Book POJO to fields in this form
 		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book2, this);
-
 		setVisible(book2 != null);
 	}
 
@@ -212,5 +223,4 @@ public class BookForm extends FormLayout {
 	public LibraryUI getUI() {
 		return (LibraryUI) super.getUI();
 	}
-
 }
