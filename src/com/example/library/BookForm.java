@@ -93,7 +93,7 @@ public class BookForm extends FormLayout {
 		try {
 			formFieldBindings.commit();
 			getUI().service.delete(book);
-			BookService.shelf.removeItem(book.getEntity());
+			BookService.shelf.removeItem(book.getItemId());
 			String msg = String.format("Removed '%s - %s'.", book.getEntity().getIsbn(), book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();
@@ -156,9 +156,9 @@ public class BookForm extends FormLayout {
 			Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
 			return;
 		}
-		BookService.shelf.addEntity(new Book(ISBN, Title, Author, Publisher, Year, Edition));
 		boolean result = getUI().service.save(book, modification);
 		if (result) {
+			BookService.shelf.addEntity(new Book(ISBN, Title, Author, Publisher, Year, Edition));
 			String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();

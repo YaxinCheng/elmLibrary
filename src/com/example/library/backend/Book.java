@@ -15,7 +15,7 @@ import com.vaadin.ui.*;
  *
  * @author Team-Elm
  * @version 1.0
- * @since 2015-02-01
+ * @since 2016-02-01
  */
 @Entity
 public class Book implements Comparable<Book>, Cloneable {

@@ -39,8 +39,8 @@ public class LibraryUI extends UI {
 	Button searchButton = new Button("Search");
 	Button addBookButton = new Button("Add Book");
 	BookService service = BookService.createDemoService();
-	/* custom component class */
 	BookForm bookForm = new BookForm();
+	EntityItem<Book> book;
 
 	/* this is where the program initializes from */
 	@Override
@@ -60,13 +60,9 @@ public class LibraryUI extends UI {
 				if (!bookForm.isVisible()) {
 					bookForm.authorField.get(0).setCaption("Author");
 					bookForm.clearFields();
-
-					/*
-					 * currently have this commented because i don't know what
-					 * to do
-					 */
-					// bookForm.edit((EntityItem<Book>) new Book("", "", new
-					// ArrayList<String>(), "", "", ""));
+					Object id = BookService.shelf.addEntity(new Book("", "", new ArrayList<String>(), "", "", ""));
+					System.out.println(id);
+					bookForm.edit(BookService.shelf.getItem(id));
 				}
 			}
 		});
