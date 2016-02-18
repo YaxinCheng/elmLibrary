@@ -34,7 +34,7 @@ public class BookForm extends FormLayout {
 	TextField yearField = new TextField("Year");
 	TextField editionField = new TextField("Edition");
 	private static int authorNumber = 1;
-
+	boolean modification = false;
 	/*
 	 * creating an entity named book, this will be managed by the JPAContainer
 	 */
@@ -132,7 +132,7 @@ public class BookForm extends FormLayout {
 	 * 'shelf'
 	 */
 	public void save(Button.ClickEvent event) {
-		if (book != null) {
+		if (modification) {
 			try {
 				// Commit the fields from UI to DAO
 				formFieldBindings.commit();
@@ -140,9 +140,7 @@ public class BookForm extends FormLayout {
 				// Validation exceptions could be shown here
 			}
 		}
-		System.out.println("Here");
-		boolean modification = false;
-		if (book != null) {
+		if (modification) {
 			if (!book.getEntity().getIsbn().isEmpty()) {
 				modification = true;
 			}
@@ -165,27 +163,33 @@ public class BookForm extends FormLayout {
 			Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
 			return;
 		}
-		if (book == null) {
-			Object id = BookService.shelf.addEntity(new Book(ISBN, Title, author, Publisher, Year, Edition));
-			book = BookService.shelf.getItem(id);
-			formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
-			try {
-				// Commit the fields from UI to DAO
-				formFieldBindings.commit();
-			} catch (FieldGroup.CommitException e) {
-				// Validation exceptions could be shown here
+		if (!modification) {
+			if(BookService.checkDuplicate(ISBN)) {
+				Object id = BookService.shelf.addEntity(new Book(ISBN, Title, author, Publisher, Year, Edition));
+				book = BookService.shelf.getItem(id);
+				formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
+				try {
+					// Commit the fields from UI to DAO
+					formFieldBindings.commit();
+				} catch (FieldGroup.CommitException e) {
+					// Validation exceptions could be shown here
+				}
+				String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
+				Notification.show(msg, Type.TRAY_NOTIFICATION);
+				BookService.shelf.refresh();
+				getUI().refreshBooks();
+				return;
+			} else {
+				Notification.show("The book with the same ISBN has already existed", Type.ERROR_MESSAGE);
+				return;
 			}
-			String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
-			Notification.show(msg, Type.TRAY_NOTIFICATION);
-			getUI().refreshBooks();
-			authorNumber = 1;
-			return;
 		}
 		boolean result = getUI().service.save(book, modification);
 		if (result) {
 			BookService.shelf.addEntity(new Book(ISBN, Title, Author, Publisher, Year, Edition));
 			String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
+			BookService.shelf.refresh();
 			getUI().refreshBooks();
 		} else {
 			Notification.show("The book with the same ISBN has already existed", Type.ERROR_MESSAGE);
