@@ -4,6 +4,8 @@ import com.example.library.backend.Book;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Compare;
 import com.vaadin.ui.Table;
 
 import java.io.BufferedReader;
@@ -132,27 +134,30 @@ public class BookService {
 	 * duplicate ISBN however with the JPAContainer i haven't learned how to yet
 	 */
 	public synchronized boolean save(EntityItem<Book> book, boolean modification) {
-		boolean dup = false;
 		if (modification) {
 			delete(book);
 			return true;
 		} else {
-			for (long i = 1; i <= shelf.size(); i++) {
-				// if
-				// (book.getEntity().getIsbn().equals(shelf.getItem(i).getEntity().getIsbn()))
-				// {
-				// System.out.println(book.getEntity().getIsbn());
-				// System.out.println(shelf.getItem(i).getEntity().getIsbn());
-				// dup = true;
-				// }
-			}
-			if (dup) {
-				System.out.println("DUPLICATE!!!!!");
-			} else {
-				System.out.println("we goood");
-				return true;
-			}
+			String isbn = book.getEntity().getIsbn();
+			return checkDuplicate(isbn);
 		}
-		return false;
+	}
+	
+	public static boolean checkDuplicate(String isbn) {
+		Filter filter = new Compare.Equal("isbn", isbn);
+		shelf.addContainerFilter(filter);
+		shelf.applyFilters();
+		if (shelf.size() >= 1) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public static void removeAllFilters() {
+		Collection<Filter> filters = BookService.shelf.getContainerFilters();
+		for(Filter filter : filters) {
+			BookService.shelf.removeContainerFilter(filter);
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.example.library;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,11 @@ import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.client.widget.grid.selection.SelectionEvent;
+import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.filter.Compare;
+import com.vaadin.event.FieldEvents.TextChangeEvent;
+import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -53,16 +58,15 @@ public class LibraryUI extends UI {
 	 * this function is called once the dash-board UI is created, it will
 	 * display the add book function
 	 */
+
 	private void configureComponents() {
 		addBookButton.addClickListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if (!bookForm.isVisible()) {
 					bookForm.authorField.get(0).setCaption("Author");
+					bookForm.modification = false;
 					bookForm.clearFields();
-//					Object id = BookService.shelf.addEntity(new Book("", "", new ArrayList<String>(), "", "", ""));
-//					System.out.println(id);
-//					bookForm.edit(BookService.shelf.getItem(id));
 					bookForm.edit();
 				}
 			}
@@ -72,9 +76,12 @@ public class LibraryUI extends UI {
 		searchButton.addClickListener(e -> {
 			String info = filterField.getValue();
 			if (!info.isEmpty()) {
-				// refreshBooks(info);
+				refreshBooks(info);
 			} else {
-				// filterField.focus();
+				filterField.focus();
+				BookService.removeAllFilters();
+				BookService.shelf.refresh();
+				bookList.setContainerDataSource(BookService.shelf);
 			}
 		});
 
@@ -92,6 +99,7 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("publisher");
 		bookList.removeColumn("edition");
 		bookList.removeColumn("checkOut");
+		bookList.removeColumn("user");
 		bookList.removeColumn("id");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 
@@ -101,6 +109,7 @@ public class LibraryUI extends UI {
 		 */
 		bookList.addSelectionListener(selectionEvent -> {
 			bookForm.clearFields();
+			bookForm.modification = true;
 			bookForm.edit(BookService.shelf.getItem(bookList.getSelectedRow()));
 		});
 		refreshBooks();
@@ -131,21 +140,31 @@ public class LibraryUI extends UI {
 	 * method on the 'shelf'
 	 */
 	void refreshBooks() {
-		// refreshBooks(filterField.getValue());
+		refreshBooks(filterField.getValue());
 	}
 
-	private void refreshBooks(String stringFilter) throws CloneNotSupportedException {
+	private void refreshBooks(String stringFilter) {
 		try {
 			// old code
 			// bookList.setContainerDataSource(new
 			// BeanItemContainer<>(Book.class, service.findAll(stringFilter)));
 
 			// new code
-			// bookList.setContainerDataSource(BookService.shelf);
+			if(stringFilter.isEmpty()) {
+				BookService.shelf.refresh();
+				bookList.setContainerDataSource(BookService.shelf);
+				return;
+			}
+			BookService.removeAllFilters();
+			Filter filter = new Compare.Equal("title", stringFilter);
+			BookService.shelf.addContainerFilter(filter);
+			BookService.shelf.refresh();
+			bookList.setContainerDataSource(BookService.shelf);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
+		} finally {
+			bookForm.setVisible(false);
 		}
-		bookForm.setVisible(false);
 	}
 
 	@WebServlet(urlPatterns = "/*")
