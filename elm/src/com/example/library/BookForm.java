@@ -13,6 +13,10 @@ import java.util.List;
 import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
 
+/**
+ * The BookForm class This class is the UI of the adding book part There are
+ * several buttons and TextField in this form
+ */
 @SuppressWarnings("serial")
 public class BookForm extends FormLayout {
 

@@ -71,6 +71,7 @@ public class Book implements Comparable<Book>, Cloneable {
 		return false;
 	}
 
+	// Setter and getter
 	public String getIsbn() {
 		return isbn;
 	}
@@ -134,6 +135,7 @@ public class Book implements Comparable<Book>, Cloneable {
 				+ ", year=" + year + ", edition=" + edition + "]";
 	}
 
+	// to Check whether two books are same
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof Book && ((Book) object).getIsbn().equals(this.isbn)) {
@@ -142,6 +144,7 @@ public class Book implements Comparable<Book>, Cloneable {
 		return false;
 	}
 
+	// to compare two books
 	@Override
 	public int compareTo(Book o) {
 		return this.title.compareTo(o.getTitle());
