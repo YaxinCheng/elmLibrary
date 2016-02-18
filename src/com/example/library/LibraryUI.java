@@ -18,6 +18,7 @@ import com.vaadin.client.widget.grid.selection.SelectionEvent;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.Compare;
+import com.vaadin.data.util.filter.Like;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction;
@@ -156,7 +157,7 @@ public class LibraryUI extends UI {
 				return;
 			}
 			BookService.removeAllFilters();
-			Filter filter = new Compare.Equal("title", stringFilter);
+			Filter filter = new Like("title", "%" + stringFilter + "%", false);
 			BookService.shelf.addContainerFilter(filter);
 			BookService.shelf.refresh();
 			bookList.setContainerDataSource(BookService.shelf);
