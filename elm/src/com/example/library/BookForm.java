@@ -43,7 +43,7 @@ public class BookForm extends FormLayout {
 	/* this creates container to hold all of the books */
 	BeanFieldGroup<EntityItem<Book>> formFieldBindings;
 
-	/*
+	/**
 	 * when the book is clicked, to view, the according method to build all of
 	 * the components will be called, they will then be stored in a layout
 	 */
@@ -73,7 +73,7 @@ public class BookForm extends FormLayout {
 		this.addComponent(new HorizontalLayout(authorField.get(0), addAuthors));
 	}
 
-	/*
+	/**
 	 * this function will allow the book to have more than one author the
 	 * authors max out at 5
 	 */
@@ -88,7 +88,7 @@ public class BookForm extends FormLayout {
 		this.addComponent(authorField.get(authorNumber - 1));
 	}
 
-	/*
+	/**
 	 * this function will be called when the 'remove' button is pressed when
 	 * viewing a book, the book will be removed from the 'shelf' and then the
 	 * books will be refreshed
@@ -125,7 +125,7 @@ public class BookForm extends FormLayout {
 		authorNumber = 1;
 	}
 
-	/*
+	/**
 	 * this function will first check if an existing book has been modified, if
 	 * it is a new book, it will then proceed to make sure all of the fields
 	 * have been filled out, the book will then be added to the JPAContainer
@@ -172,7 +172,7 @@ public class BookForm extends FormLayout {
 		authorNumber = 1;
 	}
 
-	/*
+	/**
 	 * this function will be called when a book is clicked from the table, it
 	 * will then display that book's attributes
 	 */

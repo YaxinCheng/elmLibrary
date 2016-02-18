@@ -49,7 +49,7 @@ public class LibraryUI extends UI {
 		buildLayout();
 	}
 
-	/*
+	/**
 	 * this function is called once the dash-board UI is created, it will
 	 * display the add book function
 	 */
