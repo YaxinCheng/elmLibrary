@@ -132,15 +132,20 @@ public class BookForm extends FormLayout {
 	 * 'shelf'
 	 */
 	public void save(Button.ClickEvent event) {
-		try {
-			// Commit the fields from UI to DAO
-			formFieldBindings.commit();
-		} catch (FieldGroup.CommitException e) {
-			// Validation exceptions could be shown here
+		if (book != null) {
+			try {
+				// Commit the fields from UI to DAO
+				formFieldBindings.commit();
+			} catch (FieldGroup.CommitException e) {
+				// Validation exceptions could be shown here
+			}
 		}
+		System.out.println("Here");
 		boolean modification = false;
-		if (!book.getEntity().getIsbn().isEmpty()) {
-			modification = true;
+		if (book != null) {
+			if (!book.getEntity().getIsbn().isEmpty()) {
+				modification = true;
+			}
 		}
 		String ISBN = isbnField.getValue();
 		String Title = titleField.getValue();
@@ -158,6 +163,22 @@ public class BookForm extends FormLayout {
 		if (ISBN.isEmpty() || Title.isEmpty() || author.size() == 0 || Publisher.isEmpty() || Year.isEmpty()
 				|| Edition.isEmpty()) {
 			Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
+			return;
+		}
+		if (book == null) {
+			Object id = BookService.shelf.addEntity(new Book(ISBN, Title, author, Publisher, Year, Edition));
+			book = BookService.shelf.getItem(id);
+			formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
+			try {
+				// Commit the fields from UI to DAO
+				formFieldBindings.commit();
+			} catch (FieldGroup.CommitException e) {
+				// Validation exceptions could be shown here
+			}
+			String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
+			Notification.show(msg, Type.TRAY_NOTIFICATION);
+			getUI().refreshBooks();
+			authorNumber = 1;
 			return;
 		}
 		boolean result = getUI().service.save(book, modification);
@@ -182,21 +203,24 @@ public class BookForm extends FormLayout {
 		}
 		this.book = book2;
 		this.removeAllComponents();
-		if (book2.getEntity().compareTo(new Book("", "", new ArrayList<String>(), "", "", "")) == 0) {
-			buildLayout();
-		} else {
-			removeButton.setVisible(true);
-			checkIO.setVisible(true);
-			int authorsCount = book2.getEntity().getAuthors().size();
-			buildLayout();
-			for (int i = 1; i < authorsCount; i++) {
-				this.addComponent(authorField.get(i));
-			}
+		
+		removeButton.setVisible(true);
+		checkIO.setVisible(true);
+		int authorsCount = book2.getEntity().getAuthors().size();
+		buildLayout();
+		for (int i = 1; i < authorsCount; i++) {
+			this.addComponent(authorField.get(i));
 		}
 		setFields(book2);
 		// Bind the properties of the Book POJO to fields in this form
 		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book2, this);
 		setVisible(book2 != null);
+	}
+	
+	void edit() {
+		this.removeAllComponents();
+		buildLayout();
+		setVisible(true);
 	}
 
 	private void setFields(EntityItem<Book> book2) {

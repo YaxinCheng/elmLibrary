@@ -60,9 +60,10 @@ public class LibraryUI extends UI {
 				if (!bookForm.isVisible()) {
 					bookForm.authorField.get(0).setCaption("Author");
 					bookForm.clearFields();
-					Object id = BookService.shelf.addEntity(new Book("", "", new ArrayList<String>(), "", "", ""));
-					System.out.println(id);
-					bookForm.edit(BookService.shelf.getItem(id));
+//					Object id = BookService.shelf.addEntity(new Book("", "", new ArrayList<String>(), "", "", ""));
+//					System.out.println(id);
+//					bookForm.edit(BookService.shelf.getItem(id));
+					bookForm.edit();
 				}
 			}
 		});
