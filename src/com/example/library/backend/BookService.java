@@ -34,7 +34,7 @@ public class BookService {
 		if (instance == null) {
 			final BookService bookService = new BookService();
 			/* if someone can make this path RELATIVE i will be overjoyed */
-			String filepath = "/Users/Bray/Documents/library/library/src/com/example/library/book-service-config.txt";
+			String filepath = "/Users/Roc/Documents/2015-2016Winter/CSCI3130/Project/library/src/com/example/library/book-service-config.txt";
 			/*
 			 * this function call happens when application UI is being
 			 * generated, it will read from the text file, file the 'shelf'

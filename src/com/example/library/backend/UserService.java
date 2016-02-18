@@ -15,27 +15,29 @@ public class UserService {
 
 	private static UserService instance;
 
+	/**
+	 */
 	public static UserService createDemoService() throws FileNotFoundException, IOException {
 		if (instance == null) {
 			final UserService UserService = new UserService();
 
 			// Read from a config file and populate the UserService
-			File file = new File("UsersConfigure.txt");
-			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-				String line;
-				while ((line = br.readLine()) != null) {
-					String[] userInfo = line.split("%%%%");
-					String name = userInfo[0];
-					String email = userInfo[1];
-					String phone = userInfo[2];
-					String borrowedDelimitedByComma = userInfo[3];
-					ArrayList<String> borrowed = (ArrayList<String>) Arrays.asList(borrowedDelimitedByComma.split(","));
-					String holdsDelimitedByComma = userInfo[4];
-					ArrayList<String> holds = (ArrayList<String>) Arrays.asList(holdsDelimitedByComma.split(","));
-					User user = new User(name, email, phone, borrowed, holds);
-					UserService.save(user);
-				}
-			}
+//			File file = new File("UsersConfigure.txt");
+//			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+//				String line;
+//				while ((line = br.readLine()) != null) {
+//					String[] userInfo = line.split("%%%%");
+//					String name = userInfo[0];
+//					String email = userInfo[1];
+//					String phone = userInfo[2];
+//					String borrowedDelimitedByComma = userInfo[3];
+//					List<Book> borrowed = Arrays.asList(borrowedDelimitedByComma.split(","));
+//					String holdsDelimitedByComma = userInfo[4];
+//					List<String> holds = Arrays.asList(holdsDelimitedByComma.split(","));
+//					User user = new User(name, email, phone, borrowed, holds);
+//					UserService.save(user);
+//				}
+//			}
 
 			instance = UserService;
 		}
