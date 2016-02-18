@@ -46,7 +46,7 @@ public class BookService {
 		return instance;
 	}
 
-	/*
+	/**
 	 * this function works by reading a text file using the BufferedReader and
 	 * then placing those values as the properties of a new book, each row in
 	 * the text file will represent an instance of a book
@@ -74,7 +74,7 @@ public class BookService {
 		}
 	}
 
-	/*
+	/**
 	 * this function has been giving me lots of trouble after implementing the
 	 * JPAContainer we just need to figure out a way to sort and filter through
 	 * the 'shelf'
@@ -124,7 +124,7 @@ public class BookService {
 		shelf.removeItem(book.getItemId());
 	}
 
-	/*
+	/**
 	 * this function will either replace and then add an edited book, else it
 	 * will save the book to the shelf
 	 * 
