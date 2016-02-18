@@ -21,14 +21,15 @@ public class User {
 	private String name;
 	private String email;
 	private String phone;
-	private ArrayList borrowed;
-	private ArrayList holds;
+	private List<Book> borrowed;
+	private List<Book> holds;
 
 	@OneToMany(mappedBy = "user")
 	private Set<Book> book;
 
-	// above this part, we made some change on the database part
-	public User(String name, String email, String phone, ArrayList borrowed, ArrayList holds) {
+	// Above this part, we made some change on the database part
+	// The constructor of User
+	public User(String name, String email, String phone, List<Book> borrowed, List<Book> holds) {
 
 		this.name = name;
 		this.email = email;
@@ -42,6 +43,7 @@ public class User {
 
 	}
 
+	// setter and getter
 	public String getName() {
 		return name;
 	}
@@ -66,7 +68,7 @@ public class User {
 		this.phone = phone;
 	}
 
-	public ArrayList getBorrowed() {
+	public List<Book> getBorrowed() {
 		return borrowed;
 	}
 
@@ -74,7 +76,7 @@ public class User {
 		this.borrowed = borrowed;
 	}
 
-	public ArrayList getHolds() {
+	public List<Book> getHolds() {
 		return holds;
 	}
 
@@ -88,6 +90,7 @@ public class User {
 				+ holds + "]";
 	}
 
+	// The method that can check whether the users are same or not
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof User && ((User) object).getEmail() == this.email) {
@@ -96,6 +99,7 @@ public class User {
 		return false;
 	}
 
+	// The method that can compare two users
 	public int compareTo(User o) {
 		return this.email.compareTo(o.getEmail());
 	}
