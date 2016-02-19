@@ -11,7 +11,7 @@ public class BookServiceTest {
 	
 	@Before
 	public static void init(){
-		BookService.populateBookService(instance,"C:/Users/nickm/workspace/library/src/com/example/library");
+//		BookService.populateBookService(instance,"C:/Users/nickm/workspace/library/src/com/example/library");
 		
 	}
 	@Test
