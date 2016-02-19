@@ -10,7 +10,8 @@ import com.vaadin.addon.jpacontainer.fieldfactory.SingleSelectConverter;
 import com.vaadin.ui.*;
 
 /**
- * <h1>Book</h1> This is a class that represents a Book. It has all the
+ * <h1>Book</h1> 
+ * This is a class that represents a Book. It has all the
  * attributes for a single book.
  *
  * @author Team-Elm
