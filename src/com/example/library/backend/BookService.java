@@ -119,8 +119,13 @@ public class BookService {
 	}
 
 	/* this function will simply delete a book from the 'shelf' container */
-	public synchronized void delete(EntityItem<Book> book) {
-		shelf.removeItem(book.getItemId());
+	public synchronized boolean delete(EntityItem<Book> book) {
+		try {
+			shelf.removeItem(book.getItemId());
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 	/*
