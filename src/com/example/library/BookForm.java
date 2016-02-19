@@ -131,6 +131,7 @@ public class BookForm extends FormLayout {
 		this.setVisible(false);
 		Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
 		getUI().bookList.select(null);
+		getUI().refreshBooks();
 		authorNumber = 1;
 	}
 

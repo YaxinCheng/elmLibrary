@@ -42,7 +42,7 @@ public class BookService {
 			 * generated, it will read from the text file, file the 'shelf'
 			 * container, and then be spit out to the UI
 			 */
-			populateBookService(bookService, filepath);
+//			populateBookService(bookService, filepath);
 			instance = bookService;
 		}
 		return instance;
