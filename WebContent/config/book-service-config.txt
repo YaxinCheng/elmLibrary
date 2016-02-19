@@ -4,3 +4,7 @@ B012OUZ3EQ%%%%C, C++ and C# Programming%%%%John Smith%%%%Pearson%%%%2015%%%%1
 1523400382%%%%Understanding Swift: for C and C++ Programmers%%%%David Francis Curran%%%%Springer%%%%2016%%%%English
 3527711708%%%%C++ das Lehrbuch Fur Dummies%%%%John Paul Mueller%%%%CDE%%%%1995%%%%German
 0131103628%%%%The C Programming Language%%%%Brian W. Kernighan&&&&Dennis M. Ritchie%%%%Prentice Hall%%%%1988%%%%2
+0293429872%%%%The Harry Potter Movie%%%%JK Rowling%%%%Penguin Book%%%%2014%%%%English
+9823742983%%%%Stay Hungry, Stay Foolish%%%%Roc The Prince%%%%Dalhousie University%%%%2002%%%%2
+0958640471%%%%"It's Trivial"%%%%RocGod%%%%Dalhousie University%%%%1999%%%%4
+2039487621%%%%The Boston Cream Donut%%%%Roc The Prince%%%%Life Science Center%%%%1990%%%%French
