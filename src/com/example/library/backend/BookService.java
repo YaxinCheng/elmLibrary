@@ -36,7 +36,7 @@ public class BookService {
 		if (instance == null) {
 			final BookService bookService = new BookService();
 			/* if someone can make this path RELATIVE i will be overjoyed */
-			String filepath = "/Users/Roc/Documents/2015-2016Winter/CSCI3130/Project/library/src/com/example/library/book-service-config.txt";
+			String filepath = "/Users/Bray/Documents/library/library/src/com/example/library/book-service-config.txt";
 			/*
 			 * this function call happens when application UI is being
 			 * generated, it will read from the text file, file the 'shelf'
@@ -77,12 +77,9 @@ public class BookService {
 	}
 
 	/**
-	 * this function has been giving me lots of trouble after implementing the
-	 * JPAContainer we just need to figure out a way to sort and filter through
-	 * the 'shelf'
 	 * 
-	 * with that said, this function works in conjunction with the search bar to
-	 * display the books that match the filter string
+	 * this function works in conjunction with the search bar to display the
+	 * books that match the filter string
 	 */
 	public synchronized List<Book> findAll(String filter) throws CloneNotSupportedException {
 		List<Book> arrayList = new ArrayList<Book>();
@@ -91,7 +88,7 @@ public class BookService {
 		System.out.println(id);
 		for (int i = 0; i < shelf.size() + 1; i++) {
 			if (id.contains(i)) {
-				System.out.println(i + "FUCJ YA");
+
 			}
 			// if (shelf.getItem(i).getEntity().containInformation(filter)) {
 			// arrayList.add(shelf.getItem(i).getEntity().clone());
@@ -126,7 +123,7 @@ public class BookService {
 		shelf.removeItem(book.getItemId());
 	}
 
-	/**
+	/*
 	 * this function will either replace and then add an edited book, else it
 	 * will save the book to the shelf
 	 * 
@@ -142,21 +139,32 @@ public class BookService {
 			return checkDuplicate(isbn);
 		}
 	}
-	
+
 	public static boolean checkDuplicate(String isbn) {
-		Filter filter = new Compare.Equal("isbn", isbn);
-		shelf.addContainerFilter(filter);
-		shelf.applyFilters();
-		if (shelf.size() >= 1) {
-			return false;
-		} else {
-			return true;
+		for (long i = 1; i <= shelf.getItemIds().size(); i++) {
+			if (shelf.getItemIds().contains(i)) {
+				System.out.println(isbn);
+				System.out.println(shelf.getItem(i).getEntity().getIsbn());
+				if (shelf.getItem(i).getEntity().getIsbn().equals(isbn)) {
+					System.out.println(shelf.getItem(i).getEntity().getIsbn() + " " + shelf.getItem(i).getEntity());
+					return false;
+				}
+			}
 		}
+		return true;
+		// Filter filter = new Compare.Equal("isbn", isbn);
+		// shelf.addContainerFilter(filter);
+		// shelf.applyFilters();
+		// if (shelf.size() >= 1) {
+		// return false;
+		// } else {
+		// return true;
+		// }
 	}
-	
+
 	public static void removeAllFilters() {
 		Collection<Filter> filters = BookService.shelf.getContainerFilters();
-		for(Filter filter : filters) {
+		for (Filter filter : filters) {
 			BookService.shelf.removeContainerFilter(filter);
 		}
 	}

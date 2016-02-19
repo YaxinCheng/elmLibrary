@@ -14,6 +14,14 @@ import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
 
 /**
+ * <h1>BookForm</h1> 
+ * This class represents the form that will allow a user to create, edit, update, and delete a given book.
+ *
+ * @author Team-Elm
+ * @version 1.0
+ * @since 2016-02-01
+ */
+/**
  * The BookForm class This class is the UI of the adding book part There are
  * several buttons and TextField in this form
  */
@@ -132,19 +140,6 @@ public class BookForm extends FormLayout {
 	 * 'shelf'
 	 */
 	public void save(Button.ClickEvent event) {
-		if (modification) {
-			try {
-				// Commit the fields from UI to DAO
-				formFieldBindings.commit();
-			} catch (FieldGroup.CommitException e) {
-				// Validation exceptions could be shown here
-			}
-		}
-		if (modification) {
-			if (!book.getEntity().getIsbn().isEmpty()) {
-				modification = true;
-			}
-		}
 		String ISBN = isbnField.getValue();
 		String Title = titleField.getValue();
 		List<String> author = new ArrayList<String>();
@@ -164,7 +159,7 @@ public class BookForm extends FormLayout {
 			return;
 		}
 		if (!modification) {
-			if(BookService.checkDuplicate(ISBN)) {
+			if (BookService.checkDuplicate(ISBN)) {
 				Object id = BookService.shelf.addEntity(new Book(ISBN, Title, author, Publisher, Year, Edition));
 				book = BookService.shelf.getItem(id);
 				formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
@@ -180,7 +175,8 @@ public class BookForm extends FormLayout {
 				getUI().refreshBooks();
 				return;
 			} else {
-				Notification.show("The book with the same ISBN has already existed", Type.ERROR_MESSAGE);
+				Notification.show("The book with the same ISBN already exists.", Type.ERROR_MESSAGE);
+				//need to clear fields after book is rejected, weird issue where ISBN changes or something
 				return;
 			}
 		}
@@ -207,7 +203,7 @@ public class BookForm extends FormLayout {
 		}
 		this.book = book2;
 		this.removeAllComponents();
-		
+
 		removeButton.setVisible(true);
 		checkIO.setVisible(true);
 		int authorsCount = book2.getEntity().getAuthors().size();
@@ -220,7 +216,7 @@ public class BookForm extends FormLayout {
 		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book2, this);
 		setVisible(book2 != null);
 	}
-	
+
 	void edit() {
 		this.removeAllComponents();
 		buildLayout();
