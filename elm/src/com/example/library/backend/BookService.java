@@ -152,14 +152,6 @@ public class BookService {
 			}
 		}
 		return true;
-		// Filter filter = new Compare.Equal("isbn", isbn);
-		// shelf.addContainerFilter(filter);
-		// shelf.applyFilters();
-		// if (shelf.size() >= 1) {
-		// return false;
-		// } else {
-		// return true;
-		// }
 	}
 
 	public static void removeAllFilters() {

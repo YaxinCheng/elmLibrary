@@ -118,7 +118,7 @@ public class BookForm extends FormLayout {
 		}
 	}
 
-	/* this function will allow a user to check out a book or return a book */
+	/** this function will allow a user to check out a book or return a book */
 	public void checkIO(Button.ClickEvent event) {
 		if (book != null) {
 			book.getEntity().setCheckOut(!book.getEntity().isCheckOut());
@@ -128,7 +128,6 @@ public class BookForm extends FormLayout {
 	}
 
 	public void cancel(Button.ClickEvent event) {
-		// Place to call business logic.
 		this.setVisible(false);
 		Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
 		getUI().bookList.select(null);
