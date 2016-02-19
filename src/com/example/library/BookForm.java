@@ -160,6 +160,10 @@ public class BookForm extends FormLayout {
 			Notification.show("Please fill all the information", Type.WARNING_MESSAGE);
 			return;
 		}
+		if (!Year.matches("(2|1)[0-9]{3}")) {
+			Notification.show("Please input the correct format of year", Type.ERROR_MESSAGE);
+			return;
+		}
 		if (!modification) {
 			if (BookService.checkDuplicate(ISBN)) {
 				Object id = BookService.shelf.addEntity(new Book(ISBN, Title, author, Publisher, Year, Edition));
