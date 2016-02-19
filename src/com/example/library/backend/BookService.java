@@ -6,6 +6,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Compare;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Table;
 
 import java.io.BufferedReader;
@@ -13,11 +14,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 
 public class BookService {
 
@@ -35,14 +39,12 @@ public class BookService {
 	public static BookService createDemoService() {
 		if (instance == null) {
 			final BookService bookService = new BookService();
-			/* if someone can make this path RELATIVE i will be overjoyed */
-			String filepath = "/Users/Bray/Documents/library/library/src/com/example/library/book-service-config.txt";
-			/*
-			 * this function call happens when application UI is being
-			 * generated, it will read from the text file, file the 'shelf'
-			 * container, and then be spit out to the UI
-			 */
-//			populateBookService(bookService, filepath);
+			
+			/* Read some books from the config file and populate the database */
+			ServletContext servletContext = VaadinServlet.getCurrent().getServletContext();
+			InputStream stream = servletContext.getResourceAsStream("/config/book-service-config.txt");
+			populateBookService(bookService, stream);
+			
 			instance = bookService;
 		}
 		return instance;
@@ -53,9 +55,9 @@ public class BookService {
 	 * then placing those values as the properties of a new book, each row in
 	 * the text file will represent an instance of a book
 	 */
-	static void populateBookService(BookService bookService, String filepath) {
+	private static void populateBookService(BookService bookService, InputStream in) {
 		String line;
-		try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			while ((line = br.readLine()) != null) {
 				String[] bookInfo = line.split("%%%%");
 				String isbn = bookInfo[0];
@@ -69,10 +71,10 @@ public class BookService {
 				/* adding the book to the shelf */
 				Object id = shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
 				EntityItem<Book> book = shelf.getItem(id);
-				// bookService.save(book, false);
+				//bookService.save(book, false);
 			}
 		} catch (IOException e) {
-			System.out.print("IOException - Book configuration file could not be read - " + e);
+			System.out.print("ERROR - IOException - Book configuration file could not be read - " + e);
 		}
 	}
 
