@@ -61,9 +61,14 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	public boolean containInformation(String info) {
-		if ((isbn.contains(info)) || (title.contains(info)) || (publisher.contains(info)) || (year.contains(info))) {
+		if ((isbn == null) || (title == null) || (publisher == null) || (year == null) || (edition == null)){
+			return false;
+		}
+		else if ((isbn.contains(info)) || (title.contains(info)) || (publisher.contains(info))
+				|| (year.contains(info)) || (edition.contains(info))) {
 			return true;
 		}
+		
 		for (String author : authors) {
 			if (author.contains(info)) {
 				return true;
