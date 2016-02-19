@@ -11,11 +11,23 @@ public class BookServiceTest {
 	
 	@Before
 	public void init(){
-		BookService.populateBookService(instance,"C:/Users/nickm/workspace/library/src/com/example/library/book-service-config.txt");
+//		BookService.populateBookService(instance,"C:/Users/nickm/workspace/library/src/com/example/library/book-service-config.txt");
+		instance = BookService.createDemoService();
+	}
+	
+	@Test
+	public void testCount() {
+		assertTrue(instance.count() >= 0);
+	}
+	
+	@Test
+	public void testDelete() {
+		Object id = BookService.shelf.addEntity(new Book());
+		assertTrue(instance.delete(BookService.shelf.getItem(id)));
+	}
+	
+	@Test
+	public void testDuplicate() {
 		
 	}
-	@Test
-	public void test() {
-	}
-
 }
