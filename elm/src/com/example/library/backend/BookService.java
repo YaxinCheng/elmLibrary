@@ -53,7 +53,7 @@ public class BookService {
 	 * then placing those values as the properties of a new book, each row in
 	 * the text file will represent an instance of a book
 	 */
-	private static void populateBookService(BookService bookService, String filepath) {
+	static void populateBookService(BookService bookService, String filepath) {
 		String line;
 		try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
 			while ((line = br.readLine()) != null) {
