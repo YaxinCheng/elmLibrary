@@ -24,27 +24,27 @@ import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 
 public class BookService {
-
-	private static BookService instance;
-	// private HashMap<String, Book> books = new HashMap<>();//old
-	// implementation
-
 	/*
-	 * creating an entity manager for some reason, this lets us create a
-	 * JPAContainer of type Book
+	 * creating an entity manager, this lets us create a JPAContainer of type
+	 * Book which is named 'shelf'
 	 */
+	private static BookService instance;
 	static EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
 	public static JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
 
+	/*
+	 * this function will run upon initialization of the program it will find
+	 * the text file containing the library's stock and fill the shelf container
+	 */
 	public static BookService createDemoService() {
 		if (instance == null) {
 			final BookService bookService = new BookService();
-			
-			/* Read some books from the config file and populate the database */
+
+			/* Read some books from the config. file and populate the database */
 			ServletContext servletContext = VaadinServlet.getCurrent().getServletContext();
 			InputStream stream = servletContext.getResourceAsStream("/config/book-service-config.txt");
 			populateBookService(bookService, stream);
-			
+
 			instance = bookService;
 		}
 		return instance;
@@ -71,7 +71,7 @@ public class BookService {
 				/* adding the book to the shelf */
 				Object id = shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
 				EntityItem<Book> book = shelf.getItem(id);
-				//bookService.save(book, false);
+				// bookService.save(book, false);
 			}
 		} catch (IOException e) {
 			System.out.print("ERROR - IOException - Book configuration file could not be read - " + e);
@@ -85,7 +85,6 @@ public class BookService {
 	 */
 	public synchronized List<Book> findAll(String filter) throws CloneNotSupportedException {
 		List<Book> arrayList = new ArrayList<Book>();
-		System.out.println(shelf.size() + "fuck");
 		Collection<Object> id = shelf.getItemIds();
 		System.out.println(id);
 		for (int i = 0; i < shelf.size() + 1; i++) {

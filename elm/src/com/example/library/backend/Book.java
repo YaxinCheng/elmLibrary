@@ -99,6 +99,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	public List<String> getAuthors() {
+		
 		return authors;
 		// if (authors.size() == 0) {
 		// return "n.a.";
