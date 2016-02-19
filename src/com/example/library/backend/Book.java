@@ -30,9 +30,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String year;
 	private String edition;
 	private boolean checkOut;
-	private String authorInformation;
-	private int yearInformation;
-
+	private String authorInformation;// A string of all authors' names, used for search
 	@ManyToOne
 	private User user;
 
@@ -56,7 +54,6 @@ public class Book implements Comparable<Book>, Cloneable {
 		for (String author : authors) {
 			authorInformation += (author + ";"); 
 		}
-		yearInformation = Integer.parseInt(year);
 	}
 
 	public Book(String isbn, String title, List<String> authors, String pub, String year) {
@@ -167,12 +164,4 @@ public class Book implements Comparable<Book>, Cloneable {
 	protected Book clone() throws CloneNotSupportedException {
 		return new Book(isbn, title, authors, publisher, year, edition);
 	}
-	/*
-	 * public <T extends Field> T createField(Class<?> dataType, Class<T>
-	 * fieldType) { if (dataType == User.class) { JPAContainer<User> countries =
-	 * JPAContainerFactory.make(User.class, "mypunit"); ComboBox cb = new
-	 * ComboBox(null, countries); cb.setConverter(new
-	 * SingleSelectConverter<User>(cb)); return (T) cb; } return
-	 * super.createField(dataType, fieldType); }
-	 */
 }

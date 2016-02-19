@@ -17,6 +17,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.client.widget.grid.selection.SelectionEvent;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.filter.And;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Like;
 import com.vaadin.data.util.filter.Or;
@@ -41,6 +42,7 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("library")
 public class LibraryUI extends UI {
 
+	// UI Components
 	Grid bookList = new Grid();
 	TextField filterField = new TextField();
 	Button searchButton = new Button("Search");
@@ -52,8 +54,8 @@ public class LibraryUI extends UI {
 	/* this is where the program initializes from */
 	@Override
 	protected void init(VaadinRequest request) {
-		configureComponents();
-		buildLayout();
+		configureComponents();// Set all components to their places, and set their functions
+		buildLayout();// Show the view
 	}
 
 	/**
@@ -65,38 +67,32 @@ public class LibraryUI extends UI {
 		addBookButton.addClickListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				if (!bookForm.isVisible()) {
-					bookForm.authorField.get(0).setCaption("Author");
-					bookForm.modification = false;
-					bookForm.clearFields();
-					bookForm.edit();
+				if (!bookForm.isVisible()) {// When the bookForm is visible, disable the function of addButton
+					bookForm.authorField.get(0).setCaption("Author");// By default, only one author, so singular
+					bookForm.modification = false;// It's adding a new book, not modify a book
+					bookForm.clearFields();// Clear all author fields
+					bookForm.edit();// Show the bookForm
 				}
 			}
 		});
 		searchButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
-		searchButton.setClickShortcut(ShortcutAction.KeyCode.SPACEBAR);
+		searchButton.setClickShortcut(ShortcutAction.KeyCode.SPACEBAR);// Space is the shortcut for search
 		searchButton.addClickListener(e -> {
-			String info = filterField.getValue();
-			if (!info.isEmpty()) {
+			String info = filterField.getValue();// Get text in the search field
+			if (!info.isEmpty()) {// If it's not empty, search related information
 				refreshBooks(info);
-			} else {
-				filterField.focus();
-				BookService.removeAllFilters();
-				BookService.shelf.refresh();
+			} else {// If it's empty
+				filterField.focus();// Set the search filed to be the first responder
+				BookService.removeAllFilters();// Empty all filters, show all the information in the db
+				BookService.shelf.refresh();// Refresh
 				bookList.setContainerDataSource(BookService.shelf);
 			}
 		});
 
-		/*
-		 * i need to fix the filtering of books when searching and refreshing,
-		 * just not quite sure how to do that with the new implementation of the
-		 * 'shelf' at the moment
-		 */
-		filterField.setInputPrompt("Filter books...");
-		// filterField.addTextChangeListener(e -> refreshBooks(e.getText()));
-		// bookList.setContainerDataSource(new BeanItemContainer<>(Book.class));
+		filterField.setInputPrompt("Search books...");
 		bookList.setContainerDataSource(BookService.shelf);
 		bookList.setColumnOrder("title", "authors", "year");
+		// Those columns are useless here
 		bookList.removeColumn("isbn");
 		bookList.removeColumn("publisher");
 		bookList.removeColumn("edition");
@@ -104,22 +100,22 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("user");
 		bookList.removeColumn("id");
 		bookList.removeColumn("authorInformation");
-		bookList.removeColumn("yearInformation");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 		/*
 		 * this will allow a book to be edited or deleted when a row is clicked
 		 * on
 		 */
-		bookList.addSelectionListener(selectionEvent -> {
-			bookForm.clearFields();
-			bookForm.modification = true;
-			bookForm.edit(BookService.shelf.getItem(bookList.getSelectedRow()));
+		bookList.addSelectionListener(selectionEvent -> {// When a row is clicked
+			bookForm.clearFields();// Clear all author fields to prevent adding junk information
+			bookForm.modification = true;// It is a modification for a book
+			bookForm.edit(BookService.shelf.getItem(bookList.getSelectedRow()));// Pass the book to edit
 		});
 		refreshBooks();
 	}
 
 	private void buildLayout() {
+		// Set places for components
 		HorizontalLayout buttons = new HorizontalLayout(searchButton, addBookButton);
 		buttons.setSpacing(true);
 		HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
@@ -138,50 +134,41 @@ public class LibraryUI extends UI {
 		setContent(mainLayout); // Split and allow resizing
 	}
 
-	/*
-	 * here is where i have been having some trouble, i have left some of the
-	 * original code as reference, just not quite sure how to use the findAll
-	 * method on the 'shelf'
-	 */
 	void refreshBooks() {
 		refreshBooks(filterField.getValue());
 	}
 
 	private void refreshBooks(String stringFilter) {
+		BookService.removeAllFilters();// Remove other filters before searching
 		try {
-			// old code
-			// bookList.setContainerDataSource(new
-			// BeanItemContainer<>(Book.class, service.findAll(stringFilter)));
-
-			// new code
-			if(stringFilter.isEmpty()) {
+			if(stringFilter.isEmpty()) {// If nothing in the search field, just refresh
 				BookService.shelf.refresh();
 				bookList.setContainerDataSource(BookService.shelf);
 				return;
 			} else if (stringFilter.toLowerCase().matches("between[0-9]{4}to[0-9]{4}")) {
-				String[] components = stringFilter.toLowerCase().split("to");
+				// If text in the search bar follows such format, I take it as searching for books in a specific time duration
+				String[] components = stringFilter.toLowerCase().split("to");// Split the string to get information I want
 				String toDate = components[1];
 				String fromDate = components[0].split("between")[1];
-				Filter from = new Compare.GreaterOrEqual("yearInformation", fromDate);
-				Filter to = new Compare.LessOrEqual("yearInformation", toDate);
-				Filter composite = new Or(from, to);
+				Filter from = new Compare.GreaterOrEqual("year", fromDate);
+				Filter to = new Compare.LessOrEqual("year", toDate);
+				Filter composite = new And(from, to);// Search for book in this range
 				BookService.shelf.addContainerFilter(composite);
 				BookService.shelf.refresh();
 				bookList.setContainerDataSource(BookService.shelf);
-				return;
+				return;// End here
 			}
-			BookService.removeAllFilters();
-			Filter title = new Like("title", "%" + stringFilter + "%", false);
-			Filter publisher = new Like("publisher", "%" + stringFilter + "%", false);
-			Filter author = new Like("authorInformation", "%" + stringFilter + "%", false);
+			Filter title = new Like("title", "%" + stringFilter + "%", false);// Search title
+			Filter publisher = new Like("publisher", "%" + stringFilter + "%", false);// Search publisher
+			Filter author = new Like("authorInformation", "%" + stringFilter + "%", false);// Search author
 			Filter composite = new Or(title, publisher, author);
-			BookService.shelf.addContainerFilter(composite);
+			BookService.shelf.addContainerFilter(composite);// add filter
 			BookService.shelf.refresh();
 			bookList.setContainerDataSource(BookService.shelf);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} finally {
-			bookForm.setVisible(false);
+			bookForm.setVisible(false);// Close the bookform
 		}
 	}
 
