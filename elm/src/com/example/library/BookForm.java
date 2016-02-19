@@ -106,7 +106,6 @@ public class BookForm extends FormLayout {
 		try {
 			formFieldBindings.commit();
 			getUI().service.delete(book);
-			BookService.shelf.removeItem(book.getItemId());
 			String msg = String.format("Removed '%s - %s'.", book.getEntity().getIsbn(), book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();
