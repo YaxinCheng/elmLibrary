@@ -112,7 +112,9 @@ public class BookForm extends FormLayout {
 		} catch (FieldGroup.CommitException e) {
 			// Validation exceptions could be shown here
 		} finally {
-			cancel(event);
+			this.setVisible(false);
+			getUI().bookList.select(null);
+			authorNumber = 1;
 		}
 	}
 
