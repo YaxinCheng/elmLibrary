@@ -1,27 +1,24 @@
 package com.example.library.backend;
 
-import com.example.library.backend.Book;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
+
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Compare;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Table;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.servlet.ServletContext;
 
 public class BookService {
 	/*
@@ -40,7 +37,9 @@ public class BookService {
 		if (instance == null) {
 			final BookService bookService = new BookService();
 
-			/* Read some books from the config. file and populate the database */
+			/*
+			 * Read some books from the config. file and populate the database
+			 */
 			ServletContext servletContext = VaadinServlet.getCurrent().getServletContext();
 			InputStream stream = servletContext.getResourceAsStream("/config/book-service-config.txt");
 			populateBookService(bookService, stream);
@@ -70,6 +69,7 @@ public class BookService {
 
 				/* adding the book to the shelf */
 				Object id = shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
+				@SuppressWarnings("unused")
 				EntityItem<Book> book = shelf.getItem(id);
 				// bookService.save(book, false);
 			}

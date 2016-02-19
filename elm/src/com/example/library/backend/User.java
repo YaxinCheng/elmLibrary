@@ -72,7 +72,7 @@ public class User {
 		return borrowed;
 	}
 
-	public void setBorrowed(ArrayList borrowed) {
+	public void setBorrowed(ArrayList<Book> borrowed) {
 		this.borrowed = borrowed;
 	}
 
@@ -80,7 +80,7 @@ public class User {
 		return holds;
 	}
 
-	public void setHolds(ArrayList holds) {
+	public void setHolds(ArrayList<Book> holds) {
 		this.holds = holds;
 	}
 

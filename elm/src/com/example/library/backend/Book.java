@@ -2,12 +2,11 @@ package com.example.library.backend;
 
 import java.util.List;
 
-import javax.persistence.*;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.addon.jpacontainer.fieldfactory.SingleSelectConverter;
-import com.vaadin.ui.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * <h1>Book</h1> 
@@ -30,6 +29,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String year;
 	private String edition;
 	private boolean checkOut;
+	@SuppressWarnings("unused")
 	private String authorInformation;// A string of all authors' names, used for search
 	@ManyToOne
 	private User user;
