@@ -1,6 +1,0 @@
-B012OUZ3EQ%%%%C, C++ and C# Programming%%%%John Smith%%%%Pearson%%%%2015%%%%1
-1783986549%%%%Boost.Asio C++ Network Programming Cookbook%%%%Dmytro Radchuk%%%%Pearson%%%%2016%%%%1
-3540629947%%%%C++ mit dem Borland C++Builder%%%%Richard Kaiser%%%%Springer%%%%1999%%%%German
-1523400382%%%%Understanding Swift: for C and C++ Programmers%%%%David Francis Curran%%%%Springer%%%%2016%%%%English
-3527711708%%%%C++ das Lehrbuch Fur Dummies%%%%John Paul Mueller%%%%CDE%%%%1995%%%%German
-0131103628%%%%The C Programming Language%%%%Brian W. Kernighan&&&&Dennis M. Ritchie%%%%Prentice Hall%%%%1988%%%%2

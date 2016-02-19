@@ -1,15 +1,8 @@
 package com.example.library.backend;
 
-import com.example.library.backend.User;
-
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
 	
 /* this class will handle features for the different users
  * and will be fully implemented during the SECOND ITERATION */
