@@ -21,6 +21,7 @@ import com.example.library.backend.BookService;
  * @version 1.0
  * @since 2016-02-01
  */
+
 /**
  * The BookForm class This class is the UI of the adding book part There are
  * several buttons and TextField in this form
@@ -182,7 +183,8 @@ public class BookForm extends FormLayout {
 				return;
 			} else {
 				Notification.show("The book with the same ISBN already exists.", Type.ERROR_MESSAGE);
-				//need to clear fields after book is rejected, weird issue where ISBN changes or something
+				// need to clear fields after book is rejected, weird issue
+				// where ISBN changes or something
 				return;
 			}
 		}

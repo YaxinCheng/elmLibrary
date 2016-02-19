@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+	
+/* this class will handle features for the different users
+ * and will be fully implemented during the SECOND ITERATION */
 public class UserService {
 
 	private static UserService instance;
