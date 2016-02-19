@@ -30,6 +30,8 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String year;
 	private String edition;
 	private boolean checkOut;
+	private String authorInformation;
+	private int yearInformation;
 
 	@ManyToOne
 	private User user;
@@ -50,6 +52,11 @@ public class Book implements Comparable<Book>, Cloneable {
 		this.year = year;
 		this.edition = edition;
 		checkOut = false;
+		authorInformation = "";
+		for (String author : authors) {
+			authorInformation += (author + ";"); 
+		}
+		yearInformation = Integer.parseInt(year);
 	}
 
 	public Book(String isbn, String title, List<String> authors, String pub, String year) {

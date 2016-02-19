@@ -19,6 +19,7 @@ import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Like;
+import com.vaadin.data.util.filter.Or;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction;
@@ -102,6 +103,8 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("checkOut");
 		bookList.removeColumn("user");
 		bookList.removeColumn("id");
+		bookList.removeColumn("authorInformation");
+		bookList.removeColumn("yearInformation");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 		/*
@@ -155,10 +158,24 @@ public class LibraryUI extends UI {
 				BookService.shelf.refresh();
 				bookList.setContainerDataSource(BookService.shelf);
 				return;
+			} else if (stringFilter.toLowerCase().matches("between[0-9]{4}to[0-9]{4}")) {
+				String[] components = stringFilter.toLowerCase().split("to");
+				String toDate = components[1];
+				String fromDate = components[0].split("between")[1];
+				Filter from = new Compare.GreaterOrEqual("yearInformation", fromDate);
+				Filter to = new Compare.LessOrEqual("yearInformation", toDate);
+				Filter composite = new Or(from, to);
+				BookService.shelf.addContainerFilter(composite);
+				BookService.shelf.refresh();
+				bookList.setContainerDataSource(BookService.shelf);
+				return;
 			}
 			BookService.removeAllFilters();
-			Filter filter = new Like("title", "%" + stringFilter + "%", false);
-			BookService.shelf.addContainerFilter(filter);
+			Filter title = new Like("title", "%" + stringFilter + "%", false);
+			Filter publisher = new Like("publisher", "%" + stringFilter + "%", false);
+			Filter author = new Like("authorInformation", "%" + stringFilter + "%", false);
+			Filter composite = new Or(title, publisher, author);
+			BookService.shelf.addContainerFilter(composite);
 			BookService.shelf.refresh();
 			bookList.setContainerDataSource(BookService.shelf);
 		} catch (IllegalArgumentException e) {
