@@ -68,6 +68,7 @@ public class LibraryUI extends UI {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if (!bookForm.isVisible()) {// When the bookForm is visible, disable the function of addButton
+					searchButton.removeClickShortcut();
 					bookForm.authorField.get(0).setCaption("Author");// By default, only one author, so singular
 					bookForm.modification = false;// It's adding a new book, not modify a book
 					bookForm.clearFields();// Clear all author fields
@@ -107,6 +108,7 @@ public class LibraryUI extends UI {
 		 * on
 		 */
 		bookList.addSelectionListener(selectionEvent -> {// When a row is clicked
+			searchButton.removeClickShortcut();
 			bookForm.clearFields();// Clear all author fields to prevent adding junk information
 			bookForm.modification = true;// It is a modification for a book
 			bookForm.edit(BookService.shelf.getItem(bookList.getSelectedRow()));// Pass the book to edit
@@ -168,7 +170,8 @@ public class LibraryUI extends UI {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} finally {
-			bookForm.setVisible(false);// Close the bookform
+			bookForm.setVisible(false);// Close the bookform:
+			searchButton.setClickShortcut(ShortcutAction.KeyCode.SPACEBAR);
 		}
 	}
 
