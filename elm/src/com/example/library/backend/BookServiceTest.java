@@ -10,13 +10,12 @@ public class BookServiceTest {
 	static BookService instance;
 	
 	@Before
-	public static void init(){
+	public void init(){
 		BookService.populateBookService(instance,"C:/Users/nickm/workspace/library/src/com/example/library/book-service-config.txt");
 		
 	}
 	@Test
 	public void test() {
-		assertEquals(instance.count(),0);
 	}
 
 }
