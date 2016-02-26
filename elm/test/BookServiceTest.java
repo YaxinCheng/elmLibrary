@@ -1,5 +1,3 @@
-package com.example.library.backend;
-
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -9,6 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.example.library.backend.*;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Compare;
 
@@ -18,7 +17,6 @@ public class BookServiceTest {
 	
 	@Before
 	public void init(){
-//		BookService.populateBookService(instance,"C:/Users/nickm/workspace/library/src/com/example/library/book-service-config.txt");
 		instance = BookService.createDemoService();
 	}
 	
