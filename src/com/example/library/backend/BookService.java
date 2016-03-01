@@ -40,9 +40,9 @@ public class BookService {
 			/*
 			 * Read some books from the config. file and populate the database
 			 */
-			ServletContext servletContext = VaadinServlet.getCurrent().getServletContext();
-			InputStream stream = servletContext.getResourceAsStream("/config/book-service-config.txt");
-			populateBookService(bookService, stream);
+//			ServletContext servletContext = VaadinServlet.getCurrent().getServletContext();
+//			InputStream stream = servletContext.getResourceAsStream("/config/book-service-config.txt");
+//			populateBookService(bookService, stream);
 
 			instance = bookService;
 		}
