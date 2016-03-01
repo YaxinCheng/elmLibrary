@@ -3,44 +3,27 @@ package com.example.library.backend;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 	
 /* this class will handle features for the different users
  * and will be fully implemented during the SECOND ITERATION */
 public class UserService {
 
-	private static UserService instance;
-
+	public static UserService instance;
+	public JPAContainer<User> Users = JPAContainerFactory.make(User.class, JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db"));
 	/**
 	 */
-	public static UserService createDemoService() throws FileNotFoundException, IOException {
+	public static UserService createDemoService() {
 		if (instance == null) {
 			final UserService UserService = new UserService();
-
-			// Read from a config file and populate the UserService
-//			File file = new File("UsersConfigure.txt");
-//			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-//				String line;
-//				while ((line = br.readLine()) != null) {
-//					String[] userInfo = line.split("%%%%");
-//					String name = userInfo[0];
-//					String email = userInfo[1];
-//					String phone = userInfo[2];
-//					String borrowedDelimitedByComma = userInfo[3];
-//					List<Book> borrowed = Arrays.asList(borrowedDelimitedByComma.split(","));
-//					String holdsDelimitedByComma = userInfo[4];
-//					List<String> holds = Arrays.asList(holdsDelimitedByComma.split(","));
-//					User user = new User(name, email, phone, borrowed, holds);
-//					UserService.save(user);
-//				}
-//			}
-
 			instance = UserService;
 		}
 
 		return instance;
 	}
 
-	private HashMap<Long, User> Users = new HashMap<>();
 
 	public synchronized long count() {
 		return Users.size();

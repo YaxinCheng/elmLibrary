@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 
 import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
+import com.example.library.backend.User;
 import com.example.library.BookForm;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.annotations.Theme;
@@ -34,8 +35,11 @@ public class LibraryUI extends UI {
 	TextField filterField = new TextField();
 	Button searchButton = new Button("Search");
 	Button addBookButton = new Button("Add Book");
+	Button userManagement = new Button("User");
 	BookService service = BookService.createDemoService();
 	BookForm bookForm = new BookForm();
+	UserPanel userPanel = new UserPanel();
+	User user;
 	EntityItem<Book> book;
 
 	/*
@@ -63,6 +67,9 @@ public class LibraryUI extends UI {
 			 */
 			@Override
 			public void buttonClick(ClickEvent event) {
+				if (userPanel.isVisible()) {
+					userPanel.setVisible(false);
+				}
 				if (!bookForm.isVisible()) {
 					bookForm.authorField.get(0).setCaption("Author");
 					bookForm.modification = false;
@@ -88,7 +95,15 @@ public class LibraryUI extends UI {
 				bookList.setContainerDataSource(BookService.shelf);
 			}
 		});
-
+		
+		userManagement.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+		userManagement.addClickListener(e -> {
+			if (bookForm.isVisible()) {
+				bookForm.cancel(e);
+			}
+			userPanel.showPanel();
+			userPanel.settingPanel(user);
+		});
 		filterField.setInputPrompt("Search books...");
 		bookList.setContainerDataSource(BookService.shelf);
 		bookList.setColumnOrder("title", "authors", "year");
@@ -118,7 +133,7 @@ public class LibraryUI extends UI {
 
 	private void buildLayout() {
 		// Set places for components
-		HorizontalLayout buttons = new HorizontalLayout(searchButton, addBookButton);
+		HorizontalLayout buttons = new HorizontalLayout(searchButton, userManagement, addBookButton);
 		buttons.setSpacing(true);
 		HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
 		actions.setWidth("100%");
@@ -130,7 +145,7 @@ public class LibraryUI extends UI {
 		bookList.setSizeFull();
 		left.setExpandRatio(bookList, 1);
 
-		HorizontalLayout mainLayout = new HorizontalLayout(left, bookForm);
+		HorizontalLayout mainLayout = new HorizontalLayout(left, bookForm, userPanel);
 		mainLayout.setSizeFull();
 		mainLayout.setExpandRatio(left, 1);
 		setContent(mainLayout); // Split and allow resizing
