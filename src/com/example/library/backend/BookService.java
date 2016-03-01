@@ -36,14 +36,12 @@ public class BookService {
 	public static BookService createDemoService() {
 		if (instance == null) {
 			final BookService bookService = new BookService();
-
 			/*
 			 * Read some books from the config. file and populate the database
 			 */
 			ServletContext servletContext = VaadinServlet.getCurrent().getServletContext();
 			InputStream stream = servletContext.getResourceAsStream("/config/book-service-config.txt");
 			populateBookService(bookService, stream);
-
 			instance = bookService;
 		}
 		return instance;
@@ -66,12 +64,10 @@ public class BookService {
 				String publisher = bookInfo[3];
 				String year = bookInfo[4];
 				String edition = bookInfo[5];
-
 				/* adding the book to the shelf */
 				Object id = shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
 				@SuppressWarnings("unused")
 				EntityItem<Book> book = shelf.getItem(id);
-				// bookService.save(book, false);
 			}
 		} catch (IOException e) {
 			System.out.print("ERROR - IOException - Book configuration file could not be read - " + e);
@@ -86,35 +82,23 @@ public class BookService {
 	public synchronized List<Book> findAll(String filter) throws CloneNotSupportedException {
 		List<Book> arrayList = new ArrayList<Book>();
 		Collection<Object> id = shelf.getItemIds();
-		System.out.println(id);
+		// System.out.println(id);
 		for (int i = 0; i < shelf.size() + 1; i++) {
 			if (id.contains(i)) {
 
 			}
-			// if (shelf.getItem(i).getEntity().containInformation(filter)) {
-			// arrayList.add(shelf.getItem(i).getEntity().clone());
-			// }
 		}
-		// for (Book book : books.values()) {
-		// try {
-		// if (book.containInformation(filter)) {
-		// arrayList.add(book.clone());
-		// }
-		// } catch (CloneNotSupportedException ex) {
-		// Logger.getLogger(BookService.class.getName()).log(Level.SEVERE, null,
-		// ex);
-		// }
-		// }
 		Collections.sort(arrayList, new Comparator<Book>() {
 			@Override
 			public int compare(Book o1, Book o2) {
 				return (o1.compareTo(o2));
 			}
 		});
-		System.out.println("filtered books list: " + arrayList);
+		// System.out.println("filtered books list: " + arrayList);
 		return arrayList;
 	}
 
+	// to get the size of container
 	public synchronized long count() {
 		return shelf.size();
 	}
@@ -146,13 +130,12 @@ public class BookService {
 		}
 	}
 
+	// method check whether a book is duplicated ( with same isbn )
 	public static boolean checkDuplicate(String isbn) {
 		for (long i = 1; i <= shelf.getItemIds().size(); i++) {
 			if (shelf.getItemIds().contains(i)) {
-				System.out.println(isbn);
-				System.out.println(shelf.getItem(i).getEntity().getIsbn());
 				if (shelf.getItem(i).getEntity().getIsbn().equals(isbn)) {
-					System.out.println(shelf.getItem(i).getEntity().getIsbn() + " " + shelf.getItem(i).getEntity());
+					//System.out.println(shelf.getItem(i).getEntity().getIsbn() + " " + shelf.getItem(i).getEntity());
 					return false;
 				}
 			}
@@ -160,6 +143,7 @@ public class BookService {
 		return true;
 	}
 
+	// method that can remove all filters created
 	public static void removeAllFilters() {
 		Collection<Filter> filters = BookService.shelf.getContainerFilters();
 		for (Filter filter : filters) {
