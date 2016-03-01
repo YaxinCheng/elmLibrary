@@ -17,7 +17,8 @@ import javax.persistence.*;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private String account;
+	private String password;
 	private String name;
 	private String email;
 	private String phone;
@@ -37,6 +38,11 @@ public class User {
 		this.borrowed = borrowed;
 		this.holds = holds;
 
+	}
+	
+	public User(String account, String password) {
+		this.account = account;
+		this.password = password;
 	}
 
 	public User() {
@@ -82,6 +88,34 @@ public class User {
 
 	public void setHolds(ArrayList<Book> holds) {
 		this.holds = holds;
+	}
+
+	/**
+	 * @return the account
+	 */
+	public String getAccount() {
+		return account;
+	}
+
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
