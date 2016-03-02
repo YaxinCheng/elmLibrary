@@ -1,54 +1,60 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.example.library.backend.*;
+import com.example.library.backend.Book;
+import com.example.library.backend.BookService;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Compare;
 
 public class BookServiceTest {
-	
+
 	static BookService instance;
-	
+	static List<String> authors = Arrays.asList("Roc");
+	static Filter filter = new Compare.Equal("isbn", "");
+
 	@Before
-	public void init(){
-		instance = BookService.createDemoService();
+	public void init() {
+		instance = new BookService();
 	}
-	
+
 	@Test
 	public void testCount() {
-		assertTrue(instance.count() >= 0);
+		assertEquals(0, instance.count());
 	}
-	
-//	@Test
-//	public void testDelete() {
-//		Object id = BookService.shelf.addEntity(new Book());
-//		assertTrue(instance.delete(BookService.shelf.getItem(id)));
-//	}
-//	
-//	@Test
-//	public void testDuplicate() {
-//		List<String> authors = new ArrayList(Arrays.asList("T"));
-//		Object id = BookService.shelf.addEntity(new Book("123", "1",authors, "1","2016"));
-//		assertTrue(BookService.checkDuplicate("123"));
-//		instance.delete(BookService.shelf.getItem(id));
-//	}
-//	
-//	@Test
-//	public void testRemoveFilters() {
-//		List<String> authors = new ArrayList(Arrays.asList("T"));
-//		Object id = BookService.shelf.addEntity(new Book("123", "1",authors, "1","2016"));
-//		assertTrue(instance.count() > 0);
-//		Filter filter = new Compare.Equal("isbn", "");
-//		instance.shelf.addContainerFilter(filter);
-//		assertTrue(instance.count() == 0);
-//		instance.removeAllFilters();
-//		assertTrue(instance.count() > 0);
-//		instance.delete(BookService.shelf.getItem(id));
-//	}
+
+	@Test
+	public void testDelete() {
+		Object id = instance.shelf.addEntity(new Book());
+		// assertTrue(instance.delete(shelf.getItem(id)));
+		instance.delete(instance.shelf.getItem(id));
+		assertFalse(instance.delete(instance.shelf.getItem(id)));
+	}
+
+	@Test
+	public void testRemoveFilters() {
+		Object id = instance.shelf.addEntity(new Book("123", "1", authors, "person", "1", "2016"));
+		assertTrue(instance.count() > 0);
+		instance.shelf.addContainerFilter(filter);
+		assertTrue(instance.count() == 0);
+		instance.removeAllFilters();
+		assertTrue(instance.count() > 0);
+		instance.delete(instance.shelf.getItem(id));
+		assertEquals(0,instance.count());
+	}
+
+	@Test
+	public void testSaveAndDuplicate() {
+		assertEquals(0,instance.count());
+		assertFalse(instance.checkDuplicate("qwer"));
+		instance.save("qwer", "1", "person", "1", "2016", authors);
+		assertEquals(1,instance.count());
+		assertTrue(instance.save("qwer", "1", "person", "1", "2016", authors));
+	}
 }
