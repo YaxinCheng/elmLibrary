@@ -23,20 +23,20 @@ public class User {
 	private String email;
 	private String phone;
 	private List<Book> borrowed;
-	private List<Book> holds;
+	private List<Book> waiting;
 
 	@OneToMany(mappedBy = "user")
 	private Set<Book> book;
 
 	// Above this part, we made some change on the database part
 	// The constructor of User
-	public User(String name, String email, String phone, List<Book> borrowed, List<Book> holds) {
+	public User(String name, String email, String phone, List<Book> borrowed, List<Book> waiting) {
 
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.borrowed = borrowed;
-		this.holds = holds;
+		this.waiting = waiting;
 
 	}
 	
@@ -82,12 +82,12 @@ public class User {
 		this.borrowed = borrowed;
 	}
 
-	public List<Book> getHolds() {
-		return holds;
+	public List<Book> getWaiting() {
+		return waiting;
 	}
 
-	public void setHolds(ArrayList<Book> holds) {
-		this.holds = holds;
+	public void setWaiting(ArrayList<Book> waiting) {
+		this.waiting = waiting;
 	}
 
 	/**
@@ -95,13 +95,6 @@ public class User {
 	 */
 	public String getAccount() {
 		return account;
-	}
-
-	/**
-	 * @param account the account to set
-	 */
-	public void setAccount(String account) {
-		this.account = account;
 	}
 
 	/**
@@ -117,11 +110,19 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public boolean isInformationFilled() {
+		try {
+			return !name.isEmpty() && !phone.isEmpty() && !email.isEmpty();
+		} catch (NullPointerException e) {
+			return false;
+		}
+	}
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", email=" + email + ", phone=" + phone + ", borrowed=" + borrowed + ", holds="
-				+ holds + "]";
+		return "User [name=" + name + ", email=" + email + ", phone=" + phone + ", borrowed=" + borrowed + ", waiting="
+				+ waiting + "]";
 	}
 
 	// The method that can check whether the users are same or not
@@ -140,6 +141,6 @@ public class User {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		return new User(name, email, phone, borrowed, holds);
+		return new User(name, email, phone, borrowed, waiting);
 	}
 }
