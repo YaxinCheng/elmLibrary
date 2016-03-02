@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
+@SuppressWarnings("serial")
 public class UserLogin extends UserPanel {
 	Label nameLabel = new Label();
 	TextField account = new TextField("Account");
