@@ -52,6 +52,7 @@ public class LibraryUI extends UI {
 	private void configureComponents() {
 		userPanel = user == null ? new UserLogin() : new UserManagement(user);
 		BookService service = BookService.createDemoService();
+
 		/* this area will set up the search function and apply the function */
 		searchButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		userManagement.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -64,7 +65,6 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("edition");
 		bookList.removeColumn("checkOut");
 		bookList.removeColumn("user");
-		bookList.removeColumn("id");
 		bookList.removeColumn("authorInformation");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 
@@ -76,7 +76,6 @@ public class LibraryUI extends UI {
 															// clicked
 			if (userPanel.isVisible()) {
 				userPanel.setVisible(false);
-				;
 			}
 			bookForm.clearFields();// Clear all author fields to prevent adding
 									// junk information
