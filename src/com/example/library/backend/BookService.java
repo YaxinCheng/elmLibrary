@@ -118,7 +118,7 @@ public class BookService {
 	}
 	
 	public synchronized boolean save(String ISBN, String title, String publisher, String years, String edition, List<String> authour) {
-		if (checkDuplicate(ISBN) == false) {
+		if (checkDuplicate(ISBN) == true) {
 			return false;
 		}
 		shelf.addEntity(new Book(ISBN, title, authour, publisher, years, edition));
@@ -151,12 +151,11 @@ public class BookService {
 		for (long i = 1; i <= shelf.getItemIds().size(); i++) {
 			if (shelf.getItemIds().contains(i)) {
 				if (shelf.getItem(i).getEntity().getIsbn().equals(isbn)) {
-					//System.out.println(shelf.getItem(i).getEntity().getIsbn() + " " + shelf.getItem(i).getEntity());
-					return false;
+					return true;
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	// method that can remove all filters created
