@@ -5,27 +5,20 @@ import javax.servlet.annotation.WebServlet;
 import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
 import com.example.library.backend.User;
-import com.example.library.BookForm;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.And;
-import com.vaadin.data.util.filter.Compare;
-import com.vaadin.data.util.filter.Like;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
+@SuppressWarnings("serial")
 @Theme("library")
 public class LibraryUI extends UI {
 
@@ -82,7 +75,8 @@ public class LibraryUI extends UI {
 		bookList.addSelectionListener(selectionEvent -> {// When a row is
 															// clicked
 			if (userPanel.isVisible()) {
-				userPanel.setVisible(false);;
+				userPanel.setVisible(false);
+				;
 			}
 			bookForm.clearFields();// Clear all author fields to prevent adding
 									// junk information
@@ -140,12 +134,12 @@ public class LibraryUI extends UI {
 			bookForm.setVisible(false);// Close the bookform
 		}
 	}
-	
+
 	public void refresh() {
 		userPanel = user == null ? new UserLogin() : new UserManagement(user);
 		this.buildLayout();
 	}
-	
+
 	public void addBook(Button.ClickEvent e) {
 		if (userPanel.isVisible()) {
 			userPanel.setVisible(false);
@@ -161,7 +155,7 @@ public class LibraryUI extends UI {
 			bookForm.edit();
 		}
 	}
-	
+
 	public void searchBook(Button.ClickEvent e) {
 		String info = filterField.getValue();// Get text in the search field
 		if (!info.isEmpty()) {// If it's not empty, search related
@@ -171,12 +165,12 @@ public class LibraryUI extends UI {
 			filterField.focus();// Set the search filed to be the first
 								// responder
 			service.removeAllFilters();// Empty all filters, show all
-											// the information in the db
+										// the information in the db
 			service.shelf.refresh();// Refresh
 			bookList.setContainerDataSource(service.shelf);
 		}
 	}
-	
+
 	public void manageUser(Button.ClickEvent e) {
 		if (bookForm.isVisible()) {
 			bookForm.cancel(e);

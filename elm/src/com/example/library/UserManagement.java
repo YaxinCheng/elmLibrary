@@ -4,6 +4,7 @@ import com.example.library.backend.User;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+@SuppressWarnings("serial")
 public class UserManagement extends UserPanel {
 	Label accountLabel = new Label("Account");
 	Label nameLabel = new Label("Name");
@@ -14,9 +15,9 @@ public class UserManagement extends UserPanel {
 	User user;
 
 	public UserManagement(User user) {
-//		if (user == null) {
-//			throw new NullPointerException("The User Cannot be NULL!!");
-//		}
+		// if (user == null) {
+		// throw new NullPointerException("The user cannot be empty.");
+		// }
 		this.user = user;
 		configureComponents();
 		buildLayout();
@@ -49,7 +50,7 @@ public class UserManagement extends UserPanel {
 		information.setSpacing(true);
 		VerticalLayout functions = new VerticalLayout(checkBorrows, checkWaiting);
 		addComponents(information, functions);
-//		setVisible(true);
+		// setVisible(true);
 	}
 
 	public void check(Button.ClickEvent event) {
