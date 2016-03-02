@@ -3,14 +3,11 @@ package com.example.library.backend;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * <h1>Book</h1> 
- * This is a class that represents a Book. It has all the
+ * <h1>Book</h1> This is a class that represents a Book. It has all the
  * attributes for a single book.
  *
  * @author Team-Elm
@@ -19,9 +16,8 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Book implements Comparable<Book>, Cloneable {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
 	private String isbn;
 	private String title;
 	private List<String> authors;
@@ -30,7 +26,8 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String edition;
 	private boolean checkOut;
 	@SuppressWarnings("unused")
-	private String authorInformation;// A string of all authors' names, used for search
+	private String authorInformation;// A string of all authors' names, used for
+										// search
 	@ManyToOne
 	private User user;
 
@@ -52,7 +49,7 @@ public class Book implements Comparable<Book>, Cloneable {
 		checkOut = false;
 		authorInformation = "";
 		for (String author : authors) {
-			authorInformation += (author + ";"); 
+			authorInformation += (author + ";");
 		}
 	}
 
@@ -65,14 +62,13 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	public boolean containInformation(String info) {
-		if ((isbn == null) || (title == null) || (publisher == null) || (year == null) || (edition == null)){
+		if ((isbn == null) || (title == null) || (publisher == null) || (year == null) || (edition == null)) {
 			return false;
-		}
-		else if ((isbn.contains(info)) || (title.contains(info)) || (publisher.contains(info))
+		} else if ((isbn.contains(info)) || (title.contains(info)) || (publisher.contains(info))
 				|| (year.contains(info)) || (edition.contains(info))) {
 			return true;
 		}
-		
+
 		for (String author : authors) {
 			if (author.contains(info)) {
 				return true;
@@ -99,7 +95,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	public List<String> getAuthors() {
-		
+
 		return authors;
 		// if (authors.size() == 0) {
 		// return "n.a.";

@@ -70,8 +70,9 @@ public class BookService {
 				String edition = bookInfo[5];
 				/* adding the book to the shelf */
 				Object id = shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
-				@SuppressWarnings("unused")
-				EntityItem<Book> book = shelf.getItem(id);
+				System.out.println(id);
+				//@SuppressWarnings("unused")
+				//EntityItem<Book> book = shelf.getItem(id);
 			}
 		} catch (IOException e) {
 			System.out.print("ERROR - IOException - Book configuration file could not be read - " + e);
