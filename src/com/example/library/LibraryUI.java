@@ -32,12 +32,12 @@ public class LibraryUI extends UI {
 	// UI Components
 	Grid bookList = new Grid();
 	TextField filterField = new TextField();
-	Button searchButton = new Button("Search");
-	Button addBookButton = new Button("Add Book");
-	Button userManagement = new Button("User");
+	Button searchButton = new Button("Search", this::searchBook);
+	Button addBookButton = new Button("Add Book", this::addBook);
+	Button userManagement = new Button("User", this::manageUser);
 	BookService service = BookService.createDemoService();
 	BookForm bookForm = new BookForm();
-	UserPanel userPanel = new UserPanel();
+	UserPanel userPanel;
 	User user;
 	EntityItem<Book> book;
 
@@ -57,54 +57,13 @@ public class LibraryUI extends UI {
 	 */
 
 	private void configureComponents() {
-		addBookButton.addClickListener(new Button.ClickListener() {
-			/*
-			 * When the bookForm is visible, disable the function of addButton
-			 * By default an author is singular, the form is cleared, and the
-			 * edit method is called with a false parameter, meaning that it is
-			 * not a modification
-			 */
-			@Override
-			public void buttonClick(ClickEvent event) {
-				if (userPanel.isVisible()) {
-					userPanel.setVisible(false);
-				}
-				if (!bookForm.isVisible()) {
-					bookForm.authorField.get(0).setCaption("Author");
-					bookForm.modification = false;
-					bookForm.clearFields();
-					bookForm.edit();
-				}
-			}
-		});
+		userPanel = user == null ? new UserLogin() : new UserManagement(user);
+		BookService service = BookService.createDemoService();
 		/* this area will set up the search function and apply the function */
 		searchButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
-		searchButton.setClickShortcut(ShortcutAction.KeyCode.SPACEBAR);
-		searchButton.addClickListener(e -> {
-			String info = filterField.getValue();// Get text in the search field
-			if (!info.isEmpty()) {// If it's not empty, search related
-									// information
-				refreshBooks(info);
-			} else {// If it's empty
-				filterField.focus();// Set the search filed to be the first
-									// responder
-				BookService.removeAllFilters();// Empty all filters, show all
-												// the information in the db
-				BookService.shelf.refresh();// Refresh
-				bookList.setContainerDataSource(BookService.shelf);
-			}
-		});
-		
 		userManagement.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-		userManagement.addClickListener(e -> {
-			if (bookForm.isVisible()) {
-				bookForm.cancel(e);
-			}
-			userPanel.showPanel();
-			userPanel.settingPanel(user);
-		});
 		filterField.setInputPrompt("Search books...");
-		bookList.setContainerDataSource(BookService.shelf);
+		bookList.setContainerDataSource(service.shelf);
 		bookList.setColumnOrder("title", "authors", "year");
 		// Those columns are useless here
 		bookList.removeColumn("isbn");
@@ -122,10 +81,13 @@ public class LibraryUI extends UI {
 		 */
 		bookList.addSelectionListener(selectionEvent -> {// When a row is
 															// clicked
+			if (userPanel.isVisible()) {
+				userPanel.setVisible(false);;
+			}
 			bookForm.clearFields();// Clear all author fields to prevent adding
 									// junk information
 			bookForm.modification = true;// It is a modification for a book
-			bookForm.edit(BookService.shelf.getItem(bookList.getSelectedRow()));
+			bookForm.edit(service.shelf.getItem(bookList.getSelectedRow()));
 		});
 		refreshBooks();
 	}
@@ -155,40 +117,75 @@ public class LibraryUI extends UI {
 	}
 
 	private void refreshBooks(String stringFilter) {
-		BookService.removeAllFilters();// Remove other filters before searching
+		BookService service = BookService.createDemoService();
+		service.removeAllFilters();// Remove other filters before searching
 		try {
 			if (stringFilter.isEmpty()) {// If nothing in the search field, just
 											// refresh
-				BookService.shelf.refresh();
-				bookList.setContainerDataSource(BookService.shelf);
+				service.shelf.refresh();
+				bookList.setContainerDataSource(service.shelf);
 				return;
-			} else if (stringFilter.toLowerCase().matches("between[0-9]{4}to[0-9]{4}")) {
+			} else if (stringFilter.toLowerCase().matches("[0-9]{4}\\-[0-9]{4}")) {
 				// If text in the search bar follows such format, I take it as
 				// searching for books in a specific time duration
-				String[] components = stringFilter.toLowerCase().split("to");
-				String toDate = components[1];
-				String fromDate = components[0].split("between")[1];
-				Filter from = new Compare.GreaterOrEqual("year", fromDate);
-				Filter to = new Compare.LessOrEqual("year", toDate);
-				Filter composite = new And(from, to);// Search for book in this
-														// range
-				BookService.shelf.addContainerFilter(composite);
-				BookService.shelf.refresh();
-				bookList.setContainerDataSource(BookService.shelf);
+				service.searchYear(stringFilter);
+				bookList.setContainerDataSource(service.shelf);
 				return;// End here
 			}
-			Filter title = new Like("title", "%" + stringFilter + "%", false);
-			Filter publisher = new Like("publisher", "%" + stringFilter + "%", false);
-			Filter author = new Like("authorInformation", "%" + stringFilter + "%", false);
-			Filter composite = new Or(title, publisher, author);
-			BookService.shelf.addContainerFilter(composite);// add filter
-			BookService.shelf.refresh();
-			bookList.setContainerDataSource(BookService.shelf);
+			service.searchInfo(stringFilter);
+			bookList.setContainerDataSource(service.shelf);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} finally {
 			bookForm.setVisible(false);// Close the bookform
 		}
+	}
+	
+	public void refresh() {
+		userPanel = user == null ? new UserLogin() : new UserManagement(user);
+		this.buildLayout();
+	}
+	
+	public void addBook(Button.ClickEvent e) {
+		if (userPanel.isVisible()) {
+			userPanel.setVisible(false);
+		}
+		if (bookForm.isVisible()) {
+			bookForm.setVisible(false);
+			bookForm.clearFields();
+		}
+		if (!bookForm.isVisible()) {
+			bookForm.authorField.get(0).setCaption("Author");
+			bookForm.modification = false;
+			bookForm.clearFields();
+			bookForm.edit();
+		}
+	}
+	
+	public void searchBook(Button.ClickEvent e) {
+		String info = filterField.getValue();// Get text in the search field
+		if (!info.isEmpty()) {// If it's not empty, search related
+								// information
+			refreshBooks(info);
+		} else {// If it's empty
+			filterField.focus();// Set the search filed to be the first
+								// responder
+			service.removeAllFilters();// Empty all filters, show all
+											// the information in the db
+			service.shelf.refresh();// Refresh
+			bookList.setContainerDataSource(service.shelf);
+		}
+	}
+	
+	public void manageUser(Button.ClickEvent e) {
+		if (bookForm.isVisible()) {
+			bookForm.cancel(e);
+		}
+		if (userPanel.isVisible()) {
+			userPanel.setVisible(false);
+		}
+		userPanel.showPanel();
+		userPanel.settingPanel(user);
 	}
 
 	@WebServlet(urlPatterns = "/*")

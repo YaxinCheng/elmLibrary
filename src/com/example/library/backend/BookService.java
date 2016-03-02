@@ -18,6 +18,10 @@ import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.And;
+import com.vaadin.data.util.filter.Compare;
+import com.vaadin.data.util.filter.Like;
+import com.vaadin.data.util.filter.Or;
 import com.vaadin.server.VaadinServlet;
 
 public class BookService {
@@ -27,7 +31,7 @@ public class BookService {
 	 */
 	private static BookService instance;
 	static EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
-	public static JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
+	public JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
 
 	/*
 	 * this function will run upon initialization of the program it will find
@@ -41,7 +45,7 @@ public class BookService {
 			 */
 			ServletContext servletContext = VaadinServlet.getCurrent().getServletContext();
 			InputStream stream = servletContext.getResourceAsStream("/config/book-service-config.txt");
-			populateBookService(bookService, stream);
+			bookService.populateBookService(bookService, stream);
 			instance = bookService;
 		}
 		return instance;
@@ -52,7 +56,7 @@ public class BookService {
 	 * then placing those values as the properties of a new book, each row in
 	 * the text file will represent an instance of a book
 	 */
-	private static void populateBookService(BookService bookService, InputStream in) {
+	private void populateBookService(BookService bookService, InputStream in) {
 		String line;
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			while ((line = br.readLine()) != null) {
@@ -112,26 +116,38 @@ public class BookService {
 		}
 		return true;
 	}
-
-	/*
-	 * this function will either replace and then add an edited book, else it
-	 * will save the book to the shelf
-	 * 
-	 * I am having trouble with this function, the goal is to not add a
-	 * duplicate ISBN however with the JPAContainer i haven't learned how to yet
-	 */
-	public synchronized boolean save(EntityItem<Book> book, boolean modification) {
-		if (modification) {
-			delete(book);
-			return true;
-		} else {
-			String isbn = book.getEntity().getIsbn();
-			return checkDuplicate(isbn);
+	
+	public synchronized boolean save(String ISBN, String title, String publisher, String years, String edition, List<String> authour) {
+		if (checkDuplicate(ISBN) == false) {
+			return false;
 		}
+		shelf.addEntity(new Book(ISBN, title, authour, publisher, years, edition));
+		return true;
+	}
+	
+	public synchronized void searchYear(String info) {
+		String[] components = info.toLowerCase().split("-");
+		String toDate = components[1];
+		String fromDate = components[0];
+		Filter from = new Compare.GreaterOrEqual("year", fromDate);
+		Filter to = new Compare.LessOrEqual("year", toDate);
+		Filter composite = new And(from, to);// Search for book in this
+												// range
+		shelf.addContainerFilter(composite);
+		shelf.refresh();
+	}
+	
+	public synchronized void searchInfo(String info) {
+		Filter title = new Like("title", "%" + info + "%", false);
+		Filter publisher = new Like("publisher", "%" + info + "%", false);
+		Filter author = new Like("authorInformation", "%" + info + "%", false);
+		Filter composite = new Or(title, publisher, author);
+		shelf.addContainerFilter(composite);// add filter
+		shelf.refresh();
 	}
 
 	// method check whether a book is duplicated ( with same isbn )
-	public static boolean checkDuplicate(String isbn) {
+	public boolean checkDuplicate(String isbn) {
 		for (long i = 1; i <= shelf.getItemIds().size(); i++) {
 			if (shelf.getItemIds().contains(i)) {
 				if (shelf.getItem(i).getEntity().getIsbn().equals(isbn)) {
@@ -144,10 +160,10 @@ public class BookService {
 	}
 
 	// method that can remove all filters created
-	public static void removeAllFilters() {
-		Collection<Filter> filters = BookService.shelf.getContainerFilters();
+	public void removeAllFilters() {
+		Collection<Filter> filters = shelf.getContainerFilters();
 		for (Filter filter : filters) {
-			BookService.shelf.removeContainerFilter(filter);
+			shelf.removeContainerFilter(filter);
 		}
 	}
 }

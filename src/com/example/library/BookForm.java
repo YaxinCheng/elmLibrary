@@ -142,6 +142,7 @@ public class BookForm extends FormLayout {
 	 * 'shelf'
 	 */
 	public void save(Button.ClickEvent event) {
+		BookService service = BookService.createDemoService();
 		String ISBN = isbnField.getValue();
 		String Title = titleField.getValue();
 		List<String> author = new ArrayList<String>();
@@ -151,7 +152,6 @@ public class BookForm extends FormLayout {
 				author.add(writer);
 			}
 		}
-		List<String> Author = author;
 		String Publisher = publisherField.getValue();
 		String Year = yearField.getValue();
 		String Edition = editionField.getValue();
@@ -164,39 +164,14 @@ public class BookForm extends FormLayout {
 			Notification.show("Please input the correct format of year", Type.ERROR_MESSAGE);
 			return;
 		}
-		if (!modification) {
-			if (BookService.checkDuplicate(ISBN)) {
-				Object id = BookService.shelf.addEntity(new Book(ISBN, Title, author, Publisher, Year, Edition));
-				book = BookService.shelf.getItem(id);
-				formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book, this);
-				try {
-					// Commit the fields from UI to DAO
-					formFieldBindings.commit();
-				} catch (FieldGroup.CommitException e) {
-					// Validation exceptions could be shown here
-				}
-				String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
-				Notification.show(msg, Type.TRAY_NOTIFICATION);
-				BookService.shelf.refresh();
-				getUI().refreshBooks();
-				return;
-			} else {
-				Notification.show("The book with the same ISBN already exists.", Type.ERROR_MESSAGE);
-				// need to clear fields after book is rejected, weird issue
-				// where ISBN changes or something
-				return;
-			}
+		if (modification) {
+			service.delete(book);
 		}
-		boolean result = getUI().service.save(book, modification);
-		if (result) {
-			BookService.shelf.addEntity(new Book(ISBN, Title, Author, Publisher, Year, Edition));
-			String msg = String.format("Saved '%s'.", book.getEntity().getTitle());
-			Notification.show(msg, Type.TRAY_NOTIFICATION);
-			BookService.shelf.refresh();
-			getUI().refreshBooks();
-		} else {
-			Notification.show("The book with the same ISBN has already existed", Type.ERROR_MESSAGE);
-		}
+		boolean success = service.save(ISBN, Title, Publisher, Year, Edition, author);
+		String msg = success ? "Saved" : "The book with the same ISBN already exists";
+		Type msgType = success ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
+		Notification.show(msg, msgType);
+		getUI().refreshBooks();
 		authorNumber = 1;
 	}
 

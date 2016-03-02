@@ -39,13 +39,20 @@ public class UserService {
 		Users.addEntity(entry);
 	}
 	
-	public synchronized boolean logIn(String account, String password) {
+	public synchronized boolean checklogIn(String account, String password) {
 		final EntityItem<User> expected = Users.getItem(account);
 		if (expected == null) {
 			return false;
 		}
 		String passwordExpected = expected.getEntity().getPassword();
 		return password.equals(passwordExpected);
+	}
+	
+	public synchronized User getUser(String account, String password) {
+		if (checklogIn(account, password)) {
+			return Users.getItem(account).getEntity();
+		}
+		return null;
 	}
 	
 	public synchronized String register(String account, String password) {
