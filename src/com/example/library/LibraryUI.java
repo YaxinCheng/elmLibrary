@@ -27,7 +27,7 @@ public class LibraryUI extends UI {
 	TextField filterField = new TextField();
 	Button searchButton = new Button("Search", this::searchBook);
 	Button addBookButton = new Button("Add Book", this::addBook);
-	Button userManagement = new Button("User", this::manageUser);
+	Button userManagement = new Button("Account", this::manageUser);
 	BookService service = BookService.createDemoService();
 	BookForm bookForm = new BookForm();
 	UserPanel userPanel;

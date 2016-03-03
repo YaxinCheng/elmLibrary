@@ -13,6 +13,7 @@ public class UserManagement extends UserPanel {
 	Button checkBorrows = new Button("Check Borrows", this::check);
 	Button checkWaiting = new Button("Check Holds", this::check);
 	User user;
+	Button cancelButton = new Button("Cancel", this::Cancel);
 
 	public UserManagement(User user) {
 		// if (user == null) {
@@ -48,7 +49,7 @@ public class UserManagement extends UserPanel {
 		setMargin(true);
 		VerticalLayout information = new VerticalLayout(accountLabel, nameLabel, emailLabel, phoneLabel);
 		information.setSpacing(true);
-		VerticalLayout functions = new VerticalLayout(checkBorrows, checkWaiting);
+		VerticalLayout functions = new VerticalLayout(checkBorrows, checkWaiting, cancelButton);
 		addComponents(information, functions);
 		// setVisible(true);
 	}
@@ -57,6 +58,10 @@ public class UserManagement extends UserPanel {
 
 	}
 
+	public void Cancel(Button.ClickEvent event) {
+		this.setVisible(false);
+	}
+	
 	public void settingPanel(User user) {
 		this.user = user;
 	}
