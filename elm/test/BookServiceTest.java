@@ -31,8 +31,7 @@ public class BookServiceTest {
 
 	@Test
 	public void testDelete() {
-		Object id = instance.shelf.addEntity(new Book());
-		// assertTrue(instance.delete(shelf.getItem(id)));
+		Object id = instance.shelf.addEntity(new Book("","",authors,"","",""));
 		instance.delete(instance.shelf.getItem(id));
 		assertFalse(instance.delete(instance.shelf.getItem(id)));
 	}
