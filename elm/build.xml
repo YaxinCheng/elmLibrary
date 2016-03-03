@@ -177,6 +177,10 @@
 
 	<target name="test" depends="compile-tests" description="Runs all tests in the test directory that have the word Test in their name">
 		<mkdir dir="${junit.output.dir}" />
+		<mkdir dir="${workdir}/WEB-INF/classes/META-INF"/>
+		<copy todir="${workdir}/WEB-INF/classes/META-INF" failonerror="no">
+			<fileset dir="${basedir}/src/META-INF" />
+		</copy>
 		<junit fork="yes" printsummary="withOutAndErr" haltonfailure="yes" haltonerror="yes" maxmemory="1024m" forkmode="once">
 			<formatter type="xml" />
 			<batchtest todir="${junit.output.dir}">
@@ -210,7 +214,6 @@
 		<copy todir="${workdir}/VAADIN/resources" failonerror="no">
 			<fileset dir="${webroot}/VAADIN/resources" />
 		</copy>
-
 		<war destfile="${artifacts}/${warfilename}" basedir="${workdir}" webxml="${webroot}/WEB-INF/web.xml">
 			<lib dir="${webroot}/WEB-INF/lib" erroronmissingdir="no">
 				<include name="*.jar" />
