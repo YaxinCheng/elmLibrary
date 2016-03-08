@@ -28,8 +28,19 @@ public class UserService {
 		return Users.size();
 	}
 
-	public synchronized void delete(User value) {
-
+	public synchronized boolean delete(User value) {
+		try {
+			Users.removeItem(value.getAccount());
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public synchronized void replace(User user) {
+		if (delete(user)) {
+			save(user);
+		}
 	}
 
 	public synchronized void save(User entry) {

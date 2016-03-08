@@ -14,6 +14,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 
+import org.eclipse.persistence.jpa.config.Entity;
+
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -30,7 +32,7 @@ public class BookService {
 	 * Book which is named 'shelf'
 	 */
 	private static BookService instance;
-	static EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
+	private EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
 	public JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
 
 	/*
@@ -126,6 +128,12 @@ public class BookService {
 		return true;
 	}
 	
+	public synchronized void replaceBook(EntityItem<Book> book) {
+		if (delete(book)) {
+			shelf.addEntity(book.getEntity());
+		}
+	}
+	
 	public synchronized void searchYear(String info) {
 		String[] components = info.toLowerCase().split("-");
 		String toDate = components[1];
@@ -165,5 +173,13 @@ public class BookService {
 		for (Filter filter : filters) {
 			shelf.removeContainerFilter(filter);
 		}
+	}
+
+	public void bookCheckOut(EntityItem<Book> book, User user) throws NullPointerException {
+		if (user == null) {
+			throw new NullPointerException("You should log in first to rent a book!");
+		}
+		user.getBorrowed().add(book.getEntity());
+		book.getEntity().lendTo(user);
 	}
 }

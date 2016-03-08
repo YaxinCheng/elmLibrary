@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
+import com.example.library.backend.UserService;
 
 /**
  * <h1>BookForm</h1> 
@@ -120,10 +121,19 @@ public class BookForm extends FormLayout {
 
 	/** this function will allow a user to check out a book or return a book */
 	public void checkIO(Button.ClickEvent event) {
+		BookService instance = BookService.createDemoService();
 		if (book != null) {
 			book.getEntity().setCheckOut(!book.getEntity().isCheckOut());
+			try {
+				instance.bookCheckOut(book, getUI().user);
+			} catch (NullPointerException e) {
+				Notification.show(e.getLocalizedMessage(), Type.ERROR_MESSAGE);
+				return;
+			}
 			String buttonTitle = book.getEntity().isCheckOut() ? "Return" : "Check Out";
 			checkIO.setCaption(buttonTitle);
+			instance.replaceBook(book);
+			UserService.createDemoService().replace(getUI().user);
 		}
 	}
 
@@ -187,6 +197,7 @@ public class BookForm extends FormLayout {
 		this.removeAllComponents();
 
 		removeButton.setVisible(true);
+		checkIO.setCaption(book.getEntity().isCheckOut() ? "Return" : "Check Out");
 		checkIO.setVisible(true);
 		int authorsCount = book2.getEntity().getAuthors().size();
 		buildLayout();

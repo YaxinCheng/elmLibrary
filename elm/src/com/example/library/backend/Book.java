@@ -136,6 +136,20 @@ public class Book implements Comparable<Book>, Cloneable {
 		this.edition = edition;
 	}
 
+	/**
+	 * @return the user
+	 */
+	public User borrowedBy() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void lendTo(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
 		return "Book [isbn=" + isbn + ", title=" + title + ", authors=" + authors + ", publisher=" + publisher
