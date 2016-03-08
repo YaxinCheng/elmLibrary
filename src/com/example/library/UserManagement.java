@@ -55,7 +55,10 @@ public class UserManagement extends UserPanel {
 	}
 
 	public void check(Button.ClickEvent event) {
-
+		Button button = event.getButton();
+		if (button.getCaption().equals("Check Borrows")) {
+			
+		}
 	}
 
 	public void Cancel(Button.ClickEvent event) {
