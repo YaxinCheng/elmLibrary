@@ -180,6 +180,10 @@ public class LibraryUI extends UI {
 		userPanel.showPanel();
 		userPanel.settingPanel(user);
 	}
+	
+	public void userUpdate() {
+		userPanel.settingPanel(user);
+	}
 
 	@WebServlet(urlPatterns = "/*")
 	@VaadinServletConfiguration(ui = LibraryUI.class, productionMode = false)

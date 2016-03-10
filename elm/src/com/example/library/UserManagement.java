@@ -10,8 +10,8 @@ public class UserManagement extends UserPanel {
 	Label nameLabel = new Label("Name");
 	Label emailLabel = new Label("Email");
 	Label phoneLabel = new Label("Phone");
-	Button checkBorrows = new Button("Check Borrows", this::check);
-	Button checkWaiting = new Button("Check Holds", this::check);
+	PopupView checkBooks;
+	Button checkInfo = new Button("Check Books", this::Popupviews);
 	User user;
 	Button cancelButton = new Button("Cancel", this::Cancel);
 
@@ -25,8 +25,7 @@ public class UserManagement extends UserPanel {
 	}
 
 	public void configureComponents() {
-		checkBorrows.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-		checkWaiting.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+		checkInfo.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 		if (user != null) {
 			accountLabel.setCaption("Account");
 			accountLabel.setValue(user.getAccount());
@@ -49,7 +48,7 @@ public class UserManagement extends UserPanel {
 		setMargin(true);
 		VerticalLayout information = new VerticalLayout(accountLabel, nameLabel, emailLabel, phoneLabel);
 		information.setSpacing(true);
-		VerticalLayout functions = new VerticalLayout(checkBorrows, checkWaiting, cancelButton);
+		VerticalLayout functions = new VerticalLayout(checkInfo, cancelButton);
 		addComponents(information, functions);
 		// setVisible(true);
 	}
@@ -57,8 +56,13 @@ public class UserManagement extends UserPanel {
 	public void check(Button.ClickEvent event) {
 		Button button = event.getButton();
 		if (button.getCaption().equals("Check Borrows")) {
-			
 		}
+	}
+	
+	public void Popupviews(Button.ClickEvent e) {
+		checkBooks = new PopupView(null, new UserDetails(user));
+		checkBooks.setPopupVisible(true);
+		this.addComponent(checkBooks);
 	}
 
 	public void Cancel(Button.ClickEvent event) {

@@ -126,6 +126,7 @@ public class BookForm extends FormLayout {
 			book.getEntity().setCheckOut(!book.getEntity().isCheckOut());
 			try {
 				instance.bookCheckOut(book, getUI().user);
+				getUI().userUpdate();
 			} catch (NullPointerException e) {
 				Notification.show(e.getLocalizedMessage(), Type.ERROR_MESSAGE);
 				return;
