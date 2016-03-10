@@ -123,15 +123,20 @@ public class BookForm extends FormLayout {
 	public void checkIO(Button.ClickEvent event) {
 		BookService instance = BookService.createDemoService();
 		if (book != null) {
+			String buttonTitle = !book.getEntity().isCheckOut() ? "Return" : "Check Out";
 			book.getEntity().setCheckOut(!book.getEntity().isCheckOut());
 			try {
-				instance.bookCheckOut(book, getUI().user);
-				getUI().userUpdate();
+				if(buttonTitle.equals("Return")) {
+					instance.bookCheckOut(book, getUI().user);
+					getUI().userUpdate();
+				} else {
+					instance.bookReturn(book, getUI().user);
+					getUI().userUpdate();
+				}
 			} catch (NullPointerException e) {
 				Notification.show(e.getLocalizedMessage(), Type.ERROR_MESSAGE);
 				return;
 			}
-			String buttonTitle = book.getEntity().isCheckOut() ? "Return" : "Check Out";
 			checkIO.setCaption(buttonTitle);
 			instance.replaceBook(book);
 			UserService.createDemoService().replace(getUI().user);

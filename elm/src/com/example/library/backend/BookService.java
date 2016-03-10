@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -178,7 +179,19 @@ public class BookService {
 		if (user == null) {
 			throw new NullPointerException("You should log in first to rent a book!");
 		}
+		book.getEntity().setCheckOutDate(new Date());
+		book.getEntity().setReturnDate(new Date(System.currentTimeMillis() + (86400 * 7 * 1000)));
 		user.getBorrowed().add(book.getEntity());
 		book.getEntity().lendTo(user);
+	}
+	
+	public void bookReturn(EntityItem<Book> book, User user) throws NullPointerException {
+		if (user == null) {
+			throw new NullPointerException("You should log in first to rent a book!");
+		}
+		user.getBorrowed().remove(book.getEntity());
+		book.getEntity().setCheckOutDate(null);
+		book.getEntity().setReturnDate(null);
+		book.getEntity().lendTo(null);
 	}
 }

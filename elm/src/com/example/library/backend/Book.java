@@ -1,5 +1,6 @@
 package com.example.library.backend;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -25,6 +26,8 @@ public class Book implements Comparable<Book>, Cloneable {
 	private String year;
 	private String edition;
 	private boolean checkOut;
+	private Date checkOutDate;
+	private Date returnDate;
 	@SuppressWarnings("unused")
 	private String authorInformation;// A string of all authors' names, used for
 										// search
@@ -148,6 +151,40 @@ public class Book implements Comparable<Book>, Cloneable {
 	 */
 	public void lendTo(User user) {
 		this.user = user;
+	}
+
+	/**
+	 * @return the checkOutDate
+	 */
+	public Date getCheckOutDate() {
+		return checkOutDate;
+	}
+
+	/**
+	 * @param checkOutDate the checkOutDate to set
+	 */
+	public void setCheckOutDate(Date checkOutDate) {
+		this.checkOutDate = checkOutDate;
+	}
+
+	/**
+	 * @return the returnDate
+	 */
+	public Date getReturnDate() {
+		return returnDate;
+	}
+	
+	public long daysPassed() {
+		Date today = new Date();
+		long diff = (today.getTime() - returnDate.getTime()) / (24 * 60 * 60 * 1000);
+		return diff <= 0? 0 : diff;
+	}
+
+	/**
+	 * @param returnDate the returnDate to set
+	 */
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
 	}
 
 	@Override
