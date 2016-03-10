@@ -71,8 +71,7 @@ public class BookService {
 				String year = bookInfo[4];
 				String edition = bookInfo[5];
 				/* adding the book to the shelf */
-				Object id = shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
-				System.out.println(id);
+				shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
 				//@SuppressWarnings("unused")
 				//EntityItem<Book> book = shelf.getItem(id);
 			}
