@@ -8,16 +8,17 @@ import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Compare;
 
-/* this class will handle features for the different users
- * and will be fully implemented during the SECOND ITERATION */
+/**
+ * this class contains all of the methods for dealing with different actions
+ * regarding a user, it also contains methods for checking log in credentials
+ */
 public class UserService {
 
 	private static UserService instance;
 	public JPAContainer<User> Users = JPAContainerFactory.make(User.class,
 			JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db"));
 
-	/**
-	 */
+	@SuppressWarnings("static-access")
 	public static UserService createDemoService() {
 		if (instance == null) {
 			BookService BookService = new BookService();
@@ -29,7 +30,6 @@ public class UserService {
 		return instance;
 	}
 
-	@SuppressWarnings("null")
 	public void populateUserService(BookService b){
 		List<Book> borrowed = null;
 		List<Book> waiting = null;
@@ -53,6 +53,7 @@ public class UserService {
 		return Users.size();
 	}
 
+	/** 'delete' will remove a user from the User JPAContainer */
 	public synchronized boolean delete(User value) {
 		try {
 			Users.removeItem(value.getAccount());
@@ -61,17 +62,27 @@ public class UserService {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * 'replace' works by deleting a given user, and then saving them,
+	 * ultimately ending up with a new copy of the user's instance
+	 */
 	public synchronized void replace(User user) {
 		if (delete(user)) {
 			save(user);
 		}
 	}
 
+	/* adding a user to the User JPAContainer */
 	public synchronized void save(User entry) {
 		Users.addEntity(entry);
 	}
 
+	/**
+	 * the checkLogIn method works by first making sure that the account passed
+	 * to it is not null, then does a simple string comparison to find out if
+	 * the given account's password matches the attempted password
+	 */
 	public synchronized boolean checklogIn(String account, String password) {
 		final EntityItem<User> expected = Users.getItem(account);
 		if (expected == null) {
@@ -81,6 +92,7 @@ public class UserService {
 		return password.equals(passwordExpected);
 	}
 
+	/* returning a requested user object */
 	public synchronized User getUser(String account, String password) {
 		if (checklogIn(account, password)) {
 			return Users.getItem(account).getEntity();
@@ -88,21 +100,17 @@ public class UserService {
 		return null;
 	}
 
-	public synchronized String register(String account, String password) {
-		boolean fmtCheck = false;
-		try {
-			fmtCheck = formatChecking(account, password);
-		} catch (FormatCheckFailedException e) {
-			return e.getLocalizedMessage();
-		}
-		if (fmtCheck == false) {
-			return "Error";
-		}
-		User newUser = new User(account, password);
-		save(newUser);
-		return "Register Success";
-	}
-
+	/**
+	 * the formatChecking function will first check the format of a password
+	 * associated with an account and works b receiving an account and password
+	 * and making sure that: neither are empty, and the password contains a
+	 * special character and is longer than 8 characters
+	 * 
+	 * secondly it will apply a filter that uses that User's name and checks to
+	 * see if there is a match in the database, if there is the size returned
+	 * will be greater than 0, and therefore not allow the user to user that
+	 * name
+	 */
 	private boolean formatChecking(String account, String password) throws FormatCheckFailedException {
 		if (account.isEmpty() || password.isEmpty()) {
 			throw new FormatCheckFailedException("Account or Password Cannot Be Empty!");
@@ -123,4 +131,23 @@ public class UserService {
 		return true;
 	}
 
+	/**
+	 * the register functions works by receiving an account and password, and
+	 * then checking if the formatChecking function returns true, if so, then a
+	 * user object is created and added to the JPAContainer
+	 */
+	public synchronized String register(String account, String password) {
+		boolean fmtCheck = false;
+		try {
+			fmtCheck = formatChecking(account, password);
+		} catch (FormatCheckFailedException e) {
+			return e.getLocalizedMessage();
+		}
+		if (fmtCheck == false) {
+			return "Error";
+		}
+		User newUser = new User(account, password);
+		save(newUser);
+		return "Register Success";
+	}
 }

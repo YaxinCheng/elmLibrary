@@ -68,7 +68,7 @@ public class UserManagement extends UserPanel {
 	public void Cancel(Button.ClickEvent event) {
 		this.setVisible(false);
 	}
-	
+
 	public void settingPanel(User user) {
 		this.user = user;
 	}
