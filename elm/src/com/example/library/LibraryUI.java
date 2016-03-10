@@ -28,7 +28,6 @@ public class LibraryUI extends UI {
 	Button searchButton = new Button("Search", this::searchBook);
 	Button addBookButton = new Button("Add Book", this::addBook);
 	Button userManagement = new Button("Account", this::manageUser);
-	BookService service = BookService.createDemoService();
 	BookForm bookForm = new BookForm();
 	UserPanel userPanel;
 	User user;
@@ -156,6 +155,7 @@ public class LibraryUI extends UI {
 	}
 
 	public void searchBook(Button.ClickEvent e) {
+		BookService service = BookService.createDemoService();
 		String info = filterField.getValue();// Get text in the search field
 		if (!info.isEmpty()) {// If it's not empty, search related
 								// information
