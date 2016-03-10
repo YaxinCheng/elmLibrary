@@ -21,16 +21,14 @@ public class UserService {
 	@SuppressWarnings("static-access")
 	public static UserService createDemoService() {
 		if (instance == null) {
-			BookService BookService = new BookService();
-			BookService.createDemoService();
 			UserService UserService = new UserService();
 			instance = UserService;
-			UserService.populateUserService(BookService);
+			UserService.populateUserService();
 		}
 		return instance;
 	}
 
-	public void populateUserService(BookService b){
+	public void populateUserService(){
 		List<Book> borrowed = null;
 		List<Book> waiting = null;
 		User user1 = new User("Nick", "definitelynot@fake.ca", "902-666-1234", borrowed, waiting);
