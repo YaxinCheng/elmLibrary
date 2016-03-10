@@ -1,5 +1,7 @@
 package com.example.library.backend;
 
+import java.util.List;
+
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -18,12 +20,47 @@ public class UserService {
 	 */
 	public static UserService createDemoService() {
 		if (instance == null) {
+			BookService BookService = new BookService();
 			UserService UserService = new UserService();
 			instance = UserService;
+			UserService.populateUserService(BookService);
 		}
 		return instance;
 	}
 
+	@SuppressWarnings("null")
+	public void populateUserService(BookService b){
+		List<Book> borrowed = null;
+		List<Book> waiting = null;
+		
+		borrowed.add((Book) b.shelf.getItem("B012OUZ3EQ"));
+		borrowed.add((Book) b.shelf.getItem("11783986549"));
+		User user1 = new User("Nick", "definitelynot@fake.ca", "902-666-1234", borrowed, waiting);
+		user1.setAccount("nick");
+		user1.setPassword("testlol!!");
+		Users.addEntity(user1);
+		borrowed.clear();
+		waiting.clear();
+		
+		borrowed.add((Book) b.shelf.getItem("20293429872"));
+		waiting.add((Book) b.shelf.getItem("11783986549"));
+		waiting.add((Book) b.shelf.getItem("42039487621"));
+		User user2 = new User("Roc", "prince@god.org", "902-123-6969", borrowed, waiting);
+		user2.setAccount("roc");
+		user2.setPassword("poutine4@");
+		Users.addEntity(user2);
+		borrowed.clear();
+		waiting.clear();
+		
+		waiting.add((Book) b.shelf.getItem("9823742983"));
+		User user3 = new User("Prince", "real@email.com", "666-123-4567", borrowed, waiting);
+		user3.setAccount("prince90");
+		user3.setPassword("securepassword!");
+		Users.addEntity(user3);
+		borrowed.clear();
+		waiting.clear();
+	}
+	
 	public synchronized int count() {
 		return Users.size();
 	}

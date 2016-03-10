@@ -105,6 +105,13 @@ public class User {
 	}
 
 	/**
+	 * @param account The account to set
+	 */
+	public void setAccount(String account){
+		this.account = account;
+	}
+	
+	/**
 	 * @param password the password to set
 	 */
 	public void setPassword(String password) {
