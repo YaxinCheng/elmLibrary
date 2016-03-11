@@ -71,10 +71,6 @@ public class BookService {
 				String publisher = bookInfo[3];
 				String year = bookInfo[4];
 				String edition = bookInfo[5];
-				/* adding the book to the shelf */
-				shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
-				//@SuppressWarnings("unused")
-				//EntityItem<Book> book = shelf.getItem(id);
 			}
 		} catch (IOException e) {
 			System.out.print("ERROR - IOException - Book configuration file could not be read - " + e);
@@ -89,7 +85,6 @@ public class BookService {
 	public synchronized List<Book> findAll(String filter) throws CloneNotSupportedException {
 		List<Book> arrayList = new ArrayList<Book>();
 		Collection<Object> id = shelf.getItemIds();
-		// System.out.println(id);
 		for (int i = 0; i < shelf.size() + 1; i++) {
 			if (id.contains(i)) {
 
@@ -101,7 +96,6 @@ public class BookService {
 				return (o1.compareTo(o2));
 			}
 		});
-		// System.out.println("filtered books list: " + arrayList);
 		return arrayList;
 	}
 
@@ -130,7 +124,7 @@ public class BookService {
 		shelf.addEntity(new Book(ISBN, title, authour, publisher, years, edition));
 		return true;
 	}
-	
+
 	public synchronized void replaceBook(EntityItem<Book> book) {
 		if (delete(book)) {
 			shelf.addEntity(book.getEntity());
@@ -148,7 +142,7 @@ public class BookService {
 		shelf.addContainerFilter(composite);
 		shelf.refresh();
 	}
-	
+
 	public synchronized void searchInfo(String info) {
 		Filter title = new Like("title", "%" + info + "%", false);
 		Filter publisher = new Like("publisher", "%" + info + "%", false);
