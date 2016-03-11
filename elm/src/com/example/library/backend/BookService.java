@@ -71,6 +71,7 @@ public class BookService {
 				String publisher = bookInfo[3];
 				String year = bookInfo[4];
 				String edition = bookInfo[5];
+				shelf.addEntity(new Book(isbn, title, authors, publisher, year, edition));
 			}
 		} catch (IOException e) {
 			System.out.print("ERROR - IOException - Book configuration file could not be read - " + e);
