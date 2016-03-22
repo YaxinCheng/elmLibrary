@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <project basedir="." default="test" xmlns:ivy="antlib:org.apache.ivy.ant" name="Build script for Vaadin 7 projects">
 
-	<property file="${user.home}/.userdata.properties" />
 	<property file="build.properties" />
 	<property name="workdir" value="${artifacts}/work" />
 	<property name="compiled-classes.dir" value="${workdir}/WEB-INF/classes" />
 	<property name="compiled-tests.dir" value="${workdir}/tests/classes" />
-	<property name="warfilename" value="library.war" />
+	<property name="warfilename" value="webapp.war" />
 	<property name="ant.build.javac.source" value="1.8" />
 	<property name="ant.build.javac.target" value="1.8" />
 
@@ -80,7 +79,6 @@
 	</target>
 
 	<target name="-init" depends="setup">
-		<mkdir dir="${artifacts}" />
 		<mkdir dir="${workdir}" />
 		<echo message="Resolving ivy dependencies" />
 		<ivy:cachefileset setid="ivy.default" conf="default" log="download-only"/>
@@ -165,22 +163,26 @@
 
 		<typedef name="webApp" classname="org.eclipse.jetty.ant.AntWebAppContext" classpathref="jettypath" loaderref="jetty.loader" onerror="ignore" />
 		<taskdef classpathref="jettypath" resource="tasks.properties" loaderref="jetty.loader" />
-
+		<typedef name="connector" classname="org.eclipse.jetty.ant.types.Connector"
+		           classpathref="jetty.plugin.classpath" loaderref="jetty.loader" />
 		<jetty.run daemon="true">
 			<systemProperties>
 				<systemProperty name="org.eclipse.jetty.LEVEL" value="WARN" />
 				<systemProperty name="org.eclipse.jetty.util.log.class" value="org.eclipse.jetty.util.log.StrErrLog" />
 			</systemProperties>
-			<webApp war="${artifacts}/${warfilename}" contextPath="/" />
+			<connectors>
+				<connector port="8090"/>
+			</connectors>
+			<webApp war="${artifacts}/${warfilename}" contextPath="/">
+				<attributes>
+		          <attribute name="org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern" value=".*classes.*"/>
+		        </attributes>
+			</webApp>
 		</jetty.run>
 	</target>
 
-	<target name="test" depends="compile-tests" description="Runs all tests in the test directory that have the word Test in their name">
+	<target name="test" depends="compile-tests, jetty.run" description="Runs all tests in the test directory that have the word Test in their name">
 		<mkdir dir="${junit.output.dir}" />
-		<mkdir dir="${workdir}/WEB-INF/classes/META-INF"/>
-		<copy todir="${workdir}/WEB-INF/classes/META-INF" failonerror="no">
-			<fileset dir="${basedir}/src/META-INF" />
-		</copy>
 		<junit fork="yes" printsummary="withOutAndErr" haltonfailure="yes" haltonerror="yes" maxmemory="1024m" forkmode="once">
 			<formatter type="xml" />
 			<batchtest todir="${junit.output.dir}">
@@ -204,16 +206,24 @@
 
 	<target name="package-war" depends="-init" description="Packages everything in a WAR that has been deployed in ${workdir}">
 		<mkdir dir="${workdir}/WEB-INF/lib" />
+		<copy todir="${workdir}/WEB-INF/lib" flatten="true">
+		      <fileset refid="ivy.default"/>
+	    </copy>
 		<delete>
 			<fileset dir="${workdir}/WEB-INF/lib">
 				<include name="**/*-sources.jar" />
 				<include name="**/*-javadoc.jar" />
 			</fileset>
 		</delete>
+		<mkdir dir="$/WEB-INF/classes/META-INF" />
+		<copy todir="${workdir}/WEB-INF/classes/META-INF" failonerror="no">
+			<fileset dir="${sources}/META-INF" />
+		</copy>
 		<mkdir dir="${workdir}/VAADIN/resources" />
 		<copy todir="${workdir}/VAADIN/resources" failonerror="no">
 			<fileset dir="${webroot}/VAADIN/resources" />
 		</copy>
+
 		<war destfile="${artifacts}/${warfilename}" basedir="${workdir}" webxml="${webroot}/WEB-INF/web.xml">
 			<lib dir="${webroot}/WEB-INF/lib" erroronmissingdir="no">
 				<include name="*.jar" />
@@ -221,12 +231,11 @@
 			<lib dir="${libraries}" erroronmissingdir="no">
 				<include name="*.jar" />
 			</lib>
-			<lib refid="ivy.default" />
 		</war>
 	</target>
 
 	<target name="deploy" depends="test" description="Deploys the project to the remote production server">
-		<scp file="${artifacts}/${warfilename}" todir="${username}:${password}@mega.cs.dal.ca:/opt/apache-tomcat-7.0.57/webapps" trust="yes" />
+		<copy file="${artifacts}/${warfilename}" todir="/opt/apache-tomcat-7.0.57/webapps" />
 	</target>
 
 	<target name="build-and-package" depends="compile-theme, compile-project, compile-widgetset, package-war">
