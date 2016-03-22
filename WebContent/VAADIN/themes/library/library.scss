@@ -1,9 +1,30 @@
 // Global variable overrides. Must be declared before importing Valo.
 
+$v-app-loading-text: "Loading...";
+$v-font-family: "Roboto", sans-serif;
+$v-font-weight: 400;
+$v-font-weight--header: 400;
+$v-background-color: #fff;
+$v-focus-color: rgb(150,190,90);
+$v-luminance-threshold: 180;
+$v-border: 2px solid v-shade;
+$v-border-radius: 6px;
+$v-bevel: false;
+$v-gradient: false;
+$v-shadow: false;
+$v-textfield-bevel: false;
+$v-textfield-shadow: false;
+$v-link-text-decoration: false;
+$v-selection-overlay-padding-horizontal: 0;
+$v-selection-overlay-padding-vertical: 6px;
+$v-selection-item-height: 30px;
+$v-selection-item-border-radius: 0;
+$valo-menu-background-color: #eee;
+
 // Defines the plaintext font size, weight and family. Font size affects general component sizing.
-//$v-font-size: 16px;
+//$v-font-size: 8px;
 //$v-font-weight: 300;
-//$v-font-family: "Open Sans", sans-serif;
+//$v-font-family: "Open Sans";
 
 // Defines the border used by all components.
 //$v-border: 1px solid (v-shade 0.7);
@@ -30,7 +51,6 @@
 @import "../valo/valo.scss";
 
 @mixin library {
-  @include valo;
+ @include valo;
 
-  // Insert your own theme rules here
 }

@@ -14,10 +14,14 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
- * 
- * @author Team_Elm
- * @role The UI for User Login to the library
+ * <h1>User Login</h1> 
+ * This is the main UI class that the user will login or register from.
+ *
+ * @author Team-Elm
+ * @version 4.92.2
+ * @since 2016-02-01
  */
+/** the user login class... */
 @SuppressWarnings("serial")
 public class UserLogin extends UserPanel {
 	Label nameLabel = new Label();
@@ -69,8 +73,8 @@ public class UserLogin extends UserPanel {
 		this.setVisible(false);
 	}
 
-	/*
-	 * Register method for people can register into the library
+	/**
+	 * Register method works by signing a user up for the library
 	 */
 	public void Register(Button.ClickEvent event) {
 		UserService instance = UserService.createDemoService();
@@ -90,7 +94,7 @@ public class UserLogin extends UserPanel {
 		String passwordValue = password.getValue();
 		boolean result = instance.checklogIn(accountValue, passwordValue);
 		Type type = result ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
-		String msg = result ? "Welcome!" : "Password and account does not match!";
+		String msg = result ? "Welcome!" : "Password and account do not match!";
 		Notification.show(msg, type);
 		user = instance.getUser(accountValue, passwordValue);
 		getUI().user = user;
