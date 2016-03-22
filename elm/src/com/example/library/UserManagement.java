@@ -29,6 +29,7 @@ public class UserManagement extends UserPanel {
 		buildLayout();
 	}
 
+	/* this is where the program will be structured from */
 	public void configureComponents() {
 		checkInfo.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 		if (user != null) {
@@ -57,10 +58,13 @@ public class UserManagement extends UserPanel {
 		addComponents(information, functions);
 		// setVisible(true);
 	}
-
+	
+	/* generating the button to check books */
+	//View Borrows
 	public void check(Button.ClickEvent event) {
 		Button button = event.getButton();
-		if (button.getCaption().equals("Check Borrows")) {
+		if (button.getCaption().equals("View Borrowed Books")) {
+			//
 		}
 	}
 
