@@ -4,6 +4,14 @@ import com.example.library.backend.User;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+/**
+ * <h1>UserManagement</h1> This is the main UI class that the program initializes from.
+ *
+ * @author Team-Elm
+ * @version 4.92.2
+ * @since 2016-02-01
+ */
+/** the userManagement class... */
 @SuppressWarnings("serial")
 public class UserManagement extends UserPanel {
 	Label accountLabel = new Label("Account");
@@ -16,9 +24,6 @@ public class UserManagement extends UserPanel {
 	Button cancelButton = new Button("Cancel", this::Cancel);
 
 	public UserManagement(User user) {
-		// if (user == null) {
-		// throw new NullPointerException("The user cannot be empty.");
-		// }
 		this.user = user;
 		configureComponents();
 		buildLayout();
@@ -58,7 +63,7 @@ public class UserManagement extends UserPanel {
 		if (button.getCaption().equals("Check Borrows")) {
 		}
 	}
-	
+
 	public void Popupviews(Button.ClickEvent e) {
 		checkBooks = new PopupView(null, new UserDetails(user));
 		checkBooks.setPopupVisible(true);
