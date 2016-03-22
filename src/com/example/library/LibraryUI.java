@@ -18,6 +18,13 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+/**
+ * <h1>Home UI</h1> This is the main UI class that the program initializes from.
+ *
+ * @author Team-Elm
+ * @version 4.92.2
+ * @since 2016-02-01
+ */
 @SuppressWarnings("serial")
 @Theme("library")
 public class LibraryUI extends UI {
@@ -180,7 +187,7 @@ public class LibraryUI extends UI {
 		userPanel.showPanel();
 		userPanel.settingPanel(user);
 	}
-	
+
 	public void userUpdate() {
 		userPanel.settingPanel(user);
 	}

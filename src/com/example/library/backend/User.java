@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
  * list of books they are on a hold list for.
  * 
  * @author Team-Elm
- * @version 1.0
+ * @version 4.92.2
  * @since 2016-02-01
  */
 @Entity

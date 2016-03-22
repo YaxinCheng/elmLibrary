@@ -3,10 +3,8 @@ package com.example.library;
 import com.example.library.backend.Book;
 import com.example.library.backend.User;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 
 @SuppressWarnings("serial")
 public class UserDetails extends UserPanel {
