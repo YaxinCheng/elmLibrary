@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="DESKTOP-EK9S4CK" name="UserServiceTest" skipped="0" tests="5" time="0.058" timestamp="2016-03-22T21:29:46">
+<testsuite errors="0" failures="0" hostname="DESKTOP-EK9S4CK" name="LibraryTest" skipped="0" tests="1" time="10.999" timestamp="2016-03-22T21:29:35">
   <properties>
     <property name="file.encoding.pkg" value="sun.io" />
     <property name="ivy.retrieve.pattern.ivy.instance" value="C:\Users\nickm\workspace\library/lib/[artifact]-[revision](-[classifier]).[ext]" />
@@ -217,11 +217,17 @@
     <property name="sun.arch.data.model" value="64" />
     <property name="ivy.buildlist.ivyfilepath" value="ivy.xml" />
   </properties>
-  <testcase classname="UserServiceTest" name="testCheckLogIn" time="0.027" />
-  <testcase classname="UserServiceTest" name="testCount" time="0.001" />
-  <testcase classname="UserServiceTest" name="testGetUser" time="0.007" />
-  <testcase classname="UserServiceTest" name="testRegister" time="0.008" />
-  <testcase classname="UserServiceTest" name="testCreate" time="0.0" />
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
+  <testcase classname="LibraryTest" name="testClickButton" time="10.987" />
+  <system-out><![CDATA[-----------------------------------------------------------------------------------
+Vaadin TestBench 4 registered to nickmacdonald7@gmail.com (Pro Tools subscription)
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+Vaadin TestBench 4 registered to nickmacdonald7@gmail.com (Pro Tools subscription)
+-----------------------------------------------------------------------------------
+]]></system-out>
+  <system-err><![CDATA[Mar 22, 2016 6:29:34 PM java.util.prefs.WindowsPreferences <init>
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+Starting ChromeDriver 2.21.371459 (36d3d07f660ff2bc1bf28a75d1cdabed0983e7c4) on port 41252
+Only local connections are allowed.
+]]></system-err>
 </testsuite>
