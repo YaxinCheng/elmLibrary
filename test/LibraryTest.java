@@ -1,17 +1,13 @@
-import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.testbench.TestBenchTestCase;
-import com.vaadin.testbench.elements.ButtonElement;
-import com.vaadin.testbench.elements.LabelElement;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import com.vaadin.testbench.ScreenshotOnFailureRule;
+import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.testbench.elements.LabelElement;
 
 /**
  * This class contains JUnit tests, which are run using Vaadin TestBench 4.

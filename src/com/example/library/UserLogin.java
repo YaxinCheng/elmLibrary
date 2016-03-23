@@ -6,7 +6,6 @@ import com.example.library.backend.UserService;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
@@ -40,11 +39,11 @@ public class UserLogin extends UserPanel {
 	}
 
 	private void configureComponent() {
-		account.setInputPrompt("Account");
+		account.setInputPrompt("Username");
 		password.setInputPrompt("Password");
 		nameField.setInputPrompt("Name");
-		emailField.setInputPrompt("Email@Elm.Ca");
-		phoneField.setInputPrompt("Phone #");
+		emailField.setInputPrompt("email@elm.ca");
+		phoneField.setInputPrompt("Phone Number");
 		cancelButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 		cancelButton.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
 		Save.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -113,7 +112,7 @@ public class UserLogin extends UserPanel {
 		}
 		return true;
 	}
-	
+
 	public void clearFields() {
 		account.setValue("");
 		password.setValue("");
