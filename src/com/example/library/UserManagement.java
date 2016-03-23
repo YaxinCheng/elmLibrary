@@ -121,6 +121,9 @@ public class UserManagement extends UserPanel {
 					user.setEmail(email);
 					user.setPhone(phone);
 					instance.replace(user);
+					nameLabel.setValue(name);
+					emailLabel.setValue(email);
+					phoneLabel.setValue(phone);
 				} 
 			} catch (FormatCheckFailedException e) {
 				Notification.show(e.getLocalizedMessage(), Type.ERROR_MESSAGE);
