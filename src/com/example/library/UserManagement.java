@@ -107,7 +107,7 @@ public class UserManagement extends UserPanel {
 		if (editing == true) {
 			setFields();
 			buildLayout();
-			event.getButton().setCaption("DONE");
+			event.getButton().setCaption("Done");
 		} else {
 			UserService instance = UserService.createDemoService();
 			event.getButton().setCaption("Edit");
