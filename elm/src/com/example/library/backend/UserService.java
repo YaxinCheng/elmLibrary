@@ -50,9 +50,9 @@ public class UserService {
 		ycheng.setPassword("cyx123321X&");
 		Users.addEntity(ycheng);
 		
-		User user4 = new User("Bray", "bray@elm.ca", "902-666-1234", borrowed, waiting);
-		user4.setAccount("nick");
-		user4.setPassword("testlol!!");
+		User user4 = new User("Bray", "bray@elm.ca", "902-420-4200", borrowed, waiting);
+		user4.setAccount("Bray");
+		user4.setPassword("schurman!2");
 		Users.addEntity(user4);
 	}
 
@@ -120,20 +120,20 @@ public class UserService {
 	 */
 	private boolean formatChecking(String account, String password) throws FormatCheckFailedException {
 		if (account.isEmpty() || password.isEmpty()) {
-			throw new FormatCheckFailedException("Account or Password Cannot Be Empty!");
+			throw new FormatCheckFailedException("Username or password cannot be empty.");
 		}
 		if (password.length() < 8) {
-			throw new FormatCheckFailedException("Password must be longer than 8 Characters!");
+			throw new FormatCheckFailedException("Password must be longer than 8 characters.");
 		}
 		if (!password.matches(".*[\\-\\*\\&\\^\\%\\$\\#\\@\\!\\(\\)].*")) {
-			throw new FormatCheckFailedException("Password Must Contain At Least 1 Special Character");
+			throw new FormatCheckFailedException("Password must contain at least 1 special character");
 		}
 		Filter accountCheck = new Compare.Equal("account", account);
 		Users.addContainerFilter(accountCheck);
 		// Users.refresh();
 		if (Users.size() > 0) {
 			Users.removeAllContainerFilters();
-			throw new FormatCheckFailedException("The Account Is Already Existed in the Database!");
+			throw new FormatCheckFailedException("The account is already in the database.");
 		}
 		return true;
 	}
@@ -151,11 +151,11 @@ public class UserService {
 			return e.getLocalizedMessage();
 		}
 		if (fmtCheck == false) {
-			return "Error";
+			return "Error validating information.";
 		}
 		User newUser = new User(account, password);
 		save(newUser);
-		return "Register Success";
+		return "Successful registration.";
 	}
 
 	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
@@ -163,10 +163,10 @@ public class UserService {
 			throw new FormatCheckFailedException("Name can't contains numbers");
 		}
 		if (!email.matches(".+\\.?.*@.+\\..+")) {
-			throw new FormatCheckFailedException("Please enter the correct email format");
+			throw new FormatCheckFailedException("Email needs to be in the format: johnny_rotten@elm.ca");
 		}
 		if (!phone.matches("\\(?[0-9]{3}\\)?-?[0-9]{3}-?[0-9]{4}")) {
-			throw new FormatCheckFailedException("Please enter the correct phone number");
+			throw new FormatCheckFailedException("Phone number needs to be in the format: xxx-xxx-xxxx");
 		}
 		return true;
 	}
