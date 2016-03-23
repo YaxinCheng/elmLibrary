@@ -1,11 +1,13 @@
 package com.example.library.backend;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * <h1>Book</h1> This is a class that represents a Book. It has all the
@@ -33,6 +35,8 @@ public class Book implements Comparable<Book>, Cloneable {
 										// search
 	@ManyToOne
 	private User user;
+	@OneToMany
+	private ArrayList<User> waitList = new ArrayList();
 
 	public boolean isCheckOut() {
 		return checkOut;
@@ -187,6 +191,14 @@ public class Book implements Comparable<Book>, Cloneable {
 	 */
 	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
+	}
+	
+	public ArrayList<User> getWaitList() {
+		return waitList;
+	}
+	
+	public void Wait(User user) {
+		waitList.add(user);
 	}
 
 	@Override

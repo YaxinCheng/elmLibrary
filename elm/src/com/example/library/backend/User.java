@@ -30,7 +30,7 @@ public class User {
 	private String phone;
 	private List<Book> borrowed;
 	private List<Book> waiting;
-
+	private boolean librarian = false;
 	@OneToMany(mappedBy = "user")
 	private Set<Book> book;
 
@@ -146,6 +146,20 @@ public class User {
 		}
 	}
 
+	/**
+	 * @return the librarian
+	 */
+	public boolean isLibrarian() {
+		return librarian;
+	}
+
+	/**
+	 * @param librarian the librarian to set
+	 */
+	public void setLibrarian(boolean librarian) {
+		this.librarian = librarian;
+	}
+
 	@Override
 	public String toString() {
 		return "User [name=" + name + ", email=" + email + ", phone=" + phone + ", borrowed=" + borrowed + ", waiting="
@@ -155,7 +169,7 @@ public class User {
 	// The method that can check whether the users are same or not
 	@Override
 	public boolean equals(Object object) {
-		if (object instanceof User && ((User) object).getEmail() == this.email) {
+		if (object instanceof User && ((User) object).getAccount() == this.account) {
 			return true;
 		}
 		return false;

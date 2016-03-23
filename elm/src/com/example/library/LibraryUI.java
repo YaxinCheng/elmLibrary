@@ -79,8 +79,8 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("checkOut");
 		bookList.removeColumn("user");
 		bookList.removeColumn("authorInformation");
+		bookList.removeColumn("waitList");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
-
 		/*
 		 * this will allow a book to be edited or deleted when a row is clicked
 		 * on
@@ -93,7 +93,10 @@ public class LibraryUI extends UI {
 			bookForm.clearFields();// Clear all author fields to prevent adding
 									// junk information
 			bookForm.modification = true;// It is a modification for a book
-			bookForm.edit(service.shelf.getItem(bookList.getSelectedRow()));
+			bookForm.setPermission(user.isLibrarian());
+			if (user != null) {
+				bookForm.edit(service.shelf.getItem(bookList.getSelectedRow()), user);
+			}
 		});
 		refreshBooks();
 	}
@@ -223,11 +226,11 @@ public class LibraryUI extends UI {
 	
 	public void logInSwitch(boolean trigger) {
 		if (trigger) {
+			userPanel = new UserLogin();
 			buildLayoutForLogInView();
 			this.setStyleName("logIn");
 		} else {
 			userPanel = new UserManagement(user);
-			
 			buildLayout();
 			this.setStyleName("blur");
 		}

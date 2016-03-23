@@ -66,6 +66,7 @@ public class UserManagement extends UserPanel {
 		setSizeUndefined();
 		setMargin(true);
 		
+		editButton.setCaption("Edit");
 		VerticalLayout information = new VerticalLayout(accountLabel);
 		buildLayoutForInfoLayout();
 		buildLayoutForEditingLayout();
@@ -131,6 +132,7 @@ public class UserManagement extends UserPanel {
 	public void Cancel(Button.ClickEvent event) {
 		this.removeAllComponents();
 		editing = false;
+		buildLayout();
 		this.setVisible(false);
 	}
 

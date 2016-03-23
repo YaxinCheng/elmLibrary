@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
+import com.example.library.backend.User;
 import com.example.library.backend.UserService;
 
 /**
@@ -123,10 +124,14 @@ public class BookForm extends FormLayout {
 	public void checkIO(Button.ClickEvent event) {
 		BookService instance = BookService.createDemoService();
 		if (book != null) {
+			if (checkIO.getCaption().equals("Wait")) {
+				waitInList();
+				return;
+			}
 			String buttonTitle = !book.getEntity().isCheckOut() ? "Return" : "Check Out";
 			book.getEntity().setCheckOut(!book.getEntity().isCheckOut());
 			try {
-				if(buttonTitle.equals("Return")) {
+				if (buttonTitle.equals("Return")) {
 					instance.bookCheckOut(book, getUI().user);
 					getUI().userUpdate();
 				} else {
@@ -141,6 +146,12 @@ public class BookForm extends FormLayout {
 			instance.replaceBook(book);
 			UserService.createDemoService().replace(getUI().user);
 		}
+	}
+	
+	public void waitInList() {
+		BookService instance = BookService.createDemoService();
+		book.getEntity().Wait(getUI().user);
+		instance.replaceBook(book);
 	}
 
 	public void cancel(Button.ClickEvent event) {
@@ -195,16 +206,24 @@ public class BookForm extends FormLayout {
 	 * this function will be called when a book is clicked from the table, it
 	 * will then display that book's attributes
 	 */
-	void edit(EntityItem<Book> book2) {
+	void edit(EntityItem<Book> book2, User user) {
 		if (book2 == null) {
 			return;
 		}
 		this.book = book2;
 		this.removeAllComponents();
 
-		removeButton.setVisible(true);
-		checkIO.setCaption(book.getEntity().isCheckOut() ? "Return" : "Check Out");
+		if (!book.getEntity().isCheckOut()) {
+			checkIO.setCaption("Check Out");
+		} else {
+			if (book.getEntity().borrowedBy().equals(user)) {
+				checkIO.setCaption("Return");
+			} else {
+				checkIO.setCaption("Wait");
+			}
+		}
 		checkIO.setVisible(true);
+
 		int authorsCount = book2.getEntity().getAuthors().size();
 		buildLayout();
 		for (int i = 1; i < authorsCount; i++) {
@@ -244,6 +263,11 @@ public class BookForm extends FormLayout {
 		for (TextField field : authorField) {
 			field.setValue("");
 		}
+	}
+
+	public void setPermission(boolean isLibaririan) {
+		this.removeButton.setVisible(isLibaririan);
+		this.saveButton.setVisible(isLibaririan);
 	}
 
 	@Override
