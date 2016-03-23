@@ -55,7 +55,10 @@ public class UserManagement extends UserPanel {
 		VerticalLayout information = new VerticalLayout(accountLabel, nameLabel, emailLabel, phoneLabel);
 		information.setSpacing(true);
 		VerticalLayout functions = new VerticalLayout(checkInfo, cancelButton);
-		addComponents(information, functions);
+		VerticalLayout alig = new VerticalLayout(information, functions);
+		alig.setComponentAlignment(information, Alignment.MIDDLE_CENTER);
+		alig.setComponentAlignment(functions, Alignment.BOTTOM_CENTER);
+		addComponents(alig);
 		// setVisible(true);
 	}
 	
