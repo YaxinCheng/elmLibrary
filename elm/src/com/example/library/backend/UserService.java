@@ -18,7 +18,6 @@ public class UserService {
 	public JPAContainer<User> Users = JPAContainerFactory.make(User.class,
 			JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db"));
 
-	@SuppressWarnings("static-access")
 	public static UserService createDemoService() {
 		if (instance == null) {
 			UserService UserService = new UserService();
@@ -28,7 +27,7 @@ public class UserService {
 		return instance;
 	}
 
-	public void populateUserService(){
+	public void populateUserService() {
 		List<Book> borrowed = null;
 		List<Book> waiting = null;
 		User user1 = new User("Nick", "definitelynot@fake.ca", "902-666-1234", borrowed, waiting);
@@ -45,13 +44,13 @@ public class UserService {
 		user3.setAccount("prince90");
 		user3.setPassword("securepassword!");
 		Users.addEntity(user3);
-		
+
 		User ycheng = new User("ycheng", "yaxin.Cheng@dal.ca", "902-877-9707", borrowed, waiting);
 		ycheng.setAccount("ycheng");
 		ycheng.setPassword("cyx123321X&");
 		Users.addEntity(ycheng);
 	}
-	
+
 	public synchronized int count() {
 		return Users.size();
 	}

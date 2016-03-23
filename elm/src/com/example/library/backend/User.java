@@ -43,9 +43,8 @@ public class User {
 		this.phone = phone;
 		this.borrowed = borrowed;
 		this.waiting = waiting;
-
 	}
-	
+
 	public User(String account, String password) {
 		this.account = account;
 		this.password = password;
@@ -68,7 +67,7 @@ public class User {
 
 	}
 
-	// setter and getter
+	// setter and getters
 	public String getName() {
 		return name;
 	}
@@ -124,19 +123,21 @@ public class User {
 	}
 
 	/**
-	 * @param account The account to set
+	 * @param account
+	 *            The account to set
 	 */
-	public void setAccount(String account){
+	public void setAccount(String account) {
 		this.account = account;
 	}
-	
+
 	/**
-	 * @param password the password to set
+	 * @param password
+	 *            the password to set
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public boolean isInformationFilled() {
 		try {
 			return !name.isEmpty() && !phone.isEmpty() && !email.isEmpty();

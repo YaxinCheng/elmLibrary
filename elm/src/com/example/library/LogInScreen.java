@@ -7,22 +7,23 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 
+@SuppressWarnings("serial")
 public class LogInScreen extends UserPanel {
-	
+
 	TextField account = new TextField();
 	PasswordField password = new PasswordField();
 	Button Confirm = new Button("Log In", this::LogIn);
 	Button Register = new Button("Register", this::Register);
 	private User user;
-	
+
 	public LogInScreen() {
 		configureComponents();
 		buildLayout();
 	}
-	
+
 	public void configureComponents() {
 		setSizeUndefined();
-		account.setInputPrompt("Account");
+		account.setInputPrompt("Username");
 		account.setMaxLength(180);
 		password.setInputPrompt("Password");
 		password.setMaxLength(180);
@@ -30,7 +31,7 @@ public class LogInScreen extends UserPanel {
 		Confirm.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		Register.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 	}
-	
+
 	public void buildLayout() {
 		VerticalLayout textFields = new VerticalLayout(account, password);
 		textFields.setSpacing(true);
@@ -50,14 +51,14 @@ public class LogInScreen extends UserPanel {
 		// TODO Auto-generated method stub
 		this.user = user;
 	}
-	
+
 	public void LogIn(Button.ClickEvent event) {
 		UserService instance = UserService.createDemoService();
 		String accountValue = account.getValue().toLowerCase();
 		String passwordValue = password.getValue();
 		boolean result = instance.checklogIn(accountValue, passwordValue);
 		Type type = result ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
-		String msg = result ? "Welcome!" : "Password and account do not match!";
+		String msg = result ? "Welcome." : "Username and account do not match.";
 		Notification.show(msg, type);
 		user = instance.getUser(accountValue, passwordValue);
 		getUI().user = user;
@@ -67,7 +68,7 @@ public class LogInScreen extends UserPanel {
 	public void Register(Button.ClickEvent event) {
 		getUI().showRegister();
 	}
-	
+
 	public LibraryUI getUI() {
 		return (LibraryUI) super.getUI();
 	}

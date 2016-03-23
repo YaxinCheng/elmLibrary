@@ -61,7 +61,6 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	public Book() {
-
 	}
 
 	public boolean containInformation(String info) {
@@ -147,7 +146,8 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param user
+	 *            the user to set
 	 */
 	public void lendTo(User user) {
 		this.user = user;
@@ -161,7 +161,8 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	/**
-	 * @param checkOutDate the checkOutDate to set
+	 * @param checkOutDate
+	 *            the checkOutDate to set
 	 */
 	public void setCheckOutDate(Date checkOutDate) {
 		this.checkOutDate = checkOutDate;
@@ -173,15 +174,16 @@ public class Book implements Comparable<Book>, Cloneable {
 	public Date getReturnDate() {
 		return returnDate;
 	}
-	
+
 	public long daysPassed() {
 		Date today = new Date();
 		long diff = (today.getTime() - returnDate.getTime()) / (24 * 60 * 60 * 1000);
-		return diff <= 0? 0 : diff;
+		return diff <= 0 ? 0 : diff;
 	}
 
 	/**
-	 * @param returnDate the returnDate to set
+	 * @param returnDate
+	 *            the returnDate to set
 	 */
 	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;

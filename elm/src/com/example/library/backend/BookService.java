@@ -15,8 +15,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 
-import org.eclipse.persistence.jpa.config.Entity;
-
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
