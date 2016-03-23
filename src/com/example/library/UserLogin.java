@@ -80,7 +80,7 @@ public class UserLogin extends UserPanel {
 		String email = emailField.getValue();
 		String phone = phoneField.getValue();
 		try {
-			if (informationCheck(name, email, phone)) {
+			if (instance.informationCheck(name, email, phone)) {
 				String result = instance.register(accountValue, passwordValue);
 				Type notificationType = result.equals("Register Success") ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
 				Notification.show(result, notificationType);
@@ -98,19 +98,6 @@ public class UserLogin extends UserPanel {
 			Notification.show(e.getLocalizedMessage(), Type.ERROR_MESSAGE);
 		}
 
-	}
-
-	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
-		if (name.matches(".*[0-9]+.*")) {
-			throw new FormatCheckFailedException("Name can't contains numbers");
-		}
-		if (!email.matches(".+\\.?.*@.+\\..+")) {
-			throw new FormatCheckFailedException("Please enter the correct email format");
-		}
-		if (!phone.matches("[0-9]{10}")) {
-			throw new FormatCheckFailedException("Please enter the correct phone number");
-		}
-		return true;
 	}
 
 	public void clearFields() {
