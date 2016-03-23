@@ -1,13 +1,20 @@
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import com.example.library.UserPanel;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.LabelElement;
+import com.vaadin.testbench.elements.NotificationElement;
+import com.vaadin.testbench.elements.PasswordFieldElement;
+import com.vaadin.testbench.elements.TextFieldElement;
 
 /**
  * This class contains JUnit tests, which are run using Vaadin TestBench 4.
@@ -19,63 +26,44 @@ import com.vaadin.testbench.elements.LabelElement;
  * Once the license is installed, you can run this class as a JUnit test.
  */
 public class LibraryTest extends TestBenchTestCase {
-    @Rule
-    public ScreenshotOnFailureRule screenshotOnFailureRule =
-            new ScreenshotOnFailureRule(this, true);
+	@Rule
+	public ScreenshotOnFailureRule screenshotOnFailureRule = new ScreenshotOnFailureRule(this, true);
 
-    @Before
-    public void setUp() throws Exception {
-        //setDriver(new FirefoxDriver()); // Firefox
+	@Before
+	public void setUp() throws Exception {
+		setDriver(new ChromeDriver()); // Chrome
+	}
 
-        // To use Chrome, first install chromedriver.exe from
-        // http://chromedriver.storage.googleapis.com/index.html
-        // on your system path (e.g. C:\Windows\System32\)
-        setDriver(new ChromeDriver()); // Chrome
+	/**
+	 * Opens the URL where the application is deployed.
+	 */
+	private void openTestUrl() {
+		getDriver().get("http://localhost:8080/library/");
+	}
 
-        // To use Internet Explorer, first install iedriverserver.exe from
-        // http://selenium-release.storage.googleapis.com/index.html?path=2.43/
-        // on your system path (e.g. C:\Windows\System32\)
-        //   setDriver(new InternetExplorerDriver()); // IE
+	/**
+	 * Test the Log In button
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testLogIn() throws Exception {
+		openTestUrl();
+		assertTrue($(TextFieldElement.class).exists());
+		assertTrue($(PasswordFieldElement.class).exists());
+		assertTrue($(ButtonElement.class).exists());
+		assertEquals(2, $(ButtonElement.class).all().size());
+		// Click the Login button
+		ButtonElement LoginButton = $(ButtonElement.class).caption("Log In").first();
+		LoginButton.click();
+		// There should now be one notification with the specified text
+		assertEquals("Username and account do not match.", $(NotificationElement.class).first().getText());
+	}
 
-        // To test headlessly (without a browser), first install phantomjs.exe
-        // from http://phantomjs.org/download.html on your system path
-        // (e.g. C:\Windows\System32\)
-        //   setDriver(new PhantomJSDriver()); // PhantomJS headless browser
-    }
-
-    /**
-     * Opens the URL where the application is deployed.
-     */
-    private void openTestUrl() {
-        getDriver().get("http://localhost:8090/library");
-    }
-
-    @Test
-    public void testClickButton() throws Exception {
-        openTestUrl();
-
-        // At first there should be no labels
-        assertFalse($(LabelElement.class).exists());
-
-//        // Click the button
-//        ButtonElement clickMeButton = $(ButtonElement.class).
-//                caption("Add Book").first();
-//        clickMeButton.click();
-//
-//        // There should now be one label
-//        assertEquals(1, $(LabelElement.class).all().size());
-//        // ... with the specified text
-//        assertEquals("Thank you for clicking",
-//                $(LabelElement.class).first().getText());
-//
-//        // Click the button again
-//        clickMeButton.click();
-//
-//        // There should now be two labels
-//        List<LabelElement> allLabels = $(LabelElement.class).all();
-//        assertEquals(2, allLabels.size());
-//        // ... and the last label should have the correct text
-//        LabelElement lastLabel = allLabels.get(1);
-//        assertEquals("Thank you for clicking", lastLabel.getText());
-    }
+	@Test
+	public void testRegister() throws Exception {
+		openTestUrl();
+		ButtonElement RegisterButton = $(ButtonElement.class).caption("Register").first();
+		RegisterButton.click();
+	}
 }
