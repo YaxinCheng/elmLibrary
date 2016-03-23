@@ -82,9 +82,9 @@ public class UserLogin extends UserPanel {
 		try {
 			if (instance.informationCheck(name, email, phone)) {
 				String result = instance.register(accountValue, passwordValue);
-				Type notificationType = result.equals("Register Success") ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
+				Type notificationType = result.equals("Successfully registered.") ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
 				Notification.show(result, notificationType);
-				if (result.equals("Register Success")) {
+				if (result.equals("Successfully registered.")) {
 					user = instance.getUser(accountValue, passwordValue);
 					user.setName(name);
 					user.setEmail(email);

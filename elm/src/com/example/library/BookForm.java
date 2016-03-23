@@ -177,7 +177,7 @@ public class BookForm extends FormLayout {
 			return;
 		}
 		if (!Year.matches("(2|1)[0-9]{3}")) {
-			Notification.show("Please input the correct format of year", Type.ERROR_MESSAGE);
+			Notification.show("Please input the correct format for a year", Type.ERROR_MESSAGE);
 			return;
 		}
 		if (modification) {

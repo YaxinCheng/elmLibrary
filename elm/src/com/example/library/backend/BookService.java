@@ -112,11 +112,12 @@ public class BookService {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * Save 
+	 * Save
 	 */
-	public synchronized boolean save(String ISBN, String title, String publisher, String years, String edition, List<String> authour) {
+	public synchronized boolean save(String ISBN, String title, String publisher, String years, String edition,
+			List<String> authour) {
 		if (checkDuplicate(ISBN) == true) {
 			return false;
 		}
@@ -129,7 +130,7 @@ public class BookService {
 			shelf.addEntity(book.getEntity());
 		}
 	}
-	
+
 	public synchronized void searchYear(String info) {
 		String[] components = info.toLowerCase().split("-");
 		String toDate = components[1];
@@ -173,17 +174,17 @@ public class BookService {
 
 	public void bookCheckOut(EntityItem<Book> book, User user) throws NullPointerException {
 		if (user == null) {
-			throw new NullPointerException("You should log in first to rent a book!");
+			throw new NullPointerException("You need to log in first before you can rent a book.");
 		}
 		book.getEntity().setCheckOutDate(new Date());
 		book.getEntity().setReturnDate(new Date(System.currentTimeMillis() + (86400 * 7 * 1000)));
 		user.getBorrowed().add(book.getEntity());
 		book.getEntity().lendTo(user);
 	}
-	
+
 	public void bookReturn(EntityItem<Book> book, User user) throws NullPointerException {
 		if (user == null) {
-			throw new NullPointerException("You should log in first to rent a book!");
+			throw new NullPointerException("You need to log in first before you can rent a book.");
 		}
 		user.getBorrowed().remove(book.getEntity());
 		book.getEntity().setCheckOutDate(null);
