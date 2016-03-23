@@ -163,7 +163,7 @@ public class UserService {
 		if (name.matches(".*[0-9]+.*") || name.isEmpty()) {
 			throw new FormatCheckFailedException("Please enter the correct name format");
 		}
-		if (!email.matches(".+\\.?.*@.+\\..+")) {
+		if (!email.matches(".+(\\.?.*)*@.+\\..+")) {
 			throw new FormatCheckFailedException("Email needs to be in the format: johnny_rotten@elm.ca");
 		}
 		if (!phone.matches("\\(?[0-9]{3}\\)?-?[0-9]{3}-?[0-9]{4}")) {
