@@ -43,7 +43,7 @@ public class UserManagement extends UserPanel {
 	/* this is where the program will be structured from */
 	public void configureComponents() {
 		checkInfo.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-		accountLabel.setCaption("Account");
+		accountLabel.setCaption("Username");
 		accountLabel.setValue(user.getAccount());
 		accountLabel.setStyleName(ValoTheme.LABEL_COLORED);
 		nameLabel.setCaption("Name");
@@ -56,8 +56,8 @@ public class UserManagement extends UserPanel {
 		phoneLabel.setValue(user.getPhone());
 		phoneLabel.setStyleName(ValoTheme.LABEL_COLORED);
 		nameField.setInputPrompt("Name");
-		emailField.setInputPrompt("Email@Elm.ca");
-		phoneField.setInputPrompt("Phone #");
+		emailField.setInputPrompt("email@elm.ca");
+		phoneField.setInputPrompt("Phone Number");
 		logOutButton.setStyleName(ValoTheme.BUTTON_DANGER);
 		this.setVisible(false);
 	}

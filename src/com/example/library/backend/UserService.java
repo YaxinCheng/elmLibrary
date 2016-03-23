@@ -49,6 +49,11 @@ public class UserService {
 		ycheng.setAccount("ycheng");
 		ycheng.setPassword("cyx123321X&");
 		Users.addEntity(ycheng);
+		
+		User user4 = new User("Bray", "bray@elm.ca", "902-666-1234", borrowed, waiting);
+		user4.setAccount("nick");
+		user4.setPassword("testlol!!");
+		Users.addEntity(user4);
 	}
 
 	public synchronized int count() {
@@ -152,7 +157,7 @@ public class UserService {
 		save(newUser);
 		return "Register Success";
 	}
-	
+
 	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
 		if (name.matches(".*[0-9]+.*")) {
 			throw new FormatCheckFailedException("Name can't contains numbers");
