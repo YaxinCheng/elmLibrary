@@ -45,6 +45,11 @@ public class UserService {
 		user3.setAccount("prince90");
 		user3.setPassword("securepassword!");
 		Users.addEntity(user3);
+		
+		User ycheng = new User("ycheng", "yaxin.Cheng@dal.ca", "902-877-9707", borrowed, waiting);
+		ycheng.setAccount("ycheng");
+		ycheng.setPassword("cyx123321X&");
+		Users.addEntity(ycheng);
 	}
 	
 	public synchronized int count() {

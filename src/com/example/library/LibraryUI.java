@@ -11,7 +11,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
+import com.vaadin.ui.*;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -25,6 +25,7 @@ import com.vaadin.ui.themes.ValoTheme;
  * @version 4.92.2
  * @since 2016-02-01
  */
+
 @SuppressWarnings("serial")
 @Theme("library")
 public class LibraryUI extends UI {
@@ -36,9 +37,13 @@ public class LibraryUI extends UI {
 	Button addBookButton = new Button("Add Book", this::addBook);
 	Button userManagement = new Button("Account", this::manageUser);
 	BookForm bookForm = new BookForm();
+	HorizontalLayout contentLayout;
 	UserPanel userPanel;
 	User user;
 	EntityItem<Book> book;
+	
+	// Log in screen
+	LogInScreen log;
 
 	/*
 	 * this is where the program initializes, all of the components are set as
@@ -46,6 +51,7 @@ public class LibraryUI extends UI {
 	 */
 	@Override
 	protected void init(VaadinRequest request) {
+		this.addStyleName("logIn");
 		configureComponents();
 		buildLayout();
 	}
@@ -56,7 +62,7 @@ public class LibraryUI extends UI {
 	 */
 
 	private void configureComponents() {
-		userPanel = user == null ? new UserLogin() : new UserManagement(user);
+		initializeLogInView();
 		BookService service = BookService.createDemoService();
 
 		/* this area will set up the search function and apply the function */
@@ -93,22 +99,12 @@ public class LibraryUI extends UI {
 
 	private void buildLayout() {
 		// Set places for components
-		HorizontalLayout buttons = new HorizontalLayout(searchButton, userManagement, addBookButton);
-		buttons.setSpacing(true);
-		HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
-		actions.setWidth("100%");
-		filterField.setWidth("100%");
-		actions.setExpandRatio(filterField, 1);
-
-		VerticalLayout left = new VerticalLayout(actions, bookList);
-		left.setSizeFull();
-		bookList.setSizeFull();
-		left.setExpandRatio(bookList, 1);
-
-		HorizontalLayout mainLayout = new HorizontalLayout(left, bookForm, userPanel);
-		mainLayout.setSizeFull();
-		mainLayout.setExpandRatio(left, 1);
-		setContent(mainLayout); // Split and allow resizing
+		buildLayoutForLogInView();
+		if (user != null) {
+			buildLayoutForBookForm();
+		}
+		
+		setContent(contentLayout);
 	}
 
 	void refreshBooks() {
@@ -141,7 +137,6 @@ public class LibraryUI extends UI {
 	}
 
 	public void refresh() {
-		userPanel = user == null ? new UserLogin() : new UserManagement(user);
 		this.buildLayout();
 	}
 
@@ -186,6 +181,53 @@ public class LibraryUI extends UI {
 		}
 		userPanel.showPanel();
 		userPanel.settingPanel(user);
+	}
+	
+	private void initializeLogInView() {
+		if (user == null) {
+			log = new LogInScreen();
+			log.showPanel();
+		}
+	}
+	
+	private void buildLayoutForLogInView() {
+		HorizontalLayout mainLayout = new HorizontalLayout(log);
+		mainLayout.setSizeFull();
+		mainLayout.setExpandRatio(log, 1);
+		mainLayout.setWidth("100%");
+		mainLayout.setComponentAlignment(log, Alignment.MIDDLE_CENTER);
+		contentLayout = mainLayout;
+	}
+	
+	private void buildLayoutForBookForm() {
+		HorizontalLayout buttons = new HorizontalLayout(searchButton, userManagement, addBookButton);
+		buttons.setSpacing(true);
+		HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
+		actions.setWidth("100%");
+		filterField.setWidth("100%");
+		actions.setExpandRatio(filterField, 1);
+
+		VerticalLayout left = new VerticalLayout(actions, bookList);
+		left.setSizeFull();
+		bookList.setSizeFull();
+		left.setExpandRatio(bookList, 1);
+
+		HorizontalLayout mainLayout = new HorizontalLayout(left, bookForm, userPanel);
+		mainLayout.setSizeFull();
+		mainLayout.setExpandRatio(left, 1);
+		if (user != null) {
+			contentLayout = mainLayout;
+		}
+	}
+	
+	public void logInSwitch(boolean trigger) {
+		if (trigger) {
+			buildLayoutForLogInView();
+		} else {
+			userPanel = new UserManagement(user);
+			buildLayout();
+		}
+		setContent(contentLayout);
 	}
 
 	public void userUpdate() {
