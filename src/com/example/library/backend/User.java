@@ -51,6 +51,19 @@ public class User {
 		this.password = password;
 	}
 
+	public User(String account, String password, String name, String email, String phone, List<Book> borrowed,
+			List<Book> waiting, Set<Book> book) {
+		super();
+		this.account = account;
+		this.password = password;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.borrowed = borrowed;
+		this.waiting = waiting;
+		this.book = book;
+	}
+
 	public User() {
 
 	}

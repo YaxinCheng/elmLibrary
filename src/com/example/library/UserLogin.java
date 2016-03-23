@@ -1,5 +1,6 @@
 package com.example.library;
 
+import com.example.library.backend.FormatCheckFailedException;
 import com.example.library.backend.User;
 import com.example.library.backend.UserService;
 import com.vaadin.event.ShortcutAction;
@@ -24,14 +25,11 @@ import com.vaadin.ui.themes.ValoTheme;
 /** the user login class... */
 @SuppressWarnings("serial")
 public class UserLogin extends UserPanel {
-	Label nameLabel = new Label();
-	TextField account = new TextField("Account");
-	PasswordField password = new PasswordField("Password");
-	TextField nameField = new TextField("Name");
-	TextField emailField = new TextField("Email");
-	TextField phoneField = new TextField("Phone");
-	Button LogIn = new Button("Log in", this::LogIn);
-	Button Register = new Button("Register", this::Register);
+	TextField account = new TextField();
+	PasswordField password = new PasswordField();
+	TextField nameField = new TextField();
+	TextField emailField = new TextField();
+	TextField phoneField = new TextField();
 	Button Save = new Button("Save", this::Save);
 	Button cancelButton = new Button("Cancel", this::Cancel);
 	User user;
@@ -42,9 +40,13 @@ public class UserLogin extends UserPanel {
 	}
 
 	private void configureComponent() {
+		account.setInputPrompt("Account");
+		password.setInputPrompt("Password");
+		nameField.setInputPrompt("Name");
+		emailField.setInputPrompt("Email@Elm.Ca");
+		phoneField.setInputPrompt("Phone #");
 		cancelButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 		cancelButton.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
-		Register.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		Save.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		setVisible(false);
 	}
@@ -52,15 +54,13 @@ public class UserLogin extends UserPanel {
 	private void buildLayout() {
 		setSizeUndefined();
 		setMargin(true);
-		removeAllComponents();
-		if (user == null) {
-			addLogInView();
-		} else if (!user.isInformationFilled()) {
-			addUserView();
-		} else {
-			getUI().refresh();
-			Cancel(null);
-		}
+		VerticalLayout information = new VerticalLayout(cancelButton, account, password, nameField, emailField,
+				phoneField);
+		information.setSpacing(true);
+		HorizontalLayout buttons = new HorizontalLayout(Save);
+		buttons.setSpacing(true);
+		addComponent(information);
+		addComponent(buttons);
 	}
 
 	public void settingPanel(User user) {
@@ -73,62 +73,53 @@ public class UserLogin extends UserPanel {
 		this.setVisible(false);
 	}
 
-	/**
-	 * Register method works by signing a user up for the library
-	 */
-	public void Register(Button.ClickEvent event) {
-		UserService instance = UserService.createDemoService();
-		String accountValue = account.getValue();
-		String passwordValue = password.getValue();
-		String result = instance.register(accountValue, passwordValue);
-		Type notificationType = result.equals("Register Success") ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
-		Notification.show(result, notificationType);
-	}
-
-	/*
-	 * Login method for people already registered that can login to the library
-	 */
-	public void LogIn(Button.ClickEvent event) {
-		UserService instance = UserService.createDemoService();
-		String accountValue = account.getValue();
-		String passwordValue = password.getValue();
-		boolean result = instance.checklogIn(accountValue, passwordValue);
-		Type type = result ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
-		String msg = result ? "Welcome!" : "Password and account do not match!";
-		Notification.show(msg, type);
-		user = instance.getUser(accountValue, passwordValue);
-		getUI().user = user;
-		buildLayout();
-	}
-
 	public void Save(Button.ClickEvent event) {
+		UserService instance = UserService.createDemoService();
+		String accountValue = account.getValue().toLowerCase();
+		String passwordValue = password.getValue();
 		String name = nameField.getValue();
 		String email = emailField.getValue();
 		String phone = phoneField.getValue();
-		user.setName(name);
-		user.setEmail(email);
-		user.setPhone(phone);
-		getUI().user = user;
-		getUI().refresh();
-		Cancel(null);
+		try {
+			if (informationCheck(name, email, phone)) {
+				String result = instance.register(accountValue, passwordValue);
+				Type notificationType = result.equals("Register Success") ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
+				Notification.show(result, notificationType);
+				if (result.equals("Register Success")) {
+					user = instance.getUser(accountValue, passwordValue);
+					user.setName(name);
+					user.setEmail(email);
+					user.setPhone(phone);
+					instance.replace(user);
+					getUI().user = user;
+					Cancel(null);
+				}
+			}
+		} catch (FormatCheckFailedException e) {
+			Notification.show(e.getLocalizedMessage(), Type.ERROR_MESSAGE);
+		}
+
 	}
 
-	private void addUserView() {
-		VerticalLayout information = new VerticalLayout(cancelButton, nameField, emailField, phoneField);
-		HorizontalLayout buttons = new HorizontalLayout(Save);
-		buttons.setSpacing(true);
-		addComponent(information);
-		addComponent(buttons);
+	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
+		if (name.matches(".*[0-9]+.*")) {
+			throw new FormatCheckFailedException("Name can't contains numbers");
+		}
+		if (!email.matches(".+\\.?.*@.+\\..+")) {
+			throw new FormatCheckFailedException("Please enter the correct email format");
+		}
+		if (!phone.matches("[0-9]{10}")) {
+			throw new FormatCheckFailedException("Please enter the correct phone number");
+		}
+		return true;
 	}
-
-	private void addLogInView() {
-		VerticalLayout main = new VerticalLayout(cancelButton);
-		main.addComponents(account, password);
-		main.setSpacing(true);
-		HorizontalLayout functions = new HorizontalLayout(LogIn, Register);
-		functions.setSpacing(true);
-		addComponent(main);
-		addComponent(functions);
+	
+	public void clearFields() {
+		account.setValue("");
+		password.setValue("");
+		nameField.setValue("");
+		emailField.setValue("");
+		phoneField.setValue("");
 	}
 
 	public LibraryUI getUI() {

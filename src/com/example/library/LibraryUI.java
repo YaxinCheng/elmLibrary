@@ -63,6 +63,7 @@ public class LibraryUI extends UI {
 
 	private void configureComponents() {
 		initializeLogInView();
+		userPanel = user == null ? new UserLogin() : new UserManagement(user);
 		BookService service = BookService.createDemoService();
 
 		/* this area will set up the search function and apply the function */
@@ -191,7 +192,7 @@ public class LibraryUI extends UI {
 	}
 	
 	private void buildLayoutForLogInView() {
-		HorizontalLayout mainLayout = new HorizontalLayout(log);
+		HorizontalLayout mainLayout = new HorizontalLayout(log, userPanel);
 		mainLayout.setSizeFull();
 		mainLayout.setExpandRatio(log, 1);
 		mainLayout.setWidth("100%");
@@ -226,6 +227,7 @@ public class LibraryUI extends UI {
 			this.setStyleName("logIn");
 		} else {
 			userPanel = new UserManagement(user);
+			
 			buildLayout();
 			this.setStyleName("blur");
 		}
@@ -234,6 +236,13 @@ public class LibraryUI extends UI {
 
 	public void userUpdate() {
 		userPanel.settingPanel(user);
+	}
+	
+	public void showRegister() {
+		if (user == null) {
+			((UserLogin) userPanel).clearFields();
+			userPanel.setVisible(true);
+		}
 	}
 
 	@WebServlet(urlPatterns = "/*")

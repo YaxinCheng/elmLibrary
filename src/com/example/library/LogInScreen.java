@@ -1,7 +1,5 @@
 package com.example.library;
 
-import javax.swing.GroupLayout.Alignment;
-
 import com.example.library.backend.User;
 import com.example.library.backend.UserService;
 import com.vaadin.ui.themes.ValoTheme;
@@ -55,7 +53,7 @@ public class LogInScreen extends UserPanel {
 	
 	public void LogIn(Button.ClickEvent event) {
 		UserService instance = UserService.createDemoService();
-		String accountValue = account.getValue();
+		String accountValue = account.getValue().toLowerCase();
 		String passwordValue = password.getValue();
 		boolean result = instance.checklogIn(accountValue, passwordValue);
 		Type type = result ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
@@ -67,12 +65,7 @@ public class LogInScreen extends UserPanel {
 	}
 
 	public void Register(Button.ClickEvent event) {
-		UserService instance = UserService.createDemoService();
-		String accountValue = account.getValue();
-		String passwordValue = password.getValue();
-		String result = instance.register(accountValue, passwordValue);
-		Type notificationType = result.equals("Register Success") ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
-		Notification.show(result, notificationType);
+		getUI().showRegister();
 	}
 	
 	public LibraryUI getUI() {
