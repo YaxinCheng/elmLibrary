@@ -223,9 +223,11 @@ public class LibraryUI extends UI {
 	public void logInSwitch(boolean trigger) {
 		if (trigger) {
 			buildLayoutForLogInView();
+			this.setStyleName("logIn");
 		} else {
 			userPanel = new UserManagement(user);
 			buildLayout();
+			this.setStyleName("blur");
 		}
 		setContent(contentLayout);
 	}
