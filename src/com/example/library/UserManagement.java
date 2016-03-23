@@ -27,7 +27,7 @@ public class UserManagement extends UserPanel {
 	VerticalLayout infoLayout;
 	VerticalLayout editingLayout;
 	PopupView checkBooks;
-	Button checkInfo = new Button("Check Books", this::Popupviews);
+	Button checkInfo = new Button("View checked-out books", this::Popupviews);
 	User user;
 	boolean editing = false;
 	Button editButton = new Button("Edit", this::Edit);
@@ -42,7 +42,7 @@ public class UserManagement extends UserPanel {
 
 	/* this is where the program will be structured from */
 	public void configureComponents() {
-		checkInfo.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+		checkInfo.setStyleName(ValoTheme.BUTTON_QUIET);
 		accountLabel.setCaption("Username");
 		accountLabel.setValue(user.getAccount());
 		accountLabel.setStyleName(ValoTheme.LABEL_COLORED);
@@ -65,7 +65,6 @@ public class UserManagement extends UserPanel {
 	public void buildLayout() {
 		setSizeUndefined();
 		setMargin(true);
-		
 		editButton.setCaption("Edit");
 		VerticalLayout information = new VerticalLayout(accountLabel);
 		buildLayoutForInfoLayout();
@@ -81,12 +80,12 @@ public class UserManagement extends UserPanel {
 		}
 		addComponents(alig);
 	}
-	
+
 	private void buildLayoutForInfoLayout() {
 		infoLayout = new VerticalLayout(nameLabel, emailLabel, phoneLabel);
 		infoLayout.setSpacing(true);
 	}
-	
+
 	private void buildLayoutForEditingLayout() {
 		editingLayout = new VerticalLayout(nameField, emailField, phoneField);
 		editingLayout.setSpacing(true);
@@ -101,7 +100,7 @@ public class UserManagement extends UserPanel {
 		checkBooks.setPopupVisible(true);
 		this.addComponent(checkBooks);
 	}
-	
+
 	public void Edit(Button.ClickEvent event) {
 		editing = !editing;
 		this.removeAllComponents();
@@ -149,7 +148,7 @@ public class UserManagement extends UserPanel {
 	public void settingPanel(User user) {
 		this.user = user;
 	}
-	
+
 	private void setFields() {
 		nameField.setValue(nameLabel.getValue());
 		emailField.setValue(emailLabel.getValue());
