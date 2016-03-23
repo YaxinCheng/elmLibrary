@@ -41,7 +41,7 @@ public class LibraryUI extends UI {
 	UserPanel userPanel;
 	User user;
 	EntityItem<Book> book;
-	
+
 	// Log in screen
 	LogInScreen log;
 
@@ -107,7 +107,6 @@ public class LibraryUI extends UI {
 		if (user != null) {
 			buildLayoutForBookForm();
 		}
-		
 		setContent(contentLayout);
 	}
 
@@ -186,14 +185,14 @@ public class LibraryUI extends UI {
 		userPanel.showPanel();
 		userPanel.settingPanel(user);
 	}
-	
+
 	private void initializeLogInView() {
 		if (user == null) {
 			log = new LogInScreen();
 			log.showPanel();
 		}
 	}
-	
+
 	private void buildLayoutForLogInView() {
 		HorizontalLayout mainLayout = new HorizontalLayout(log, userPanel);
 		mainLayout.setSizeFull();
@@ -202,7 +201,7 @@ public class LibraryUI extends UI {
 		mainLayout.setComponentAlignment(log, Alignment.MIDDLE_CENTER);
 		contentLayout = mainLayout;
 	}
-	
+
 	private void buildLayoutForBookForm() {
 		HorizontalLayout buttons = new HorizontalLayout(searchButton, userManagement, addBookButton);
 		buttons.setSpacing(true);
@@ -223,7 +222,7 @@ public class LibraryUI extends UI {
 			contentLayout = mainLayout;
 		}
 	}
-	
+
 	public void logInSwitch(boolean trigger) {
 		if (trigger) {
 			userPanel = new UserLogin();
@@ -240,7 +239,7 @@ public class LibraryUI extends UI {
 	public void userUpdate() {
 		userPanel.settingPanel(user);
 	}
-	
+
 	public void showRegister() {
 		if (user == null) {
 			((UserLogin) userPanel).clearFields();
