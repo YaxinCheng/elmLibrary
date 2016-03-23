@@ -152,4 +152,17 @@ public class UserService {
 		save(newUser);
 		return "Register Success";
 	}
+	
+	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
+		if (name.matches(".*[0-9]+.*")) {
+			throw new FormatCheckFailedException("Name can't contains numbers");
+		}
+		if (!email.matches(".+\\.?.*@.+\\..+")) {
+			throw new FormatCheckFailedException("Please enter the correct email format");
+		}
+		if (!phone.matches("\\(?[0-9]{3}\\)?-?[0-9]{3}-?[0-9]{4}")) {
+			throw new FormatCheckFailedException("Please enter the correct phone number");
+		}
+		return true;
+	}
 }

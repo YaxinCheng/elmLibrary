@@ -1,7 +1,10 @@
 package com.example.library;
 
+import com.example.library.backend.FormatCheckFailedException;
 import com.example.library.backend.User;
+import com.example.library.backend.UserService;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -18,11 +21,18 @@ public class UserManagement extends UserPanel {
 	Label nameLabel = new Label("Name");
 	Label emailLabel = new Label("Email");
 	Label phoneLabel = new Label("Phone");
+	TextField nameField = new TextField();
+	TextField emailField = new TextField();
+	TextField phoneField = new TextField();
+	VerticalLayout infoLayout;
+	VerticalLayout editingLayout;
 	PopupView checkBooks;
 	Button checkInfo = new Button("Check Books", this::Popupviews);
 	User user;
+	boolean editing = false;
+	Button editButton = new Button("Edit", this::Edit);
 	Button cancelButton = new Button("Cancel", this::Cancel);
-	Button logOut = new Button("Log Out", this::LogOut);
+	Button logOutButton = new Button("Log Out", this::LogOut);
 
 	public UserManagement(User user) {
 		this.user = user;
@@ -45,33 +55,43 @@ public class UserManagement extends UserPanel {
 		phoneLabel.setCaption("Phone");
 		phoneLabel.setValue(user.getPhone());
 		phoneLabel.setStyleName(ValoTheme.LABEL_COLORED);
-		logOut.setStyleName(ValoTheme.BUTTON_DANGER);
+		nameField.setInputPrompt("Name");
+		emailField.setInputPrompt("Email@Elm.ca");
+		phoneField.setInputPrompt("Phone #");
+		logOutButton.setStyleName(ValoTheme.BUTTON_DANGER);
 		this.setVisible(false);
 	}
 
 	public void buildLayout() {
 		setSizeUndefined();
 		setMargin(true);
-		VerticalLayout information = new VerticalLayout(accountLabel, nameLabel, emailLabel, phoneLabel);
-		information.setSpacing(true);
-		VerticalLayout functions = new VerticalLayout(checkInfo, cancelButton, logOut);
+		
+		VerticalLayout information = new VerticalLayout(accountLabel);
+		buildLayoutForInfoLayout();
+		buildLayoutForEditingLayout();
+		VerticalLayout functions = new VerticalLayout(checkInfo, editButton, cancelButton, logOutButton);
 		functions.setSpacing(true);
-		VerticalLayout alig = new VerticalLayout(information, functions);
-		alig.setComponentAlignment(information, Alignment.MIDDLE_CENTER);
-		alig.setComponentAlignment(functions, Alignment.BOTTOM_CENTER);
+		VerticalLayout alig;
+		if (!editing) {
+			alig = new VerticalLayout(information, infoLayout, functions);
+		} else {
+			alig = new VerticalLayout(information, editingLayout, functions);
+			alig.setComponentAlignment(editingLayout, Alignment.MIDDLE_CENTER);
+		}
 		addComponents(alig);
-		// setVisible(true);
+	}
+	
+	private void buildLayoutForInfoLayout() {
+		infoLayout = new VerticalLayout(nameLabel, emailLabel, phoneLabel);
+		infoLayout.setSpacing(true);
+	}
+	
+	private void buildLayoutForEditingLayout() {
+		editingLayout = new VerticalLayout(nameField, emailField, phoneField);
+		editingLayout.setSpacing(true);
 	}
 
 	/* generating the button to check books */
-	// View Borrows
-	public void check(Button.ClickEvent event) {
-		Button button = event.getButton();
-		if (button.getCaption().equals("View Borrowed Books")) {
-			//
-		}
-	}
-
 	public void Popupviews(Button.ClickEvent e) {
 		if (checkBooks != null) {
 			this.removeComponent(checkBooks);
@@ -80,8 +100,37 @@ public class UserManagement extends UserPanel {
 		checkBooks.setPopupVisible(true);
 		this.addComponent(checkBooks);
 	}
+	
+	public void Edit(Button.ClickEvent event) {
+		editing = !editing;
+		this.removeAllComponents();
+		if (editing == true) {
+			setFields();
+			buildLayout();
+			event.getButton().setCaption("DONE");
+		} else {
+			UserService instance = UserService.createDemoService();
+			event.getButton().setCaption("Edit");
+			String name = nameField.getValue();
+			String email = emailField.getValue();
+			String phone = phoneField.getValue();
+			try {
+				if (instance.informationCheck(name, email, phone)) {
+					user.setName(name);
+					user.setEmail(email);
+					user.setPhone(phone);
+					instance.replace(user);
+				} 
+			} catch (FormatCheckFailedException e) {
+				Notification.show(e.getLocalizedMessage(), Type.ERROR_MESSAGE);
+			}
+			buildLayout();
+		}
+	}
 
 	public void Cancel(Button.ClickEvent event) {
+		this.removeAllComponents();
+		editing = false;
 		this.setVisible(false);
 	}
 
@@ -94,6 +143,12 @@ public class UserManagement extends UserPanel {
 
 	public void settingPanel(User user) {
 		this.user = user;
+	}
+	
+	private void setFields() {
+		nameField.setValue(nameLabel.getValue());
+		emailField.setValue(emailLabel.getValue());
+		phoneField.setValue(phoneLabel.getValue());
 	}
 
 	public LibraryUI getUI() {
