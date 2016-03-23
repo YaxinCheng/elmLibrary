@@ -48,6 +48,7 @@ public class UserService {
 		User ycheng = new User("ycheng", "yaxin.Cheng@dal.ca", "902-877-9707", borrowed, waiting);
 		ycheng.setAccount("ycheng");
 		ycheng.setPassword("cyx123321X&");
+		ycheng.setLibrarian(true);
 		Users.addEntity(ycheng);
 		
 		User user4 = new User("Bray", "bray@elm.ca", "902-420-4200", borrowed, waiting);
@@ -159,8 +160,8 @@ public class UserService {
 	}
 
 	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
-		if (name.matches(".*[0-9]+.*")) {
-			throw new FormatCheckFailedException("Name can't contains numbers");
+		if (name.matches(".*[0-9]+.*") || name.isEmpty()) {
+			throw new FormatCheckFailedException("Please enter the correct name format");
 		}
 		if (!email.matches(".+\\.?.*@.+\\..+")) {
 			throw new FormatCheckFailedException("Email needs to be in the format: johnny_rotten@elm.ca");
