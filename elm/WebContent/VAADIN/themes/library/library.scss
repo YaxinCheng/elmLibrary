@@ -1,15 +1,15 @@
 // Global variable overrides. Must be declared before importing Valo.
 
-$v-app-loading-text: "Loading library...";
-$v-font-family: "Roboto", sans-serif;
+$v-app-loading-text: "Loading...";
+$v-font-family: "Open Sans", sans-serif;
 $v-font-weight: 400;
+$v-font-weight--header: 300;
 $v-font-size: 14px;
-$v-font-weight--header: 400;
 $v-background-color: #fff;
 $v-focus-color: rgb(150,190,90);
 $v-luminance-threshold: 180;
 $v-border: 2px solid v-shade;
-$v-border-radius: 6px;
+$v-border-radius: 2px;
 $v-bevel: false;
 $v-gradient: false;
 $v-shadow: false;
