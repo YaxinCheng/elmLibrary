@@ -51,7 +51,7 @@ public class UserService {
 		Users.addEntity(ycheng);
 		
 		User user4 = new User("Bray", "bray@elm.ca", "902-420-4200", borrowed, waiting);
-		user4.setAccount("Bray");
+		user4.setAccount("bray");
 		user4.setPassword("schurman!2");
 		Users.addEntity(user4);
 	}
