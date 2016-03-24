@@ -109,7 +109,7 @@ public class UserManagement extends UserPanel {
 			buildLayout();
 			event.getButton().setCaption("Done");
 		} else {
-			UserService instance = UserService.createDemoService();
+			UserService instance = UserService.initialize();
 			event.getButton().setCaption("Edit");
 			String name = nameField.getValue();
 			String email = emailField.getValue();

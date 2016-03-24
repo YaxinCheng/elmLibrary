@@ -38,7 +38,7 @@ public class BookService {
 	 * this function will run upon initialization of the program it will find
 	 * the text file containing the library's stock and fill the shelf container
 	 */
-	public static BookService createDemoService() {
+	public static BookService initialize() {
 		if (instance == null) {
 			final BookService bookService = new BookService();
 			/*

@@ -107,7 +107,7 @@ public class BookForm extends FormLayout {
 	public void remove(Button.ClickEvent event) {
 		try {
 			formFieldBindings.commit();
-			BookService.createDemoService().delete(book);
+			BookService.initialize().delete(book);
 			String msg = String.format("Removed '%s - %s'.", book.getEntity().getIsbn(), book.getEntity().getTitle());
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
 			getUI().refreshBooks();
@@ -122,7 +122,7 @@ public class BookForm extends FormLayout {
 
 	/** this function will allow a user to check out a book or return a book */
 	public void checkIO(Button.ClickEvent event) {
-		BookService instance = BookService.createDemoService();
+		BookService instance = BookService.initialize();
 		if (book != null) {
 			if (checkIO.getCaption().equals("Wait")) {
 				waitInList();
@@ -144,12 +144,12 @@ public class BookForm extends FormLayout {
 			}
 			checkIO.setCaption(buttonTitle);
 			instance.replaceBook(book);
-			UserService.createDemoService().replace(getUI().user);
+			UserService.initialize().replace(getUI().user);
 		}
 	}
 	
 	public void waitInList() {
-		BookService instance = BookService.createDemoService();
+		BookService instance = BookService.initialize();
 		book.getEntity().Wait(getUI().user);
 		instance.replaceBook(book);
 	}
@@ -169,7 +169,7 @@ public class BookForm extends FormLayout {
 	 * 'shelf'
 	 */
 	public void save(Button.ClickEvent event) {
-		BookService service = BookService.createDemoService();
+		BookService service = BookService.initialize();
 		String ISBN = isbnField.getValue();
 		String Title = titleField.getValue();
 		List<String> author = new ArrayList<String>();
