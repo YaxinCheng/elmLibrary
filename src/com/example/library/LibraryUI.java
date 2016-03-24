@@ -232,6 +232,7 @@ public class LibraryUI extends UI {
 			userPanel = new UserManagement(user);
 			buildLayout();
 			this.setStyleName("blur");
+			
 		}
 		setContent(contentLayout);
 	}

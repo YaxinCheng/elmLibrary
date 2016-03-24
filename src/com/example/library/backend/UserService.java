@@ -156,7 +156,7 @@ public class UserService {
 		}
 		User newUser = new User(account, password);
 		save(newUser);
-		return "Successful registration.";
+		return "Successfully registered.";
 	}
 
 	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
