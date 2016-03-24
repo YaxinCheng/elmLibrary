@@ -15,7 +15,7 @@ public class UserServiceTest {
 		UserService instance = UserService.initialize();
 		assertNotNull(instance);
 	}
-	
+
 	@Test
 	public void testCount() {
 		UserService instance = UserService.initialize();
@@ -27,25 +27,25 @@ public class UserServiceTest {
 	public void testRegister() {
 		UserService instance = UserService.initialize();
 		String result = instance.register("ycheng", "c123yx987&");
-		assertEquals(result, "Register Success");
+		assertEquals(result, "Successfully registered.");
 		result = instance.register("", "");
-		assertEquals(result, "Account or Password Cannot Be Empty!");
+		assertEquals(result, "Username or password cannot be empty.");
 	}
-	
+
 	@Test
 	public void testCheckLogIn() {
 		UserService instance = UserService.initialize();
 		String result = instance.register("ycheng123", "c123yx987&");
-		assertEquals(result, "Register Success");
+		assertEquals(result, "Successfully registered.");
 		assertTrue(instance.checklogIn("ycheng123", "c123yx987&"));
 		assertFalse(instance.checklogIn("", ""));
 	}
-	
+
 	@Test
 	public void testGetUser() {
 		UserService instance = UserService.initialize();
 		String result = instance.register("ychengxxx", "c123yx987&");
-		assertEquals(result, "Register Success");
+		assertEquals(result, "Successfully registered.");
 		User user = instance.getUser("ychengxxx", "c123yx987&");
 		assertNotNull(user);
 	}

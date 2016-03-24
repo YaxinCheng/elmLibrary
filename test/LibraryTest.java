@@ -11,7 +11,6 @@ import com.example.library.UserPanel;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.ButtonElement;
-import com.vaadin.testbench.elements.LabelElement;
 import com.vaadin.testbench.elements.NotificationElement;
 import com.vaadin.testbench.elements.PasswordFieldElement;
 import com.vaadin.testbench.elements.TextFieldElement;
@@ -65,5 +64,8 @@ public class LibraryTest extends TestBenchTestCase {
 		openTestUrl();
 		ButtonElement RegisterButton = $(ButtonElement.class).caption("Register").first();
 		RegisterButton.click();
+		ButtonElement SaveButton = $(ButtonElement.class).caption("Save").first();
+		SaveButton.click();
+		assertEquals("Please enter the correct name format", $(NotificationElement.class).first().getText());
 	}
 }
