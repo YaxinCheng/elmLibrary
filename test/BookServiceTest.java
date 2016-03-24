@@ -56,4 +56,11 @@ public class BookServiceTest {
 		assertEquals(1,instance.count());
 		assertTrue(instance.save("qwer", "1", "person", "1", "2016", authors));
 	}
+	
+	@Test
+	public void testFilterRent() {
+		assertFalse(instance.count() == 0);
+		instance.rentedBooks();
+		assertEquals(0, instance.count());
+	}
 }

@@ -149,9 +149,11 @@ public class BookForm extends FormLayout {
 	}
 	
 	public void waitInList() {
-		BookService instance = BookService.initialize();
-		book.getEntity().Wait(getUI().user);
-		instance.replaceBook(book);
+		if (!book.getEntity().getWaitList().contains(getUI().user)) {			
+			BookService instance = BookService.initialize();
+			book.getEntity().Wait(getUI().user);
+			instance.replaceBook(book);
+		}
 	}
 
 	public void cancel(Button.ClickEvent event) {
