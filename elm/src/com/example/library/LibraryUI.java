@@ -64,7 +64,7 @@ public class LibraryUI extends UI {
 	private void configureComponents() {
 		initializeLogInView();
 		userPanel = user == null ? new UserLogin() : new UserManagement(user);
-		BookService service = BookService.createDemoService();
+		BookService service = BookService.initialize();
 
 		/* this area will set up the search function and apply the function */
 		searchButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -115,7 +115,7 @@ public class LibraryUI extends UI {
 	}
 
 	private void refreshBooks(String stringFilter) {
-		BookService service = BookService.createDemoService();
+		BookService service = BookService.initialize();
 		service.removeAllFilters();// Remove other filters before searching
 		try {
 			if (stringFilter.isEmpty()) {// If nothing in the search field, just
@@ -160,7 +160,7 @@ public class LibraryUI extends UI {
 	}
 
 	public void searchBook(Button.ClickEvent e) {
-		BookService service = BookService.createDemoService();
+		BookService service = BookService.initialize();
 		String info = filterField.getValue();// Get text in the search field
 		if (!info.isEmpty()) {// If it's not empty, search related
 								// information

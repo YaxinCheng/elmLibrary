@@ -53,7 +53,7 @@ public class LogInScreen extends UserPanel {
 	}
 
 	public void LogIn(Button.ClickEvent event) {
-		UserService instance = UserService.createDemoService();
+		UserService instance = UserService.initialize();
 		String accountValue = account.getValue().toLowerCase();
 		String passwordValue = password.getValue();
 		boolean result = instance.checklogIn(accountValue, passwordValue);

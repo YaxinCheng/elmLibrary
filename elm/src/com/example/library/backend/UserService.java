@@ -18,7 +18,7 @@ public class UserService {
 	public JPAContainer<User> Users = JPAContainerFactory.make(User.class,
 			JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db"));
 
-	public static UserService createDemoService() {
+	public static UserService initialize() {
 		if (instance == null) {
 			UserService UserService = new UserService();
 			instance = UserService;

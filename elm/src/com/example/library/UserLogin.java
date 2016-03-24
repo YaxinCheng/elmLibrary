@@ -73,7 +73,7 @@ public class UserLogin extends UserPanel {
 	}
 
 	public void Save(Button.ClickEvent event) {
-		UserService instance = UserService.createDemoService();
+		UserService instance = UserService.initialize();
 		String accountValue = account.getValue().toLowerCase();
 		String passwordValue = password.getValue();
 		String name = nameField.getValue();
