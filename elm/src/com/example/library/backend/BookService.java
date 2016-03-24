@@ -191,4 +191,9 @@ public class BookService {
 		book.getEntity().setReturnDate(null);
 		book.getEntity().lendTo(null);
 	}
+	
+	public void rentedBooks() {
+		Filter rented = new Compare.Equal("checkOut", "true");
+		shelf.addContainerFilter(rented);
+	}
 }
