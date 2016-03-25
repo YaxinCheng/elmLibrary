@@ -24,8 +24,10 @@ public class LogInScreen extends UserPanel {
 	public void configureComponents() {
 		setSizeUndefined();
 		account.setInputPrompt("Username");
+		account.setId("6");
 		account.setMaxLength(180);
 		password.setInputPrompt("Password");
+		password.setId("7");
 		password.setMaxLength(180);
 		Confirm.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 		Confirm.setClickShortcut(ShortcutAction.KeyCode.ENTER);

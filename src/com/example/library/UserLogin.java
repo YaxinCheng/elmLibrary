@@ -40,10 +40,15 @@ public class UserLogin extends UserPanel {
 
 	private void configureComponent() {
 		account.setInputPrompt("Username");
+		account.setId("1");
 		password.setInputPrompt("Password");
+		password.setId("2");
 		nameField.setInputPrompt("Name");
+		nameField.setId("3");
 		emailField.setInputPrompt("email@elm.ca");
+		emailField.setId("4");
 		phoneField.setInputPrompt("Phone Number");
+		phoneField.setId("5");
 		cancelButton.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
 		cancelButton.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
 		Save.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -82,7 +87,8 @@ public class UserLogin extends UserPanel {
 		try {
 			if (instance.informationCheck(name, email, phone)) {
 				String result = instance.register(accountValue, passwordValue);
-				Type notificationType = result.equals("Successfully registered.") ? Type.TRAY_NOTIFICATION : Type.ERROR_MESSAGE;
+				Type notificationType = result.equals("Successfully registered.") ? Type.TRAY_NOTIFICATION
+						: Type.ERROR_MESSAGE;
 				Notification.show(result, notificationType);
 				if (result.equals("Successfully registered.")) {
 					user = instance.getUser(accountValue, passwordValue);
