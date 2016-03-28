@@ -134,10 +134,58 @@ public class LibraryTest extends TestBenchTestCase {
 	}
 
 	/*
-	 * Test Log In Successfully
+	 * Register failed with wrong phone number
 	 */
 	@Test
 	public void test6() throws Exception {
+		openTestUrl();
+		ButtonElement RegisterButton = $(ButtonElement.class).caption("Register").first();
+		RegisterButton.click();
+		TextFieldElement account = $(TextFieldElement.class).id("1");
+		account.setValue("Bray");
+		PasswordFieldElement password = $(PasswordFieldElement.class).id("2");
+		password.setValue("Bray!23456");
+		TextFieldElement name = $(TextFieldElement.class).id("3");
+		name.setValue("Bray");
+		TextFieldElement email = $(TextFieldElement.class).id("4");
+		email.setValue("123@234.com");
+		TextFieldElement phone = $(TextFieldElement.class).id("5");
+		phone.setValue("123456");
+		ButtonElement SaveButton = $(ButtonElement.class).caption("Save").first();
+		SaveButton.click();
+		assertEquals("Phone number needs to be in the format: xxx-xxx-xxxx",
+				$(NotificationElement.class).first().getText().toString());
+	}
+
+	/*
+	 * Register failed with wrong email format
+	 */
+	@Test
+	public void test7() throws Exception {
+		openTestUrl();
+		ButtonElement RegisterButton = $(ButtonElement.class).caption("Register").first();
+		RegisterButton.click();
+		TextFieldElement account = $(TextFieldElement.class).id("1");
+		account.setValue("Bray");
+		PasswordFieldElement password = $(PasswordFieldElement.class).id("2");
+		password.setValue("Bray!23456");
+		TextFieldElement name = $(TextFieldElement.class).id("3");
+		name.setValue("Bray");
+		TextFieldElement email = $(TextFieldElement.class).id("4");
+		email.setValue("123234.com");
+		TextFieldElement phone = $(TextFieldElement.class).id("5");
+		phone.setValue("9021234567");
+		ButtonElement SaveButton = $(ButtonElement.class).caption("Save").first();
+		SaveButton.click();
+		assertEquals("Email needs to be in the format: johnny_rotten@elm.ca",
+				$(NotificationElement.class).first().getText().toString());
+	}
+
+	/*
+	 * Test Log In Successfully
+	 */
+	@Test
+	public void test8() throws Exception {
 		openTestUrl();
 		TextFieldElement user = $(TextFieldElement.class).id("6");
 		user.setValue("RocKing");
