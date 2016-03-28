@@ -1,10 +1,17 @@
-B012OUZ3EQ%%%%C, C++ and C# Programming%%%%John Smith%%%%Pearson%%%%2015%%%%1
-1783986549%%%%Boost.Asio C++ Network Programming Cookbook%%%%Dmytro Radchuk%%%%Pearson%%%%2016%%%%1
-3540629947%%%%C++ mit dem Borland C++Builder%%%%Richard Kaiser%%%%Springer%%%%1999%%%%German
+9283742938%%%%Roc Quixote%%%%Nauzer&&&&Srini%%%%Computer Science Lecture Hall%%%%2016%%%%1st
+2093482030%%%%Lord of the Flies%%%%William Golding%%%%Roc and The Boys%%%%1959%%%%English
+3094587303%%%%Learning How To Sing: A Love Story%%%%Roc The Prince%%%%Your Father's Moustache%%%%2006%%%%Spanish
+9458394058%%%%Siddartha%%%%Roc Wang&&&&Bill Gates&&&&Steve Irwin%%%%MIT%%%%2005%%%%2nd French
+4398563729%%%%Programming in Vaadin: How to Hate Yourself%%%%Michael Phelps%%%%CSCI 3130%%%%2002%%%%English
+2039487621%%%%"Trust me, I'm a vegan."%%%%Marco Rubio&&&&Roc Wang%%%%Henry Hicks%%%%1982%%%%5th Revised
+B012OUZ3EQ%%%%C, C++, and C# Programming%%%%John Smith%%%%Pearson%%%%2015%%%%1
 1523400382%%%%Understanding Swift: for C and C++ Programmers%%%%David Francis Curran%%%%Springer%%%%2016%%%%English
-3527711708%%%%C++ das Lehrbuch Fur Dummies%%%%John Paul Mueller%%%%CDE%%%%1995%%%%German
+3527711708%%%%C++ for Dummies%%%%John Paul Mueller%%%%CDE%%%%1995%%%%German
 0131103628%%%%The C Programming Language%%%%Brian W. Kernighan&&&&Dennis M. Ritchie%%%%Prentice Hall%%%%1988%%%%2
 0293429872%%%%The Harry Potter Movie%%%%JK Rowling%%%%Penguin Book%%%%2014%%%%English
 9823742983%%%%Stay Hungry, Stay Foolish%%%%Roc The Prince%%%%Dalhousie University%%%%2002%%%%2
-0958640471%%%%"It's Trivial"%%%%RocGod%%%%Dalhousie University%%%%1999%%%%4
-2039487621%%%%The Boston Cream Donut%%%%Roc The Prince%%%%Life Science Center%%%%1990%%%%French
+0958640471%%%%"It's Trivial"%%%%Roc The God%%%%Dalhousie University%%%%1999%%%%4
+1783986549%%%%C++ Network Programming Cookbook%%%%Dmytro Radchuk%%%%Pearson%%%%2016%%%%1
+3540629947%%%%"We don't take gift cards": A History of the Killam Subway%%%%Ariana Grande%%%%Springer%%%%1999%%%%German
+2020484724%%%%The Boston Cream Donut%%%%Roc The Prince%%%%Life Science Center%%%%1990%%%%French
+3485394857%%%%The Catcher in the Rye%%%%Roc Caulfield%%%%New York, New York%%%%1943%%%%5th
