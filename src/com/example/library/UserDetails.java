@@ -29,7 +29,7 @@ public class UserDetails extends UserPanel {
 		VerticalLayout bookLayouts = new VerticalLayout();
 		for (Book book : user.getBorrowed()) {
 			Label label = new Label(book.getTitle() + " should be returned at " + book.getReturnDate() + ". It currently"
-					+ "has $" + book.daysPassed() * 3 + " in late fees.");
+					+ " has $" + book.daysPassed() * 3 + " in late fees.");
 			bookLayouts.addComponent(label);
 		}
 		this.addComponent(bookLayouts);
