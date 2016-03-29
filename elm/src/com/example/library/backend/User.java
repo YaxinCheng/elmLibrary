@@ -48,6 +48,8 @@ public class User {
 	public User(String account, String password) {
 		this.account = account;
 		this.password = password;
+		borrowed = new ArrayList();
+		waiting = new ArrayList();
 	}
 
 	public User(String account, String password, String name, String email, String phone, List<Book> borrowed,
@@ -162,8 +164,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", email=" + email + ", phone=" + phone + ", borrowed=" + borrowed + ", waiting="
-				+ waiting + "]";
+		return "" + account;
 	}
 
 	// The method that can check whether the users are same or not

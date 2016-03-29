@@ -1,7 +1,10 @@
 package com.example.library.backend;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.example.library.LibraryUI;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -28,7 +31,7 @@ public class UserService {
 	}
 
 	public void populateUserService() {
-		List<Book> borrowed = null;
+		List<Book> borrowed = new ArrayList();
 		List<Book> waiting = null;
 		User user1 = new User("Nick", "definitelynot@fake.ca", "902-666-1234", borrowed, waiting);
 		user1.setAccount("nick");
