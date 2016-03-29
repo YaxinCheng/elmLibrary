@@ -107,6 +107,9 @@ public class BookService {
 	public synchronized boolean delete(EntityItem<Book> book) {
 		try {
 			shelf.removeItem(book.getItemId());
+			User user = book.getEntity().borrowedBy();
+			user.getBorrowed().remove(book.getEntity());
+			UserService.initialize().replace(user);
 		} catch (Exception e) {
 			return false;
 		}
@@ -126,7 +129,7 @@ public class BookService {
 	}
 
 	public synchronized void replaceBook(EntityItem<Book> book) {
-		if (delete(book)) {
+		if (shelf.removeItem(book.getItemId())) {
 			shelf.addEntity(book.getEntity());
 		}
 	}
@@ -177,7 +180,11 @@ public class BookService {
 			throw new NullPointerException("You need to log in first before you can rent a book.");
 		}
 		book.getEntity().setCheckOutDate(new Date());
-		book.getEntity().setReturnDate(new Date(System.currentTimeMillis() + (86400 * 7 * 1000)));
+		book.getEntity().setCheckOut(true);
+		if (user.getAccount().equals("bray")) {
+			book.getEntity().setReturnDate(new Date());
+		} else 
+			book.getEntity().setReturnDate(new Date(System.currentTimeMillis() + (86400 * 7 * 1000)));
 		user.getBorrowed().add(book.getEntity());
 		book.getEntity().lendTo(user);
 	}
@@ -195,5 +202,10 @@ public class BookService {
 	public void rentedBooks() {
 		Filter rented = new Compare.Equal("checkOut", "true");
 		shelf.addContainerFilter(rented);
+	}
+	
+	public void lateBooks() {
+		Filter late = new Compare.Less("returnDate", new Date());
+		shelf.addContainerFilter(late);
 	}
 }

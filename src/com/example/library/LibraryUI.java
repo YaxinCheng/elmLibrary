@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import com.example.library.backend.Book;
 import com.example.library.backend.BookService;
 import com.example.library.backend.User;
+import com.example.library.backend.UserService;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -36,6 +37,7 @@ public class LibraryUI extends UI {
 	Button searchButton = new Button("Search", this::searchBook);
 	Button addBookButton = new Button("Add Book", this::addBook);
 	Button userManagement = new Button("Account", this::manageUser);
+	Button dashButton = new Button("Dash Board", this::switchDashboard);
 	BookForm bookForm = new BookForm();
 	HorizontalLayout contentLayout;
 	UserPanel userPanel;
@@ -69,6 +71,7 @@ public class LibraryUI extends UI {
 		/* this area will set up the search function and apply the function */
 		searchButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		userManagement.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+		dashButton.setStyleName(ValoTheme.BUTTON_DANGER);
 		filterField.setInputPrompt("Search books...");
 		bookList.setContainerDataSource(service.shelf);
 		bookList.setColumnOrder("title", "authors", "year");
@@ -79,8 +82,8 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("checkOut");
 		bookList.removeColumn("user");
 		bookList.removeColumn("authorInformation");
-		bookList.removeColumn("waitList");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
+		bookList.removeColumn("waitList");
 		/*
 		 * this will allow a book to be edited or deleted when a row is clicked
 		 * on
@@ -203,7 +206,14 @@ public class LibraryUI extends UI {
 	}
 
 	private void buildLayoutForBookForm() {
-		HorizontalLayout buttons = new HorizontalLayout(searchButton, userManagement, addBookButton);
+		HorizontalLayout buttons = null;
+		if (user != null) {
+			if (user.isLibrarian()) {
+				buttons = new HorizontalLayout(searchButton, dashButton, userManagement, addBookButton);
+			} else {
+				buttons = new HorizontalLayout(searchButton, userManagement, addBookButton);
+			}
+		}
 		buttons.setSpacing(true);
 		HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
 		actions.setWidth("100%");
@@ -232,7 +242,16 @@ public class LibraryUI extends UI {
 			userPanel = new UserManagement(user);
 			buildLayout();
 			this.setStyleName("blur");
-			
+			if (user.getAccount().equals("bray")) {
+				UserService service = UserService.initialize();
+				BookService instance = BookService.initialize();
+				EntityItem<Book> lateBook = instance.shelf.getItem("9283742938");
+				if (lateBook.getEntity() == null) {
+					return;
+				}
+				instance.bookCheckOut(lateBook, user);
+				service.replace(user);
+			}
 		}
 		setContent(contentLayout);
 	}
@@ -246,6 +265,11 @@ public class LibraryUI extends UI {
 			((UserLogin) userPanel).clearFields();
 			userPanel.setVisible(true);
 		}
+	}
+
+	public void switchDashboard(Button.ClickEvent e) {
+		Panel dash = new Panel(new LibrarianDashboard());
+		this.setContent(dash);
 	}
 
 	@WebServlet(urlPatterns = "/*")
