@@ -6,10 +6,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
-
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.ButtonElement;
+import com.vaadin.testbench.elements.GridElement;
 import com.vaadin.testbench.elements.NotificationElement;
 import com.vaadin.testbench.elements.PasswordFieldElement;
 import com.vaadin.testbench.elements.TextFieldElement;
@@ -81,8 +81,8 @@ public class LibraryTest extends TestBenchTestCase {
 		openTestUrl();
 		ButtonElement RegisterButton = $(ButtonElement.class).caption("Register").first();
 		RegisterButton.click();
-		ButtonElement SaveButton = $(ButtonElement.class).caption("Save").first();
-		SaveButton.click();
+		ButtonElement Save = $(ButtonElement.class).caption("Save").first();
+		Save.click();
 		assertEquals("Please enter the correct name format", $(NotificationElement.class).first().getText().toString());
 	}
 
@@ -106,7 +106,7 @@ public class LibraryTest extends TestBenchTestCase {
 		phone.setValue("9021234567");
 		ButtonElement SaveButton = $(ButtonElement.class).caption("Save").first();
 		SaveButton.click();
-		assertEquals("Successfully registered.", $(NotificationElement.class).first().getText());
+		assertEquals("Successfully registered.", $(NotificationElement.class).first().getText().toString());
 	}
 
 	/*
@@ -191,6 +191,12 @@ public class LibraryTest extends TestBenchTestCase {
 		user.setValue("RocKing");
 		PasswordFieldElement Pass = $(PasswordFieldElement.class).id("7");
 		Pass.setValue("Wz!23456");
+		ButtonElement login=$(ButtonElement.class).caption("Log In").first();
+		login.click();
+		assertEquals("Welcome.", $(NotificationElement.class).first().getText().toString());
+		assertEquals(1, $(TextFieldElement.class).all().size());
+		assertEquals(3, $(ButtonElement.class).all().size());
+		assertEquals(1, $(GridElement.class).all().size());
 	}
 
 	@After
