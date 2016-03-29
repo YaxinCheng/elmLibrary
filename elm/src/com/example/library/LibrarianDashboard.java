@@ -33,7 +33,7 @@ public class LibrarianDashboard extends FormLayout {
 	
 	public void buildLayout() {
 		this.setSizeFull();
-		VerticalLayout tables = new VerticalLayout(rentList, lateList);
+		HorizontalLayout tables = new HorizontalLayout(rentList, lateList);
 		HorizontalLayout main = new HorizontalLayout(tables, backButton);
 		this.addComponent(main);
 	}

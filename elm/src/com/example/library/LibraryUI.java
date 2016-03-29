@@ -211,7 +211,7 @@ public class LibraryUI extends UI {
 			if (user.isLibrarian()) {
 				buttons = new HorizontalLayout(searchButton, dashButton, userManagement, addBookButton);
 			} else {
-				buttons = new HorizontalLayout(searchButton, userManagement, addBookButton);
+				buttons = new HorizontalLayout(searchButton, userManagement);
 			}
 		}
 		buttons.setSpacing(true);
@@ -242,16 +242,6 @@ public class LibraryUI extends UI {
 			userPanel = new UserManagement(user);
 			buildLayout();
 			this.setStyleName("blur");
-			if (user.getAccount().equals("bray")) {
-				UserService service = UserService.initialize();
-				BookService instance = BookService.initialize();
-				EntityItem<Book> lateBook = instance.shelf.getItem("9283742938");
-				if (lateBook.getEntity() == null) {
-					return;
-				}
-				instance.bookCheckOut(lateBook, user);
-				service.replace(user);
-			}
 		}
 		setContent(contentLayout);
 	}
