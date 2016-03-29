@@ -31,8 +31,6 @@ public class User {
 	private List<Book> borrowed;
 	private List<Book> waiting;
 	private boolean librarian = false;
-	@OneToMany(mappedBy = "user")
-	private Set<Book> book;
 
 	// Above this part, we made some change on the database part
 	// The constructor of User
@@ -62,7 +60,6 @@ public class User {
 		this.phone = phone;
 		this.borrowed = borrowed;
 		this.waiting = waiting;
-		this.book = book;
 	}
 
 	public User() {
