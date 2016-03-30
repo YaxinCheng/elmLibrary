@@ -36,7 +36,7 @@ public class UserDetails extends UserPanel {
 		Table borrowList = new Table();
 		Label label = new Label("Click your book to return");
 		borrowList.setContainerDataSource(borrowedBooks);
-		borrowList.setVisibleColumns("authors", "title", "checkOutDate", "returnDate");
+		borrowList.setVisibleColumns("title", "checkOutDate", "returnDate", "fees");
 		borrowList.setSizeFull();
 		borrowList.setSelectable(true);
 		borrowList.setImmediate(true);
