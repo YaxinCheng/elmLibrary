@@ -31,6 +31,7 @@ public class User {
 	private List<Book> borrowed;
 	private List<Book> waiting;
 	private boolean librarian = false;
+	private double fees;
 
 	// Above this part, we made some change on the database part
 	// The constructor of User
@@ -41,11 +42,13 @@ public class User {
 		this.phone = phone;
 		this.borrowed = borrowed;
 		this.waiting = waiting;
+		this.fees = 0.00;
 	}
 
 	public User(String account, String password) {
 		this.account = account;
 		this.password = password;
+		this.fees = 0.00;
 		borrowed = new ArrayList();
 		waiting = new ArrayList();
 	}
@@ -60,6 +63,7 @@ public class User {
 		this.phone = phone;
 		this.borrowed = borrowed;
 		this.waiting = waiting;
+		this.fees = 0.00;
 	}
 
 	public User() {
@@ -159,6 +163,27 @@ public class User {
 		this.librarian = librarian;
 	}
 
+	public double getFees() {
+		return fees;
+	}
+
+	public void setFees(double fees) {
+		this.fees = fees;
+	}
+	/**
+	 * Finds user's total late fees based on days past due
+	 * @param books Due book list
+	 * @return Total fees as a double
+	 */
+	public double totalFees(List<Book> books){
+		double total = 0.00;
+		// $1.50 per day passed
+		for(int i = 0; i < books.size(); i++){
+			total += books.get(i).daysPassed() * 0.50;
+		}
+		return total;
+	}
+	
 	@Override
 	public String toString() {
 		return "" + account;
