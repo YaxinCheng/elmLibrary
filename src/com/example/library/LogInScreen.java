@@ -1,5 +1,10 @@
 package com.example.library;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.text.DecimalFormat;
+import com.example.library.backend.Book;
 import com.example.library.backend.User;
 import com.example.library.backend.UserService;
 import com.vaadin.ui.themes.ValoTheme;
@@ -64,13 +69,85 @@ public class LogInScreen extends UserPanel {
 		Notification.show(msg, type);
 		user = instance.getUser(accountValue, passwordValue);
 		getUI().user = user;
+		showLoginNotification(user);
 		getUI().logInSwitch(!result);
 	}
 
 	public void Register(Button.ClickEvent event) {
 		getUI().showRegister();
 	}
-
+	/**
+	 * Shows a notification on login containing info pertaining to a specific user,
+	 * including late fees, books due, and books on hold/wait.
+	 * @param currentUser User that is logging in
+	 */
+	@SuppressWarnings("deprecation")
+	public void showLoginNotification(User currentUser){
+		//String containing all notification info
+		String notify = "";
+		Date current = new Date();
+		//Lists to display due and held books
+		List<Book> due = new ArrayList<Book>();
+		List<Book> held = new ArrayList<Book>();
+		//Checking if the user has any books due
+		if(currentUser.getBorrowed().size() > 0){
+			//Instantiate a list to output due books
+			
+			//Check to see if any books on user's borrowed list are overdue
+			for(int i = 0; i < currentUser.getBorrowed().size(); i++){
+				if(currentUser.getBorrowed().get(i).getReturnDate().before(current)){
+					due.add(currentUser.getBorrowed().get(i));
+				}
+			}
+			//Will display list of overdue book if anything is overdue
+			if(due.size() > 0){
+				notify += "Overdue books: ";
+				for(int i = 0; i < due.size(); i++){
+					notify += "\n -" + due.get(i).getTitle();
+				}
+			}
+			else{
+				notify += "\nYou have no overdue books.";
+			}
+		}
+		//Add up user fees
+		currentUser.setFees(currentUser.totalFees(due));
+		//Checking the user's fees, adding info to notify
+		if(currentUser.getFees() > 0){
+			DecimalFormat df = new DecimalFormat(".00");
+			notify += "\nYou have late fees that need to be paid: $" + df.format(currentUser.getFees());
+		}
+		else{
+			notify += "\nYou have no outstanding fees. Enjoy your day!";
+		}
+		//Checking if anything is on hold/wait list, then displaying the book
+		if(currentUser.getWaiting().size() > 0){
+			//Check to see if any books on user's wait/hold list are available (not checked out)
+			for(int i = 0; i < currentUser.getWaiting().size(); i++){
+				if(!currentUser.getWaiting().get(i).isCheckOut()){
+					held.add(currentUser.getWaiting().get(i));
+				}
+			}
+			//Adds available books to notification
+			if(held.size() > 0){
+				notify += "\nBooks you have on hold are now available: ";
+				for(int i = 0; i < held.size(); i++){
+					notify += "\n -" + held.get(i).getTitle();
+				}
+			}
+			else{
+				//Nothing to show here, no need to disappoint the user
+			}
+		}
+		//Show final notification
+		if(currentUser.getFees() >0 ){
+			Notification.show("Attention", notify, Notification.TYPE_ERROR_MESSAGE);
+		}
+		else{
+			Notification.show("Attention", notify, Notification.TYPE_WARNING_MESSAGE);
+		}
+	}
+	
 	public LibraryUI getUI() {
 		return (LibraryUI) super.getUI();
 	}
