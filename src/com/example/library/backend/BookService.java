@@ -194,10 +194,25 @@ public class BookService {
 			throw new NullPointerException("You need to log in first before you can rent a book.");
 		}
 		user.getBorrowed().remove(book.getEntity());
+		book.getEntity().setCheckOut(false);
 		book.getEntity().setCheckOutDate(null);
 		book.getEntity().setReturnDate(null);
 		book.getEntity().lendTo(null);
 	}
+	
+	public void bookReturn(Book book, User user) throws NullPointerException {
+		if (user == null) {
+			throw new NullPointerException("You need to log in first before you can rent a book.");
+		}
+		user.getBorrowed().remove(book);
+		shelf.removeItem(book.getIsbn());
+		book.setCheckOut(false);
+		book.setCheckOutDate(null);
+		book.setReturnDate(null);
+		book.lendTo(null);
+		shelf.addEntity(book);
+	}
+	
 	
 	public void rentedBooks() {
 		Filter rented = new Compare.Equal("checkOut", "true");
