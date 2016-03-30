@@ -34,7 +34,9 @@ public class LibrarianDashboard extends FormLayout {
 	public void buildLayout() {
 		this.setSizeFull();
 		HorizontalLayout tables = new HorizontalLayout(rentList, lateList);
+		tables.setSpacing(true);
 		HorizontalLayout main = new HorizontalLayout(tables, backButton);
+		main.setSpacing(true);
 		this.addComponent(main);
 	}
 	
@@ -56,8 +58,10 @@ public class LibrarianDashboard extends FormLayout {
 		rentList.addColumn("title");
 		rentList.addColumn("authors");
 		rentList.addColumn("checkOutDate");
+		rentList.addColumn("waitList");
 		rentList.setSizeFull();
 		service.removeAllFilters();
+		rentList.setCaption("Rent List");
 	}
 	
 	private void dataSourceForLateList() {
@@ -79,6 +83,7 @@ public class LibrarianDashboard extends FormLayout {
 		lateList.addColumn("authors");
 		lateList.addColumn("returnDate");
 		lateList.setSizeFull();
+		lateList.setCaption("Late List");
 		service.removeAllFilters();
 	}
 	
