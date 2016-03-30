@@ -81,6 +81,7 @@ public class LibraryUI extends UI {
 		bookList.removeColumn("edition");
 		bookList.removeColumn("checkOut");
 		bookList.removeColumn("user");
+		bookList.removeColumn("fees");
 		bookList.removeColumn("authorInformation");
 		bookList.setSelectionMode(Grid.SelectionMode.SINGLE);
 		bookList.removeColumn("waitList");

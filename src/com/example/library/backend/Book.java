@@ -200,6 +200,14 @@ public class Book implements Comparable<Book>, Cloneable {
 	public void Wait(User user) {
 		waitList.add(user);
 	}
+	
+	public double getFees() {
+		if (user != null) {
+			return user.getFees();
+		}
+		return 0;
+	}
+	
 
 	@Override
 	public String toString() {
