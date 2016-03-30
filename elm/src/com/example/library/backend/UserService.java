@@ -161,7 +161,14 @@ public class UserService {
 		save(newUser);
 		return "Successfully registered.";
 	}
-
+	/**
+	 * Check format of user information
+	 * @param name User name
+	 * @param email User email
+	 * @param phone User phone
+	 * @return true when all information matches the format
+	 * @throws FormatCheckFailedException with specific error informaiton
+	 */
 	public boolean informationCheck(String name, String email, String phone) throws FormatCheckFailedException {
 		if (name.matches(".*[0-9]+.*") || name.isEmpty()) {
 			throw new FormatCheckFailedException("Please enter the correct name format");

@@ -34,14 +34,6 @@ public class BookTest {
 	}
 	
 	@Test
-	public void containInformationTest() {
-		assertFalse(book1.containInformation("A Dance with Dragons"));
-		assertTrue(book2.containInformation("A Dance with Dragons"));
-		assertTrue(book3.containInformation("with Dragons"));
-		assertTrue(book2.containInformation("1st"));
-	}
-	
-	@Test
 	public void compareToTest() {
 		assertEquals(book2.compareTo(book3),0);
 		assertEquals(book2.compareTo(book4),-19);

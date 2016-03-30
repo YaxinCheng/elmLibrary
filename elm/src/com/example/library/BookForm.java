@@ -63,6 +63,9 @@ public class BookForm extends FormLayout {
 		buildLayout();
 	}
 
+	/**
+	 * Set properties for some components
+	 */
 	private void configureComponents() {
 		saveButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		saveButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -73,6 +76,9 @@ public class BookForm extends FormLayout {
 		setVisible(false);
 	}
 
+	/**
+	 * Specify the layout for components
+	 */
 	private void buildLayout() {
 		setSizeUndefined();
 		setMargin(true);
@@ -120,7 +126,9 @@ public class BookForm extends FormLayout {
 		}
 	}
 
-	/** this function will allow a user to check out a book or return a book */
+	/** this function will allow a user to check out a book or return a book 
+	 *	And it will put user into the wait list for a book if the book has been borrowed 
+	 */
 	public void checkIO(Button.ClickEvent event) {
 		BookService instance = BookService.initialize();
 		if (book != null) {
@@ -148,6 +156,9 @@ public class BookForm extends FormLayout {
 		}
 	}
 	
+	/**
+	 * Put the user into the wait list of the book
+	 */
 	public void waitInList() {
 		if (!book.getEntity().getWaitList().contains(getUI().user)) {			
 			BookService instance = BookService.initialize();
@@ -156,9 +167,12 @@ public class BookForm extends FormLayout {
 		}
 	}
 
+	/**
+	 * Hide the book form view
+	 * @param event cancel button clicked event
+	 */
 	public void cancel(Button.ClickEvent event) {
 		this.setVisible(false);
-		Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
 		getUI().bookList.select(null);
 		getUI().refreshBooks();
 		authorNumber = 1;
@@ -236,13 +250,20 @@ public class BookForm extends FormLayout {
 		formFieldBindings = BeanFieldGroup.bindFieldsBuffered(book2, this);
 		setVisible(book2 != null);
 	}
-
+	
+	/**
+	 * Refresh the book form view and present it
+	 */
 	void edit() {
 		this.removeAllComponents();
 		buildLayout();
 		setVisible(true);
 	}
 
+	/**
+	 * Set all text fields to the value of the book
+	 * @param book2 The book where information needs to be shown
+	 */
 	private void setFields(EntityItem<Book> book2) {
 		titleField.setValue(book2.getEntity().getTitle());
 		isbnField.setValue(book2.getEntity().getIsbn());
@@ -254,6 +275,9 @@ public class BookForm extends FormLayout {
 		}
 	}
 
+	/**
+	 * Clear all fields
+	 */
 	public void clearFields() {
 		isbnField.setValue("");
 		titleField.setValue("");
@@ -266,7 +290,11 @@ public class BookForm extends FormLayout {
 			field.setValue("");
 		}
 	}
-
+	
+	/**
+	 * Set different views for different user groups
+	 * @param isLibaririan Identification for the user group
+	 */
 	public void setPermission(boolean isLibaririan) {
 		this.removeButton.setVisible(isLibaririan);
 		this.saveButton.setVisible(isLibaririan);

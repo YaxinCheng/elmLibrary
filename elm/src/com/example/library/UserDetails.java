@@ -10,17 +10,29 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * UI shows books the user borrowed and corresponding late fees
+ * @author Team-Elm
+ * @since 2016-03-01
+ */
 @SuppressWarnings("serial")
 public class UserDetails extends UserPanel {
 	private User user;
 	private BeanItemContainer<Book> borrowedBooks;
 	
+	/**
+	 * Specify the user before building the view
+	 * @param user the specific user needs to check
+	 */
 	public UserDetails(User user) {
 		this.user = user;
 		configureComponents();
 		buildLayout();
 	}
-
+	
+	/**
+	 * Set properties for components
+	 */
 	public void configureComponents() {
 		if (user == null) {
 			return;
@@ -29,6 +41,9 @@ public class UserDetails extends UserPanel {
 		updateSource();
 	}
 
+	/**
+	 * Set components layout
+	 */
 	public void buildLayout() {
 		if (user == null) {
 			return;
@@ -54,6 +69,9 @@ public class UserDetails extends UserPanel {
 		this.addComponent(main);
 	}
 
+	/**
+	 * Update the view when user is updated
+	 */
 	@Override
 	public void settingPanel(User user) {
 		this.user = user;
@@ -61,11 +79,18 @@ public class UserDetails extends UserPanel {
 		buildLayout();
 	}
 
+	/**
+	 * Hide the view
+	 * @param e
+	 */
 	public void Cancel(Button.ClickEvent e) {
 		this.removeAllComponents();
 		this.setVisible(false);
 	}
 	
+	/**
+	 * Get all borrowed books and put in the same container as a data source for the table
+	 */
 	private void updateSource() {
 		for (Book book : user.getBorrowed()) {
 			borrowedBooks.addBean(book);

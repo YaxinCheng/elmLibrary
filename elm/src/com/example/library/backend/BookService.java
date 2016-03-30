@@ -34,7 +34,7 @@ public class BookService {
 	private EntityManager em = JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db");
 	public JPAContainer<Book> shelf = JPAContainerFactory.make(Book.class, em);
 
-	/*
+	/**
 	 * this function will run upon initialization of the program it will find
 	 * the text file containing the library's stock and fill the shelf container
 	 */
@@ -98,12 +98,17 @@ public class BookService {
 		return arrayList;
 	}
 
-	// to get the size of container
+	/**
+	 * @return Number of books in the container right now 
+	 */
 	public synchronized long count() {
 		return shelf.size();
 	}
 
-	/* this function will simply delete a book from the 'shelf' container */
+	/**
+	 *  this function will simply delete a book from the 'shelf' container
+	 *  @return true if delete successfully
+	 */
 	public synchronized boolean delete(EntityItem<Book> book) {
 		try {
 			shelf.removeItem(book.getItemId());
@@ -117,7 +122,14 @@ public class BookService {
 	}
 
 	/**
-	 * Save
+	 * Get information of a book and save it in the JPAContainer
+	 * @param ISBN
+	 * @param title
+	 * @param publisher
+	 * @param years
+	 * @param edition
+	 * @param authour
+	 * @return true if save successfully, false if a book with the same ISBN exists
 	 */
 	public synchronized boolean save(String ISBN, String title, String publisher, String years, String edition,
 			List<String> authour) {
@@ -127,13 +139,21 @@ public class BookService {
 		shelf.addEntity(new Book(ISBN, title, authour, publisher, years, edition));
 		return true;
 	}
-
+	
+	/**
+	 * Update the copy in the JPAContainer for the book
+	 * @param book book need to be updated
+	 */
 	public synchronized void replaceBook(EntityItem<Book> book) {
 		if (shelf.removeItem(book.getItemId())) {
 			shelf.addEntity(book.getEntity());
 		}
 	}
 
+	/**
+	 * Search books in the years span
+	 * @param info year information
+	 */
 	public synchronized void searchYear(String info) {
 		String[] components = info.toLowerCase().split("-");
 		String toDate = components[1];
@@ -146,6 +166,10 @@ public class BookService {
 		shelf.refresh();
 	}
 
+	/**
+	 * Search books with related information
+	 * @param info information needed
+	 */
 	public synchronized void searchInfo(String info) {
 		Filter title = new Like("title", "%" + info + "%", false);
 		Filter publisher = new Like("publisher", "%" + info + "%", false);
@@ -155,7 +179,11 @@ public class BookService {
 		shelf.refresh();
 	}
 
-	// method check whether a book is duplicated ( with same isbn )
+	/**
+	 * Method check whether a book is duplicated ( with same isbn )
+	 * @param isbn the isbn needed to be checked
+	 * @return true if the book is duplicated
+	 */
 	public boolean checkDuplicate(String isbn) {
 		for (long i = 1; i <= shelf.getItemIds().size(); i++) {
 			if (shelf.getItemIds().contains(i)) {
@@ -167,14 +195,22 @@ public class BookService {
 		return false;
 	}
 
-	// method that can remove all filters created
+	/**
+	 *  Method that can remove all filters created
+	 */
 	public void removeAllFilters() {
 		Collection<Filter> filters = shelf.getContainerFilters();
 		for (Filter filter : filters) {
 			shelf.removeContainerFilter(filter);
 		}
 	}
-
+	
+	/**
+	 * Check out a book for the user
+	 * @param book book needed to be checked out
+	 * @param user user who check out the book
+	 * @throws NullPointerException if user is null, throws NullPointerException
+	 */
 	public void bookCheckOut(EntityItem<Book> book, User user) throws NullPointerException {
 		if (user == null) {
 			throw new NullPointerException("You need to log in first before you can rent a book.");
@@ -191,6 +227,12 @@ public class BookService {
 		book.getEntity().lendTo(user);
 	}
 
+	/**
+	 * Return a book by the user
+	 * @param book Book needed to be returned
+	 * @param user User who returns the book
+	 * @throws NullPointerException Throw when user is null
+	 */
 	public void bookReturn(EntityItem<Book> book, User user) throws NullPointerException {
 		if (user == null) {
 			throw new NullPointerException("You need to log in first before you can rent a book.");
@@ -202,6 +244,12 @@ public class BookService {
 		book.getEntity().lendTo(null);
 	}
 	
+	/**
+	 * Return a book by the user
+	 * @param book Book needed to be returned
+	 * @param user User who returns the book
+	 * @throws NullPointerException Throw when user is null
+	 */
 	public void bookReturn(Book book, User user) throws NullPointerException {
 		if (user == null) {
 			throw new NullPointerException("You need to log in first before you can rent a book.");
@@ -215,12 +263,17 @@ public class BookService {
 		shelf.addEntity(book);
 	}
 	
-	
+	/**
+	 * Only keep checked out books in the container
+	 */
 	public void rentedBooks() {
 		Filter rented = new Compare.Equal("checkOut", "true");
 		shelf.addContainerFilter(rented);
 	}
 	
+	/**
+	 * Only keep late books in the container
+	 */
 	public void lateBooks() {
 		Filter late = new Compare.Less("returnDate", new Date());
 		shelf.addContainerFilter(late);
