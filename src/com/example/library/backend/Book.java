@@ -37,15 +37,30 @@ public class Book implements Comparable<Book>, Cloneable {
 	private User user;
 	@OneToMany
 	private ArrayList<User> waitList = new ArrayList();
-
+	
+	/**
+	 * @return if the book is checked out
+	 */
 	public boolean isCheckOut() {
 		return checkOut;
 	}
 
+	/**
+	 * Set check out status for the book
+	 * @param checkOut true if checked out, false if not
+	 */
 	public void setCheckOut(boolean checkOut) {
 		this.checkOut = checkOut;
 	}
 
+	/**
+	 * @param isbn ISBN Number as the ID of the book
+	 * @param title Title of the book
+	 * @param authors Authors list of the book
+	 * @param publisher Publisher of the book
+	 * @param year The year the book published
+	 * @param edition The edition number
+	 */
 	public Book(String isbn, String title, List<String> authors, String publisher, String year, String edition) {
 		this.isbn = isbn;
 		this.title = title;
@@ -67,22 +82,6 @@ public class Book implements Comparable<Book>, Cloneable {
 	public Book() {
 	}
 
-	public boolean containInformation(String info) {
-		if ((isbn == null) || (title == null) || (publisher == null) || (year == null) || (edition == null)) {
-			return false;
-		} else if ((isbn.contains(info)) || (title.contains(info)) || (publisher.contains(info))
-				|| (year.contains(info)) || (edition.contains(info))) {
-			return true;
-		}
-
-		for (String author : authors) {
-			if (author.contains(info)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	// Setter and getter
 	public String getIsbn() {
 		return isbn;
@@ -101,17 +100,7 @@ public class Book implements Comparable<Book>, Cloneable {
 	}
 
 	public List<String> getAuthors() {
-
 		return authors;
-		// if (authors.size() == 0) {
-		// return "n.a.";
-		// }
-		// String result = authors.get(0);
-		// for (int i = 1; i < authors.size(); i++) {
-		// result += ",";
-		// result += authors.get(i);
-		// }
-		// return result;
 	}
 
 	public void setAuthors(List<String> authors) {
@@ -179,6 +168,10 @@ public class Book implements Comparable<Book>, Cloneable {
 		return returnDate;
 	}
 
+	/**
+	 * Check days passed the due date
+	 * @return 0 when the due date is not past, number of days when the due date has been past
+	 */
 	public long daysPassed() {
 		Date today = new Date();
 		long diff = (today.getTime() - returnDate.getTime()) / (24 * 60 * 60 * 1000);
@@ -200,12 +193,11 @@ public class Book implements Comparable<Book>, Cloneable {
 	public void Wait(User user) {
 		waitList.add(user);
 	}
-	
+	/**
+	 * @return Fees owed by the user for this book
+	 */
 	public double getFees() {
-		if (user != null) {
-			return user.getFees();
-		}
-		return 0;
+		return user != null ? user.getFees() : 0;
 	}
 	
 

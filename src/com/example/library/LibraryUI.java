@@ -26,7 +26,6 @@ import com.vaadin.ui.themes.ValoTheme;
  * @version 4.92.2
  * @since 2016-02-01
  */
-
 @SuppressWarnings("serial")
 @Theme("library")
 public class LibraryUI extends UI {
@@ -47,7 +46,7 @@ public class LibraryUI extends UI {
 	// Log in screen
 	LogInScreen log;
 
-	/*
+	/**
 	 * this is where the program initializes, all of the components are set as
 	 * well as their functions, also the view is built
 	 */
@@ -105,19 +104,72 @@ public class LibraryUI extends UI {
 		refreshBooks();
 	}
 
+	/**
+	 * This function specifies the layouts for all the components
+	 * LoginView and BookForm are exclusive to each other
+	 */
 	private void buildLayout() {
-		// Set places for components
-		buildLayoutForLogInView();
+		buildLayoutForLogInView(); 
 		if (user != null) {
-			buildLayoutForBookForm();
+			buildLayoutForBookForm(); 
 		}
 		setContent(contentLayout);
 	}
 
+	/**
+	 * Set all the components for log in view, and set the log in view as the only contentLayout
+	 */
+	private void buildLayoutForLogInView() {
+		HorizontalLayout mainLayout = new HorizontalLayout(log, userPanel);
+		mainLayout.setSizeFull();
+		mainLayout.setExpandRatio(log, 1);
+		mainLayout.setWidth("100%");
+		mainLayout.setComponentAlignment(log, Alignment.MIDDLE_CENTER);
+		contentLayout = mainLayout;
+	}
+	
+	/**
+	 * Set all the components for book form view, and set the book view as the only contentLayout
+	 */
+	private void buildLayoutForBookForm() {
+		HorizontalLayout buttons = null;
+		if (user != null) {
+			if (user.isLibrarian()) {
+				buttons = new HorizontalLayout(searchButton, dashButton, userManagement, addBookButton);
+			} else {
+				buttons = new HorizontalLayout(searchButton, userManagement);
+			}
+		}
+		buttons.setSpacing(true);
+		HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
+		actions.setWidth("100%");
+		filterField.setWidth("100%");
+		actions.setExpandRatio(filterField, 1);
+		
+		VerticalLayout left = new VerticalLayout(actions, bookList);
+		left.setSizeFull();
+		bookList.setSizeFull();
+		left.setExpandRatio(bookList, 1);
+		
+		HorizontalLayout mainLayout = new HorizontalLayout(left, bookForm, userPanel);
+		mainLayout.setSizeFull();
+		mainLayout.setExpandRatio(left, 1);
+		if (user != null) {
+			contentLayout = mainLayout;
+		}
+	}
+	
+	/**
+	 * Filter books
+	 */
 	void refreshBooks() {
 		refreshBooks(filterField.getValue());
 	}
 
+	/**
+	 * This function is used to filter books and update the book list
+	 * @param stringFilter Value from the search bar used to filter books
+	 */
 	private void refreshBooks(String stringFilter) {
 		BookService service = BookService.initialize();
 		service.removeAllFilters();// Remove other filters before searching
@@ -143,10 +195,17 @@ public class LibraryUI extends UI {
 		}
 	}
 
+	/**
+	 * Refresh the whole view by rebuild the layout
+	 */
 	public void refresh() {
 		this.buildLayout();
 	}
 
+	/**
+	 * This function will be called when add book button is clicked, and it will show the bookForm View
+	 * @param e Addbook Button Click Event
+	 */
 	public void addBook(Button.ClickEvent e) {
 		if (userPanel.isVisible()) {
 			userPanel.setVisible(false);
@@ -163,6 +222,10 @@ public class LibraryUI extends UI {
 		}
 	}
 
+	/**
+	 * This function will be called when search button is clicked.
+	 * @param e Search Button Clicked Event
+	 */
 	public void searchBook(Button.ClickEvent e) {
 		BookService service = BookService.initialize();
 		String info = filterField.getValue();// Get text in the search field
@@ -179,6 +242,10 @@ public class LibraryUI extends UI {
 		}
 	}
 
+	/**
+	 * This function will be called when user button is clicked. It will show the user panel 
+	 * @param e User button clicked event
+	 */
 	public void manageUser(Button.ClickEvent e) {
 		if (bookForm.isVisible()) {
 			bookForm.cancel(e);
@@ -190,50 +257,20 @@ public class LibraryUI extends UI {
 		userPanel.settingPanel(user);
 	}
 
+	/**
+	 * When user log out, initialize the log in view and present
+	 */
 	private void initializeLogInView() {
 		if (user == null) {
 			log = new LogInScreen();
 			log.showPanel();
 		}
 	}
-
-	private void buildLayoutForLogInView() {
-		HorizontalLayout mainLayout = new HorizontalLayout(log, userPanel);
-		mainLayout.setSizeFull();
-		mainLayout.setExpandRatio(log, 1);
-		mainLayout.setWidth("100%");
-		mainLayout.setComponentAlignment(log, Alignment.MIDDLE_CENTER);
-		contentLayout = mainLayout;
-	}
-
-	private void buildLayoutForBookForm() {
-		HorizontalLayout buttons = null;
-		if (user != null) {
-			if (user.isLibrarian()) {
-				buttons = new HorizontalLayout(searchButton, dashButton, userManagement, addBookButton);
-			} else {
-				buttons = new HorizontalLayout(searchButton, userManagement);
-			}
-		}
-		buttons.setSpacing(true);
-		HorizontalLayout actions = new HorizontalLayout(filterField, buttons);
-		actions.setWidth("100%");
-		filterField.setWidth("100%");
-		actions.setExpandRatio(filterField, 1);
-
-		VerticalLayout left = new VerticalLayout(actions, bookList);
-		left.setSizeFull();
-		bookList.setSizeFull();
-		left.setExpandRatio(bookList, 1);
-
-		HorizontalLayout mainLayout = new HorizontalLayout(left, bookForm, userPanel);
-		mainLayout.setSizeFull();
-		mainLayout.setExpandRatio(left, 1);
-		if (user != null) {
-			contentLayout = mainLayout;
-		}
-	}
-
+	
+	/**
+	 * Switch the content between log in view and book view
+	 * @param trigger Switch the view to log in view when trigger is true, and switch the view to book view when trigger is false
+	 */
 	public void logInSwitch(boolean trigger) {
 		if (trigger) {
 			userPanel = new UserLogin();
@@ -247,10 +284,16 @@ public class LibraryUI extends UI {
 		setContent(contentLayout);
 	}
 
+	/**
+	 * Update the user in the userPanel when user information changed
+	 */
 	public void userUpdate() {
 		userPanel.settingPanel(user);
 	}
 
+	/**
+	 * Show register panel when view is the log in view
+	 */
 	public void showRegister() {
 		if (user == null) {
 			((UserLogin) userPanel).clearFields();
@@ -258,6 +301,10 @@ public class LibraryUI extends UI {
 		}
 	}
 
+	/**
+	 * Switch to the dashboard when Dashboard button clicked
+	 * @param e Dashboard button clicked event
+	 */
 	public void switchDashboard(Button.ClickEvent e) {
 		Panel dash = new Panel(new LibrarianDashboard());
 		this.setContent(dash);
