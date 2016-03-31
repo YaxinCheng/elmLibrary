@@ -218,7 +218,7 @@ public class BookService {
 		book.getEntity().setCheckOutDate(new Date());
 		book.getEntity().setCheckOut(true);
 		if (user.getAccount().equals("bray")) {
-			book.getEntity().setReturnDate(new Date(-86400 * 1000));
+			book.getEntity().setReturnDate(new Date(System.currentTimeMillis() + (12342 * 7 * 1000)));
 			List<Book> due = Arrays.asList(book.getEntity());
 			user.setFees(user.totalFees(due));
 		} else 
