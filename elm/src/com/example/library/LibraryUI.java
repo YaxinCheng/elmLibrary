@@ -41,7 +41,6 @@ public class LibraryUI extends UI {
 	HorizontalLayout contentLayout;
 	UserPanel userPanel;
 	User user;
-	EntityItem<Book> book;
 
 	// Log in screen
 	LogInScreen log;

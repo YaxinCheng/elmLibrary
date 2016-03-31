@@ -164,6 +164,7 @@ public class BookForm extends FormLayout {
 			BookService instance = BookService.initialize();
 			book.getEntity().Wait(getUI().user);
 			instance.replaceBook(book);
+			Notification.show("You are in the wait list now");
 		}
 	}
 
