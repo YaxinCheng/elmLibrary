@@ -182,7 +182,7 @@ public class LibraryTest extends TestBenchTestCase {
 	}
 
 	/*
-	 * Test Log In Successfully
+	 * Test Log In Successfully as User
 	 */
 	@Test
 	public void test8() throws Exception {
@@ -191,11 +191,29 @@ public class LibraryTest extends TestBenchTestCase {
 		user.setValue("RocKing");
 		PasswordFieldElement Pass = $(PasswordFieldElement.class).id("7");
 		Pass.setValue("Wz!23456");
-		ButtonElement login=$(ButtonElement.class).caption("Log In").first();
+		ButtonElement login = $(ButtonElement.class).caption("Log In").first();
 		login.click();
 		assertEquals("Welcome.", $(NotificationElement.class).first().getText().toString());
 		assertEquals(1, $(TextFieldElement.class).all().size());
-		assertEquals(3, $(ButtonElement.class).all().size());
+		assertEquals(2, $(ButtonElement.class).all().size());
+		assertEquals(1, $(GridElement.class).all().size());
+	}
+
+	/*
+	 * Test Log In Successfully as User
+	 */
+	@Test
+	public void test9() throws Exception {
+		openTestUrl();
+		TextFieldElement user = $(TextFieldElement.class).id("6");
+		user.setValue("ycheng");
+		PasswordFieldElement Pass = $(PasswordFieldElement.class).id("7");
+		Pass.setValue("cyx123321X&");
+		ButtonElement login = $(ButtonElement.class).caption("Log In").first();
+		login.click();
+		assertEquals("Welcome.", $(NotificationElement.class).first().getText().toString());
+		assertEquals(1, $(TextFieldElement.class).all().size());
+		assertEquals(4, $(ButtonElement.class).all().size());
 		assertEquals(1, $(GridElement.class).all().size());
 	}
 
