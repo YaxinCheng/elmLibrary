@@ -33,8 +33,14 @@ public class User {
 	private boolean librarian = false;
 	private double fees;
 
-	// Above this part, we made some change on the database part
-	// The constructor of User
+	/**
+	 * Constructor for the user instance
+	 * @param name name of the user
+	 * @param email email of the user
+	 * @param phone	phone number
+	 * @param borrowed borrowed books
+	 * @param waiting books the user is waiting for
+	 */
 	public User(String name, String email, String phone, List<Book> borrowed, List<Book> waiting) {
 
 		this.name = name;
@@ -45,6 +51,11 @@ public class User {
 		this.fees = 0.00;
 	}
 
+	/**
+	 * Constructor for the user instance
+	 * @param account account number
+	 * @param password password
+	 */
 	public User(String account, String password) {
 		this.account = account;
 		this.password = password;
@@ -53,6 +64,17 @@ public class User {
 		waiting = new ArrayList();
 	}
 
+	/**
+	 * Constructor for the user instance
+	 * @param account
+	 * @param password
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param borrowed
+	 * @param waiting
+	 * @param book
+	 */
 	public User(String account, String password, String name, String email, String phone, List<Book> borrowed,
 			List<Book> waiting, Set<Book> book) {
 		super();
@@ -141,6 +163,10 @@ public class User {
 		this.password = password;
 	}
 
+	/**
+	 * Check if the user information is filled
+	 * @return true if they are all filled
+	 */
 	public boolean isInformationFilled() {
 		try {
 			return !name.isEmpty() && !phone.isEmpty() && !email.isEmpty();
@@ -189,7 +215,9 @@ public class User {
 		return "" + account;
 	}
 
-	// The method that can check whether the users are same or not
+	/**
+	 * The method that can check whether the users are same or not
+	 */
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof User && ((User) object).getAccount() == this.account) {

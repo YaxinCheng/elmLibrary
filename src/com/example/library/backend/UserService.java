@@ -21,6 +21,10 @@ public class UserService {
 	public JPAContainer<User> Users = JPAContainerFactory.make(User.class,
 			JPAContainerFactory.createEntityManagerForPersistenceUnit("library_db"));
 
+	/**
+	 * Initialize function
+	 * @return a singleton instance of the UserService
+	 */
 	public static UserService initialize() {
 		if (instance == null) {
 			UserService UserService = new UserService();
@@ -29,8 +33,11 @@ public class UserService {
 		}
 		return instance;
 	}
-
-	public void populateUserService() {
+	
+	/**
+	 * Generate demo data for the program
+	 */
+	private void populateUserService() {
 		List<Book> borrowed = new ArrayList();
 		List<Book> waiting = null;
 		User user1 = new User("Nick", "definitelynot@fake.ca", "902-666-1234", borrowed, waiting);
@@ -60,11 +67,18 @@ public class UserService {
 		Users.addEntity(user4);
 	}
 
+	/**
+	 * @return number of users in the database right now
+	 */
 	public synchronized int count() {
 		return Users.size();
 	}
 
-	/** 'delete' will remove a user from the User JPAContainer */
+	/**
+	 * Delete a user from the database
+	 * @param the user need to be deleted
+	 * @return true if delete successfully, false if not
+	 */
 	public synchronized boolean delete(User value) {
 		try {
 			Users.removeItem(value.getAccount());
@@ -77,6 +91,7 @@ public class UserService {
 	/**
 	 * 'replace' works by deleting a given user, and then saving them,
 	 * ultimately ending up with a new copy of the user's instance
+	 * @param user the instance need to be updated
 	 */
 	public synchronized void replace(User user) {
 		if (delete(user)) {
@@ -84,7 +99,10 @@ public class UserService {
 		}
 	}
 
-	/* adding a user to the User JPAContainer */
+	/**
+	 * adding a user to the User JPAContainer
+	 * @param entry the user instance need to be saved
+	 */
 	public synchronized void save(User entry) {
 		Users.addEntity(entry);
 	}
@@ -103,7 +121,12 @@ public class UserService {
 		return password.equals(passwordExpected);
 	}
 
-	/* returning a requested user object */
+	/**
+	 * returning a requested user object
+	 * @param account Account number of the user
+	 * @param password Password of the user
+	 * @return User account if password and account match, null if it doesn't match
+	 */
 	public synchronized User getUser(String account, String password) {
 		if (checklogIn(account, password)) {
 			return Users.getItem(account).getEntity();
