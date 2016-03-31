@@ -3,7 +3,7 @@ package com.example.library.backend;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.math.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -176,6 +176,15 @@ public class Book implements Comparable<Book>, Cloneable {
 		Date today = new Date();
 		long diff = (today.getTime() - returnDate.getTime()) / (24 * 60 * 60 * 1000);
 		return diff <= 0 ? 0 : diff;
+	}
+	/**
+	 * Check days before the due date
+	 * @return 0 when the due date is not before, number of days when due date is not past
+	 */
+	public long daysBefore() {
+		Date today = new Date();
+		long diff = Math.abs((today.getTime() - returnDate.getTime() / (24 * 60 * 60 * 1000)));
+		return diff >= 0 ? 0 : diff;
 	}
 
 	/**

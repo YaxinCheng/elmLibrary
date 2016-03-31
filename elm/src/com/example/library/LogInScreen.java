@@ -83,16 +83,18 @@ public class LogInScreen extends UserPanel {
 	 */
 	@SuppressWarnings("deprecation")
 	public void showLoginNotification(User currentUser){
+		//Notification generation
+		Notification output = new Notification("Welcome","",Notification.TYPE_HUMANIZED_MESSAGE);
+		output.setDelayMsec(-1);
 		//String containing all notification info
 		String notify = "";
 		Date current = new Date();
 		//Lists to display due and held books
 		List<Book> due = new ArrayList<Book>();
 		List<Book> held = new ArrayList<Book>();
+		List<Book> close = new ArrayList<Book>();
 		//Checking if the user has any books due
 		if(currentUser.getBorrowed().size() > 0){
-			//Instantiate a list to output due books
-			
 			//Check to see if any books on user's borrowed list are overdue
 			for(int i = 0; i < currentUser.getBorrowed().size(); i++){
 				if(currentUser.getBorrowed().get(i).getReturnDate().before(current)){
@@ -110,6 +112,26 @@ public class LogInScreen extends UserPanel {
 				notify += "\nYou have no overdue books.";
 			}
 		}
+		//Check if any books are close to being due
+		if(currentUser.getBorrowed().size() > 0){
+			//Check to see if any books on user's borrowed list are close to being due
+			for(int i = 0; i < currentUser.getBorrowed().size(); i++){
+				if(currentUser.getBorrowed().get(i).daysBefore() < 2){
+					close.add(currentUser.getBorrowed().get(i));
+				}
+			}
+			//Will display list of overdue book if anything is overdue
+			if(close.size() > 0){
+				notify += "\nThese books need to be returned soon: ";
+				for(int i = 0; i < close.size(); i++){
+					notify += "\n -" + close.get(i).getTitle();
+				}
+			}
+			else{
+				//Nothing
+			}
+		}
+		
 		//Add up user fees
 		currentUser.setFees(currentUser.totalFees(due));
 		//Checking the user's fees, adding info to notify
@@ -141,10 +163,10 @@ public class LogInScreen extends UserPanel {
 		}
 		//Show final notification
 		if(currentUser.getFees() >0 ){
-			Notification.show("Attention", notify, Notification.TYPE_ERROR_MESSAGE);
+			output.show("Attention", notify, Notification.TYPE_ERROR_MESSAGE);
 		}
 		else{
-			Notification.show("Attention", notify, Notification.TYPE_WARNING_MESSAGE);
+			output.show("Attention", notify, Notification.TYPE_WARNING_MESSAGE);
 		}
 	}
 	
